@@ -273,4 +273,155 @@ window.Webflow.push(() => {
   });
 
   // ————— FORM VALIDATION ————— //
+
+  // ————— PRELOADER ANIMATION ————— //
+
+  document.fonts.ready.then(function () {
+    const preloader = document.querySelector('.preloader_component') || '';
+
+    if (preloader) {
+      let preloaderAnimation = gsap.timeline();
+      CustomEase.create('preloaderEase', '.5, 0, .25, 1');
+      const cover = preloader.querySelectorAll('.preloader_cover');
+      const content = preloader.querySelector('.preloader_content');
+
+      let split = SplitText.create('[split-type]', {
+        type: 'words',
+        mask: 'words',
+        wordsClass: 'word',
+      });
+
+      console.log(split.words);
+
+      gsap.set(cover, { display: 'none' });
+      preloaderAnimation
+        .from('.preloader_bg-line', {
+          scaleX: 0,
+          transformOrigin: 'left',
+          duration: 1.5,
+          ease: 'power3.out',
+          stagger: { from: 'random', each: 0.2 },
+        })
+        .from(
+          '[data-animate="text-intro"] .word',
+          {
+            yPercent: 100,
+            rotateZ: 5,
+            rotateX: -60,
+            rotateY: 40,
+            duration: 1,
+            ease: 'preloaderEase',
+            stagger: 0.1,
+          },
+          '<0.3'
+        )
+        .add(() => {
+          const preloaderTexts = document.querySelectorAll('.preloader_text');
+          const totalItems = preloaderTexts.length;
+
+          // Create custom ease
+          const customEase = CustomEase.create(
+            'custom',
+            'M0,0 C0.152,0.454 0.323,0.621 0.484,0.702 0.96,0.941 0.911,0.847 1,1 '
+          );
+
+          preloaderTexts.forEach((text, index) => {
+            if (index === 0) return; // Skip first one (already visible)
+
+            // Calculate delay with custom ease
+            const progress = index / (totalItems - 1);
+            const easedProgress = customEase(progress);
+            const delay = easedProgress * 3; // Total duration of X seconds
+
+            gsap.delayedCall(delay, () => {
+              // Hide all text elements first
+              preloaderTexts.forEach((el) => gsap.set(el, { display: 'none' }));
+              // Show current element
+              gsap.set(text, { display: 'block' });
+            });
+          });
+        }, '<0.4')
+        .to(
+          '[data-animate-2="text-outro"] .word',
+          {
+            autoAlpha: 0,
+
+            duration: 0.8,
+            ease: 'preloaderEase',
+            stagger: 0.1,
+          },
+          4.75
+        )
+        .to(
+          '.preloader_bg-item-color',
+          {
+            yPercent: -120,
+            rotateZ: -2,
+            rotateX: 0,
+            rotateY: 10,
+            duration: 1,
+            ease: 'power1.in',
+            stagger: { from: 'start', each: 0.1 },
+          },
+          '<-0.6'
+        )
+        .to(
+          '.preloader_bg-line',
+          {
+            autoAlpha: 0,
+            duration: 0.4,
+            ease: 'power3.out',
+            stagger: { from: 'start', each: 0.1 },
+          },
+          '<'
+        )
+        .to(
+          '.preloader_bg-item-color',
+          {
+            yPercent: -120,
+            rotateZ: -2,
+            rotateX: 0,
+            rotateY: 10,
+            duration: 1,
+            ease: 'power2.in',
+            stagger: { from: 'start', each: 0.1 },
+          },
+          '<'
+        )
+        .set(preloader, {
+          autoAlpha: 0,
+        });
+
+      document.querySelectorAll('a').forEach(function (anchor) {
+        anchor.addEventListener('click', function (e) {
+          if (
+            this.hostname === window.location.host &&
+            this.getAttribute('href').indexOf('#') === -1 &&
+            this.getAttribute('target') !== '_blank'
+          ) {
+            e.preventDefault();
+            const destination = this.getAttribute('href');
+
+            // gsap.set(preloader, { display: 'block' });
+            // gsap.to(content, {
+            //   opacity: 1,
+            //   duration: 0.35,
+            //   ease: 'none',
+            //   onComplete: () => {
+            //     window.location = destination;
+            //   },
+            // });
+          }
+        });
+      });
+    }
+
+    // On click of the back button
+    window.onpageshow = function (event) {
+      if (event.persisted) {
+        window.location.reload();
+      }
+    };
+  });
+  // ————— PRELOADER ANIMATION ————— //
 });
