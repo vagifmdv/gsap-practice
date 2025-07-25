@@ -42,7 +42,9 @@ window.Webflow.push(() => {
     scrollTrigger: {
       trigger: '.section_full.is-2 .gsap-item',
       start: 'top 80%',
-      //   markers: true,
+      end: 'bottom 40%',
+      toggleActions: 'play none none reverse',
+      // markers: true,
     },
   });
 
@@ -53,22 +55,60 @@ window.Webflow.push(() => {
     ease: 'power2.out',
     scrollTrigger: {
       trigger: '.section_full.is-3 .gsap-item',
-      start: 'center center',
-      //   markers: true,
+      start: 'top center',
+      end: 'bottom center',
+      toggleActions: 'play reverse play reverse',
+      // markers: true,
     },
   });
 
-  gsap.from('.section_full.is-4 .gsap-item', {
-    opacity: 0,
-    x: -100,
-    autoAlpha: 0,
+  // Cards reveal using callbacks
+  const selector = '.section_full.is-4 .gsap-item';
+  const animConfig = {
     duration: 0.6,
     stagger: 0.2,
     ease: 'power2.out',
-    scrollTrigger: {
-      trigger: '.section_full.is-4 .gsap-item',
-      start: 'top 70%',
-      //   markers: true,
+    overwrite: true,
+  };
+
+  gsap.set(selector, { x: -100, autoAlpha: 0 });
+
+  ScrollTrigger.create({
+    trigger: selector,
+    start: 'top 70%',
+    end: 'bottom 30%',
+    // markers: true,
+
+    onEnter: () => {
+      gsap.to(selector, {
+        x: 0,
+        autoAlpha: 1,
+        ...animConfig,
+      });
+    },
+
+    onLeave: () => {
+      gsap.to(selector, {
+        x: 100,
+        autoAlpha: 0,
+        ...animConfig,
+      });
+    },
+
+    onEnterBack: () => {
+      gsap.to(selector, {
+        x: 0,
+        autoAlpha: 1,
+        ...animConfig,
+      });
+    },
+
+    onLeaveBack: () => {
+      gsap.to(selector, {
+        x: -100,
+        autoAlpha: 0,
+        ...animConfig,
+      });
     },
   });
 

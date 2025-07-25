@@ -1,7 +1,8 @@
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Observer } from 'gsap/Observer';
 import { SplitText } from 'gsap/SplitText';
-gsap.registerPlugin(Observer, SplitText);
+gsap.registerPlugin(Observer, SplitText, ScrollTrigger);
 
 window.Webflow ||= [];
 window.Webflow.push(() => {
@@ -9,11 +10,18 @@ window.Webflow.push(() => {
 
   // 1. Hero Section Animations
 
+  const heroTrigger = document.querySelector('.hero-image');
+  // const heroTrigger = '.hero-image';
+
   gsap.from('.hero-title', {
     duration: 1.5,
     x: -100,
     opacity: 0,
     ease: 'power2.out',
+    scrollTrigger: {
+      trigger: heroTrigger,
+      start: 'top 80%',
+    },
   });
 
   gsap.from('.subheading', {
@@ -22,6 +30,10 @@ window.Webflow.push(() => {
     opacity: 0,
     delay: 0.3,
     ease: 'power2.out',
+    scrollTrigger: {
+      trigger: heroTrigger,
+      start: 'top 80%',
+    },
   });
 
   gsap.fromTo(
@@ -38,6 +50,10 @@ window.Webflow.push(() => {
       backgroundColor: '#e2eae3',
       delay: 0.6,
       ease: 'power2.out',
+      scrollTrigger: {
+        trigger: heroTrigger,
+        start: 'top 80%',
+      },
     }
   );
 
@@ -46,12 +62,20 @@ window.Webflow.push(() => {
     scale: 1.05,
     ease: 'none',
     transformOrigin: 'center center',
+    scrollTrigger: {
+      trigger: heroTrigger,
+      start: 'top 80%',
+    },
   });
 
   gsap.from('.hero-wrapper', {
     duration: 2,
     clipPath: 'inset(100% 0% 0% 0%)',
     ease: 'power2.out',
+    scrollTrigger: {
+      trigger: heroTrigger,
+      start: 'top 80%',
+    },
   });
 
   // 2. Timeline Multi-Step Animation
@@ -60,7 +84,13 @@ window.Webflow.push(() => {
     type: 'chars', // only split into words and lines (not characters)
   });
 
-  const cardTimeline = gsap.timeline();
+  const cardTimeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.card-flex',
+      start: 'top 80%',
+      // markers: true,
+    },
+  });
 
   cardTimeline
     .from('.card-flex', {

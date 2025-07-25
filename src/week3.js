@@ -158,6 +158,76 @@ window.Webflow.push(() => {
     repeat: -1,
   });
 
+  // Modals
+
+  document.querySelectorAll('[fs-modal-element="open-1"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      gsap.fromTo(
+        '[data-popup="modal"]',
+        {
+          scale: 0.9,
+          transformOrigin: 'bottom',
+        },
+        {
+          scale: 1,
+          transformOrigin: 'bottom',
+          duration: 0.8,
+          ease: 'power2.out',
+        }
+      );
+    });
+  });
+
+  document.querySelectorAll('[fs-modal-element="close-1"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      gsap.fromTo(
+        '[data-popup="modal"]',
+        {
+          scale: 1,
+          transformOrigin: 'bottom',
+        },
+        {
+          scale: 0.9,
+          transformOrigin: 'bottom',
+          duration: 0.8,
+          ease: 'power2.out',
+        }
+      );
+    });
+  });
+
+  document.querySelectorAll('[fs-modal-element="open-2"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      gsap.fromTo(
+        '[data-popup="modal"]',
+        {
+          scale: 0.9,
+        },
+        {
+          scale: 1,
+          duration: 0.8,
+          ease: 'back.out',
+        }
+      );
+    });
+  });
+
+  document.querySelectorAll('[fs-modal-element="close-2"]').forEach((button) => {
+    button.addEventListener('click', () => {
+      gsap.fromTo(
+        '[data-popup="modal"]',
+        {
+          scale: 1,
+        },
+        {
+          scale: 0.9,
+          duration: 0.8,
+          ease: 'back.out',
+        }
+      );
+    });
+  });
+
   // ————— EASING EXAMPLES ————— //
 
   // ————— SHOPPING CART BUTTON ————— //
@@ -207,7 +277,73 @@ window.Webflow.push(() => {
 
   // ————— FORM VALIDATION ————— //
 
-  // Create combined timeline for form error
+  // Version 1 (Timing is off)
+
+  // const formErrorTimeline = gsap.timeline({ paused: true });
+  // formErrorTimeline
+  //   .to('.form_component', {
+  //     keyframes: [
+  //       { x: -10, rotation: -2, duration: 0.1 },
+  //       { x: 10, rotation: 2, duration: 0.1 },
+  //       { x: -8, rotation: -1, duration: 0.1 },
+  //       { x: 8, rotation: 1, duration: 0.1 },
+  //       { x: 0, rotation: 0, duration: 0.8, ease: 'elastic.out(1.2,0.3)' },
+  //     ],
+  //     ease: 'power2.out',
+  //   })
+  //   .to(
+  //     '.form_component',
+  //     {
+  //       borderColor: '#ff5a65',
+  //       duration: 0.2,
+  //       ease: 'power2.out',
+  //     },
+  //     0
+  //   )
+  //   .fromTo(
+  //     '.form_error',
+  //     {
+  //       opacity: 0,
+  //       y: -10,
+  //     },
+  //     {
+  //       opacity: 1,
+  //       y: 0,
+  //       duration: 0.3,
+  //       ease: 'power2.out',
+  //     },
+  //     0.2
+  //   );
+
+  // Version 2 (Not working)
+
+  // const formErrorTimeline = gsap.timeline({ paused: true });
+  // formErrorTimeline
+  //   .set('.form_component', { transformOrigin: 'center' })
+  //   .to('.form_component', {
+  //     x: '0, -10, 10, -8, 8, 0',
+  //     rotation: '0, -2, 2, -1, 1, 0',
+  //     duration: 1.2,
+  //     ease: 'power2.out, power2.out, power2.out, power2.out, elastic.out(1.2,0.3)',
+  //     borderColor: '#ff5a65',
+  //   })
+  //   .fromTo(
+  //     '.form_error',
+  //     {
+  //       opacity: 0,
+  //       y: -10,
+  //     },
+  //     {
+  //       opacity: 1,
+  //       y: 0,
+  //       duration: 0.3,
+  //       ease: 'power2.out',
+  //     },
+  //     0.2
+  //   );
+
+  // Version 3 (Original)
+
   const formErrorTimeline = gsap.timeline({ paused: true });
   formErrorTimeline
     .to('.form_component', {
@@ -288,7 +424,7 @@ window.Webflow.push(() => {
       let split = SplitText.create('[split-type]', {
         type: 'words',
         mask: 'words',
-        wordsClass: 'word',
+        wordsClass: 'word++',
       });
 
       console.log(split.words);
@@ -315,31 +451,86 @@ window.Webflow.push(() => {
           },
           '<0.3'
         )
-        .add(() => {
-          const preloaderTexts = document.querySelectorAll('.preloader_text');
-          const totalItems = preloaderTexts.length;
+        // .add(() => {
+        //   const preloaderTexts = document.querySelectorAll('.preloader_text');
+        //   const totalItems = preloaderTexts.length;
 
-          // Create custom ease
+        //   // Create custom ease
+        //   const customEase = CustomEase.create(
+        //     'custom',
+        //     'M0,0 C0.152,0.454 0.323,0.621 0.484,0.702 0.96,0.941 0.911,0.847 1,1 '
+        //   );
+
+        //   preloaderTexts.forEach((text, index) => {
+        //     if (index === 0) return; // Skip first one (already visible)
+
+        //     // Calculate delay with custom ease
+        //     const progress = index / (totalItems - 1);
+        //     const easedProgress = customEase(progress);
+        //     const delay = easedProgress * 3; // Total duration of X seconds
+
+        //     gsap.delayedCall(delay, () => {
+        //       // Hide all text elements first
+        //       preloaderTexts.forEach((el) => gsap.set(el, { display: 'none' }));
+        //       // Show current element
+        //       gsap.set(text, { display: 'block' });
+        //     });
+        //   });
+        // }, '<0.4')
+        .add(() => {
+          const texts = [
+            'Week',
+            'həftə',
+            'неделя',
+            'Woche',
+            'semaine',
+            'semana',
+            'nedēļa',
+            'апта',
+            'viikko',
+            'javë',
+            'hafta',
+            'vaiaso',
+            'неделя',
+            'vika',
+            'həftə',
+            'неделя',
+            'Woche',
+            'semaine',
+            'semana',
+            'nedēļa',
+            'vika',
+            'Week',
+          ];
+
+          const textElement = document.querySelector('.preloader_text');
+          if (!textElement) return;
+
           const customEase = CustomEase.create(
             'custom',
-            'M0,0 C0.152,0.454 0.323,0.621 0.484,0.702 0.96,0.941 0.911,0.847 1,1 '
+            'M0,0 C0.152,0.454 0.323,0.621 0.484,0.702 0.96,0.941 0.911,0.847 1,1'
           );
 
-          preloaderTexts.forEach((text, index) => {
-            if (index === 0) return; // Skip first one (already visible)
+          let currentIndex = 0;
+          textElement.textContent = texts[0];
 
-            // Calculate delay with custom ease
-            const progress = index / (totalItems - 1);
-            const easedProgress = customEase(progress);
-            const delay = easedProgress * 3; // Total duration of X seconds
+          gsap.to(
+            {},
+            {
+              progress: 1,
+              duration: 3,
+              ease: 'none',
+              onUpdate: function () {
+                const progress = customEase(this.progress());
+                const newIndex = Math.floor(progress * texts.length);
 
-            gsap.delayedCall(delay, () => {
-              // Hide all text elements first
-              preloaderTexts.forEach((el) => gsap.set(el, { display: 'none' }));
-              // Show current element
-              gsap.set(text, { display: 'block' });
-            });
-          });
+                if (newIndex !== currentIndex && newIndex < texts.length) {
+                  currentIndex = newIndex;
+                  textElement.textContent = texts[newIndex];
+                }
+              },
+            }
+          );
         }, '<0.4')
         .to(
           '[data-animate-2="text-outro"] .word',
