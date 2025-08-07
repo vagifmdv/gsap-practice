@@ -321,8 +321,8 @@ window.Webflow.push(() => {
   // formErrorTimeline
   //   .set('.form_component', { transformOrigin: 'center' })
   //   .to('.form_component', {
-  //     x: '0, -10, 10, -8, 8, 0',
-  //     rotation: '0, -2, 2, -1, 1, 0',
+  // x: '0, -10, 10, -8, 8, 0',
+  // rotation: '0, -2, 2, -1, 1, 0',
   //     duration: 1.2,
   //     ease: 'power2.out, power2.out, power2.out, power2.out, elastic.out(1.2,0.3)',
   //     borderColor: '#ff5a65',
