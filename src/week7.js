@@ -1,4 +1,5 @@
 import Lenis from 'lenis';
+import Pixelate from 'pixelate';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Observer } from 'gsap/Observer';
@@ -44,43 +45,8 @@ window.Webflow.push(() => {
     gsap.ticker.lagSmoothing(0);
   }
   // ————— LENIS ————— //
+
   // ————— HERO SLIDER ————— //
-  // Scramble text function
-  function scrambleText(element, newText, duration = 0.8) {
-    const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
-    const originalText = element.textContent;
-    const maxLength = Math.max(originalText.length, newText.length);
-
-    return new Promise((resolve) => {
-      let iteration = 0;
-      const iterations = maxLength * 2;
-
-      const timer = setInterval(
-        () => {
-          let scrambled = '';
-
-          for (let i = 0; i < maxLength; i++) {
-            if (iteration > i * 2) {
-              scrambled += newText[i] || '';
-            } else {
-              scrambled += chars[Math.floor(Math.random() * chars.length)];
-            }
-          }
-
-          element.textContent = scrambled;
-          iteration++;
-
-          if (iteration > iterations) {
-            clearInterval(timer);
-            element.textContent = newText;
-            resolve();
-          }
-        },
-        (duration * 1000) / iterations
-      );
-    });
-  }
-
   // Slide data
   const slideData = [
     {
@@ -119,7 +85,6 @@ window.Webflow.push(() => {
   const textEls = document.querySelectorAll('.hero_metric-text');
   const numerationEl = document.querySelector('.hero_numeration');
   const indicatorEl = document.querySelector('.hero_pagination-indicator');
-
   let currentSlide = 0;
   let isAnimating = false;
   let autoPlayInterval;
@@ -128,7 +93,6 @@ window.Webflow.push(() => {
   // Animation function
   async function animateToSlide(slideIndex) {
     if (isAnimating || slideIndex === currentSlide) return;
-
     isAnimating = true;
     const data = slideData[slideIndex];
 
@@ -139,42 +103,82 @@ window.Webflow.push(() => {
     // Animate indicator
     animateIndicator(slideIndex);
 
-    // Animate elements with promises
-    const promises = [];
+    // Create a timeline for synchronized animations
+    const tl = gsap.timeline();
 
     // Animate accent text
     if (accentEl) {
-      promises.push(scrambleText(accentEl, data.accent, 0.6));
+      tl.to(accentEl, {
+        duration: 0.6,
+        scrambleText: {
+          text: data.accent,
+          chars: 'lowerCase',
+          speed: 0.3,
+          revealDelay: 0,
+        },
+        ease: 'none',
+      });
     }
 
     // Animate numeration
     if (numerationEl) {
-      promises.push(scrambleText(numerationEl, data.numeration, 0.5));
+      tl.to(
+        numerationEl,
+        {
+          duration: 0.5,
+          scrambleText: {
+            text: data.numeration,
+            chars: 'numbers',
+            speed: 0.3,
+            revealDelay: 0,
+          },
+          ease: 'none',
+        },
+        '<'
+      );
     }
 
     // Animate metrics with slight delay
-    setTimeout(() => {
+    tl.add(() => {
       data.metrics.forEach((metric, index) => {
         if (valueEls[index]) {
-          promises.push(scrambleText(valueEls[index], metric.value, 0.5));
+          gsap.to(valueEls[index], {
+            duration: 0.5,
+            scrambleText: {
+              text: metric.value,
+              chars: 'numbers',
+              speed: 0.3,
+              revealDelay: 0,
+            },
+            ease: 'none',
+          });
         }
         if (textEls[index]) {
-          promises.push(scrambleText(textEls[index], metric.text, 0.7));
+          gsap.to(textEls[index], {
+            duration: 0.7,
+            scrambleText: {
+              text: metric.text,
+              chars: 'lowerCase',
+              speed: 0.3,
+              revealDelay: 0,
+            },
+            ease: 'none',
+          });
         }
       });
-    }, 100);
+    }, '<0.2');
 
-    await Promise.all(promises);
-    currentSlide = slideIndex;
-    isAnimating = false;
+    // When timeline completes
+    tl.then(() => {
+      currentSlide = slideIndex;
+      isAnimating = false;
+    });
   }
 
   // Indicator animation function
   function animateIndicator(slideIndex) {
     if (!indicatorEl) return;
-
     const positions = ['0rem', '2.5rem', '5rem'];
-
     gsap.to(indicatorEl, {
       duration: 0.4,
       left: positions[slideIndex],
@@ -186,9 +190,7 @@ window.Webflow.push(() => {
 
   // Auto-play functionality
   function startAutoPlay() {
-    // Clear any existing interval
     stopAutoPlay();
-
     autoPlayInterval = setInterval(() => {
       const nextSlide = (currentSlide + 1) % slideData.length;
       animateToSlide(nextSlide);
@@ -203,15 +205,10 @@ window.Webflow.push(() => {
   }
 
   function pauseAutoPlayWithResume() {
-    // Stop current auto-play
     stopAutoPlay();
-
-    // Clear any existing resume timeout
     if (resumeAutoPlayTimeout) {
       clearTimeout(resumeAutoPlayTimeout);
     }
-
-    // Set timeout to resume auto-play after 7 seconds
     resumeAutoPlayTimeout = setTimeout(() => {
       startAutoPlay();
     }, 3000);
@@ -220,7 +217,6 @@ window.Webflow.push(() => {
   // Add click listeners
   dots.forEach((dot, index) => {
     dot.addEventListener('click', () => {
-      // Pause auto-play and resume after delay
       pauseAutoPlayWithResume();
       animateToSlide(index);
     });
@@ -232,7 +228,7 @@ window.Webflow.push(() => {
   }
 
   // Start auto-play after page load
-  setTimeout(startAutoPlay, 0);
+  setTimeout(startAutoPlay, 1000);
   // ————— HERO SLIDER ————— //
 
   // ————— PRELOADER ANIMATION ————— //
@@ -307,19 +303,22 @@ window.Webflow.push(() => {
   // ————— PRELOADER ANIMATION ————— //
 
   // ————— MAGNETIC ICON CURSOR ————— //
-  // Magnetic icons hover effect
   const growthCases = document.querySelectorAll('.growth_case-horizontal, .growth_case-vertical');
-
   growthCases.forEach((container) => {
     const icon = container.querySelector('.icon-1x1-medium');
     let iconInitialX;
     let iconInitialY;
-
     if (!icon) return;
-
     // Initial GSAP set
     gsap.set(icon, {
       scale: 1,
+    });
+    // Icon morphing
+    const morphTl = gsap.timeline({ paused: true });
+    morphTl.to('.arrow-right', {
+      duration: 0.2,
+      morphSVG: '.arrow-left',
+      ease: 'power2.Out',
     });
 
     container.addEventListener('mouseenter', () => {
@@ -328,34 +327,30 @@ window.Webflow.push(() => {
       const containerRect = container.getBoundingClientRect();
       iconInitialX = iconRect.left - containerRect.left;
       iconInitialY = iconRect.top - containerRect.top;
-
       // Scale up on hover
       gsap.to(icon, {
         scale: 2.5, // Increased scale
         duration: 0.3,
         ease: 'power2.out',
       });
+      morphTl.play();
     });
 
     container.addEventListener('mousemove', (e) => {
       const containerRect = container.getBoundingClientRect();
-
       // Get mouse position relative to container
       const mouseX = e.clientX - containerRect.left;
       const mouseY = e.clientY - containerRect.top;
-
       // Calculate distance from mouse to icon's initial position
       const distanceX = mouseX - iconInitialX;
       const distanceY = mouseY - iconInitialY;
-
-      // Magnetic effect
-      const magneticPull = 0.2;
+      // Magnetic effect with reduced pull and limits
+      const magneticPull = 0.15; // Reduced from 0.2
       const moveX = distanceX * magneticPull;
       const moveY = distanceY * magneticPull;
-
-      // Only limit bottom and right movement
-      const maxMoveBottom = 50;
-      const maxMoveRight = 50;
+      // Reduced maximum movement
+      const maxMoveBottom = 35; // Reduced from 50
+      const maxMoveRight = 35; // Reduced from 50
       const limitedX = Math.min(moveX, maxMoveRight); // only limit right
       const limitedY = Math.min(moveY, maxMoveBottom); // only limit bottom
 
@@ -376,6 +371,7 @@ window.Webflow.push(() => {
         duration: 0.4,
         ease: 'power2.out',
       });
+      morphTl.reverse();
     });
   });
   // ————— MAGNETIC ICON CURSOR ————— //
@@ -440,25 +436,92 @@ window.Webflow.push(() => {
   });
   // ————— BUTTONS HOVER ANIMATION ————— //
 
-  // ————— MENU ANIMATION ————— //
+  // ————— COMBINED MENU & INDICATOR ANIMATION ————— //
   const menuButton = document.querySelector('.button.is-nav');
   const menuText = menuButton.querySelector('.button-text');
   const navMenu = document.querySelector('.nav_menu');
+  const navIndicator = document.querySelector('.nav_indicator');
+  const navLinks = document.querySelectorAll('.nav_link');
+
+  // Convert px to rem function
+  function pxToRem(px) {
+    return px / parseFloat(getComputedStyle(document.documentElement).fontSize) + 'rem';
+  }
+
+  // Position mapping for indicator (already in rem)
+  const positions = ['0rem', '2.75rem', '5.5rem', '8.25rem'];
+
+  // Initially hide the indicator
+  gsap.set(navIndicator, {
+    autoAlpha: 0,
+  });
+
+  // Indicator hover interactions (only set up once)
+  function setupIndicatorInteractions() {
+    const currentLink = document.querySelector('.nav_link.w--current');
+    const currentIndex = currentLink ? Array.from(navLinks).indexOf(currentLink) : 0;
+    const currentLinkWidth = currentLink?.offsetWidth || navLinks[0]?.offsetWidth || 100;
+    const currentPosition = positions[currentIndex];
+
+    // Track last hovered link to prevent jumping
+    let lastHoveredLink = null;
+
+    navLinks.forEach((link, index) => {
+      // Remove any existing listeners to avoid duplicates
+      link.removeEventListener('mouseenter', link._indicatorEnter);
+      link.removeEventListener('mouseleave', link._indicatorLeave);
+
+      // Create new listeners
+      link._indicatorEnter = () => {
+        const linkWidth = link.offsetWidth;
+        const targetPosition = positions[index];
+        lastHoveredLink = link;
+
+        gsap.to(navIndicator, {
+          top: targetPosition,
+          width: pxToRem(linkWidth),
+          duration: 0.3,
+          ease: 'power2.out',
+        });
+      };
+
+      link._indicatorLeave = () => {
+        // Small delay to check if another link was hovered
+        setTimeout(() => {
+          // Only animate back if no other link is currently hovered
+          if (lastHoveredLink === link) {
+            gsap.to(navIndicator, {
+              top: currentPosition,
+              width: pxToRem(currentLinkWidth),
+              duration: 0.3,
+              ease: 'power2.out',
+            });
+            lastHoveredLink = null;
+          }
+        }, 50);
+      };
+
+      // Add listeners
+      link.addEventListener('mouseenter', link._indicatorEnter);
+      link.addEventListener('mouseleave', link._indicatorLeave);
+    });
+
+    return {
+      currentPosition,
+      currentLinkWidth: pxToRem(currentLinkWidth),
+    };
+  }
 
   menuButton.addEventListener('click', () => {
     const isMenuVisible = getComputedStyle(navMenu).display === 'flex';
 
     if (!isMenuVisible) {
       // Opening animation
-      // First set display to flex
       navMenu.style.display = 'flex';
-
-      // Set button width to auto
       gsap.set(menuButton, {
         width: 'auto',
       });
 
-      // Animate button text to "Close"
       gsap.to(menuText, {
         duration: 0.5,
         scrambleText: {
@@ -469,19 +532,46 @@ window.Webflow.push(() => {
         ease: 'none',
       });
 
-      // Add your menu opening animation here
-      gsap.fromTo(
-        navMenu,
-        { scale: 0, transformOrigin: 'top right' },
-        {
-          scale: 1,
-          duration: 0.5,
-          ease: 'elastic.out(1,1)',
-        }
-      );
+      // Combined menu and indicator animation
+      const menuOpen = gsap.timeline();
+      menuOpen
+        .fromTo(
+          navMenu,
+          { scale: 0, transformOrigin: 'top right' },
+          {
+            scale: 1,
+            duration: 0.5,
+            ease: 'elastic.out(1,1)',
+          }
+        )
+        .fromTo(
+          '.nav_link',
+          { autoAlpha: 0 },
+          {
+            autoAlpha: 1,
+            duration: 0.1,
+            stagger: 0.05,
+            ease: 'power2.out',
+            onComplete: () => {
+              // Setup indicator after links are fully visible
+              const { currentPosition, currentLinkWidth } = setupIndicatorInteractions();
+              // Set indicator position and size
+              gsap.set(navIndicator, {
+                top: currentPosition,
+                width: currentLinkWidth,
+              });
+              // Show indicator with smooth fade
+              gsap.to(navIndicator, {
+                autoAlpha: 1,
+                duration: 0.1,
+                ease: 'power2.out',
+              });
+            },
+          },
+          '<0.15'
+        );
     } else {
       // Closing animation
-      // Animate button text back to "Menu"
       gsap.to(menuText, {
         duration: 0.5,
         scrambleText: {
@@ -492,20 +582,180 @@ window.Webflow.push(() => {
         ease: 'none',
       });
 
-      // Fade out menu
-      gsap.to(navMenu, {
-        scale: 0,
-        transformOrigin: 'top right',
-        duration: 0.2,
-        ease: 'power2.out',
-        onComplete: () => {
-          // Set display none after animation completes
-          navMenu.style.display = 'none';
-          // Reset opacity for next opening
-          navMenu.style.opacity = 1;
-        },
-      });
+      const menuClose = gsap.timeline();
+      menuClose
+        // Hide indicator first
+        .to(navIndicator, {
+          autoAlpha: 0,
+          duration: 0.1,
+          ease: 'power2.out',
+        })
+        .to(
+          navMenu,
+          {
+            scale: 0,
+            transformOrigin: 'top right',
+            duration: 0.2,
+            ease: 'power2.in',
+            onComplete: () => {
+              navMenu.style.display = 'none';
+              navMenu.style.opacity = 1;
+            },
+          },
+          '<0.05'
+        )
+        .to(
+          '.nav_link',
+          {
+            autoAlpha: 0,
+            duration: 0.05,
+            stagger: { each: 0.025, from: 'end' },
+            ease: 'power2.out',
+          },
+          '<'
+        );
     }
   });
-  // ————— MENU ANIMATION ————— //
+  // ————— COMBINED MENU & INDICATOR ANIMATION ————— //
+
+  // ————— PIXELATE JS - CASE STUDIES HOVER ————— //
+  /*
+  $('.growth_case-horizontal, .growth_case-vertical').each(function (index) {
+    let image = $(this).find('.image-absolute')[0];
+    let pixelate = new Pixelate(image, { amount: 0 });
+
+    let pixel = { value: 0.9 };
+
+    let tl = gsap.timeline({
+      paused: true,
+      onUpdate: () => {
+        pixelate.setAmount(pixel.value).render();
+      },
+      defaults: {
+        delay: 0.15,
+      },
+      ease: 'power2.in',
+    });
+    tl.set(pixel, { value: 0.97, delay: 0 });
+    tl.set(pixel, { value: 0.9 });
+    tl.set(pixel, { value: 0.86 });
+    tl.set(pixel, { value: 0 });
+
+    $(this).on('mouseenter', function () {
+      tl.restart();
+    });
+    $(this).on('mouseleave', function () {
+      tl.progress(1);
+    });
+
+    window.addEventListener('resize', function () {
+      pixelate.setWidth(image.parentNode.clientWidth).render();
+    });
+  });
+  */
+  // ————— PIXELATE JS - CASE STUDIES HOVER ————— //
+
+  // ————— LOGOS SWITCH ANIMATION ————— //
+
+  const squares = document.querySelectorAll('.logos_item');
+
+  function animateThreeSquares() {
+    // Get 3 random squares (without duplicates)
+    const shuffled = Array.from(squares).sort(() => 0.5 - Math.random());
+    const selectedSquares = shuffled.slice(0, 3);
+
+    // Create timeline for all 3 squares
+    const masterTl = gsap.timeline();
+
+    selectedSquares.forEach((square, index) => {
+      const cells = square.querySelectorAll('.logos_item-cell');
+      const logos = square.querySelectorAll('.logos_image');
+
+      // Create timeline for this square
+      const squareTl = gsap.timeline();
+
+      // 1. Show cells with stagger
+      squareTl
+        .to(cells, {
+          autoAlpha: 1,
+          duration: 0,
+          stagger: {
+            amount: 0.4,
+            from: 'random',
+          },
+        })
+
+        // 2. Switch logos
+        .call(() => {
+          logos.forEach((logo) => {
+            logo.classList.toggle('hide');
+          });
+        })
+
+        // 3. Hide cells with stagger
+        .to(cells, {
+          autoAlpha: 0,
+          duration: 0,
+          stagger: {
+            amount: 0.4,
+            from: 'random',
+          },
+        });
+
+      // Add this square's timeline to master timeline with slight delay
+      masterTl.add(squareTl, index * 0.1);
+    });
+
+    // After all animations complete, wait and repeat
+    masterTl.call(() => {
+      setTimeout(animateThreeSquares, 1500);
+    });
+  }
+
+  // Start the animation
+  setTimeout(animateThreeSquares, 2500);
+  // ————— LOGOS SWITCH ANIMATION ————— //
+
+  // ————— CASE STUDIES ————— //
+  const caseTriggers = document.querySelectorAll('.growth_case-vertical, .growth_case-horizontal');
+
+  caseTriggers.forEach((caseTrigger) => {
+    const cells = caseTrigger.querySelectorAll('.growth_cell');
+
+    const accent = caseTrigger.querySelector('.font-family-accent');
+
+    gsap.set(cells, {
+      autoAlpha: 1,
+    });
+
+    gsap.to(cells, {
+      duration: 0,
+      autoAlpha: 0,
+      delay: 0.3,
+      stagger: {
+        amount: 0.4,
+        from: 'random',
+      },
+      scrollTrigger: {
+        trigger: caseTrigger,
+        start: 'top 100%',
+      },
+    });
+
+    gsap.to(accent, {
+      duration: 0.8,
+      delay: 0.1,
+      scrambleText: {
+        text: '{original}',
+        chars: 'lowerCase',
+        speed: 0.8,
+      },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: accent,
+        start: 'top 100%',
+      },
+    });
+  });
+  // ————— CASE STUDIES ————— //
 });
