@@ -1,6 +1,10548 @@
-(()=>{var eh=Object.create;var Bs=Object.defineProperty;var ih=Object.getOwnPropertyDescriptor;var rh=Object.getOwnPropertyNames;var nh=Object.getPrototypeOf,sh=Object.prototype.hasOwnProperty;var oh=(o,t,e)=>t in o?Bs(o,t,{enumerable:!0,configurable:!0,writable:!0,value:e}):o[t]=e;var uh=(o,t)=>()=>(t||o((t={exports:{}}).exports,t),t.exports);var ah=(o,t,e,i)=>{if(t&&typeof t=="object"||typeof t=="function")for(let r of rh(t))!sh.call(o,r)&&r!==e&&Bs(o,r,{get:()=>t[r],enumerable:!(i=ih(t,r))||i.enumerable});return o};var lh=(o,t,e)=>(e=o!=null?eh(nh(o)):{},ah(t||!o||!o.__esModule?Bs(e,"default",{value:o,enumerable:!0}):e,o));var W=(o,t,e)=>(oh(o,typeof t!="symbol"?t+"":t,e),e);var vu=uh((Gr,Nn)=>{(function(o){window.URL=window.URL||window.webkitURL||window.mozURL;function t(i){return i.webkitImageSmoothingEnabled=!1,i.mozImageSmoothingEnabled=!1,i.msImageSmoothingEnabled=!1,i.imageSmoothingEnabled=!1,i}function e(i,r){r=r||{},this.image=i,this.setAmount(r.amount);var n=function(){this.imageUrl=i.src,this.width=i.clientWidth,this.height=i.clientHeight,this.canvas=document.createElement("canvas"),this.canvas.style.display="none",this.canvas.width=this.width,this.canvas.height=this.height,this.canvas.style.cssText="image-rendering: optimizeSpeed;image-rendering: -moz-crisp-edges;image-rendering: -o-crisp-edges;image-rendering: -webkit-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;image-rendering: pixelated; -ms-interpolation-mode: nearest-neighbor;",this.ctx=this.canvas.getContext("2d"),this.ctx=t(this.ctx),this.image.parentNode.appendChild(this.canvas,this.image),this.image.onload=null,this.pixelImage=new Image,this.pixelImage.onload=function(){this.ready=!0,this.render()}.bind(this),this.pixelImage.src=this.imageUrl}.bind(this);return this.image.complete&&n(),this.image.onload=n,this}e.prototype.setAmount=function(i){return this.amount=1-(i||0),this},e.prototype.setWidth=function(i){var r=this.height/this.width*i;return this.width=i,this.height=r,this.canvas.width=this.width,this.canvas.height=this.height,this.ctx=t(this.ctx),this},e.prototype.render=function(){if(!this.ready)return this;var i=this.width*(this.amount<=0?.01:this.amount),r=this.height*(this.amount<=0?.01:this.amount);return this.ctx.drawImage(this.pixelImage,0,0,i,r),this.ctx.drawImage(this.canvas,0,0,i,r,0,0,this.width,this.height),this.image.src=this.canvas.toDataURL("image/png"),this},typeof Gr<"u"?(typeof Nn<"u"&&Nn.exports&&(Gr=Nn.exports=e),Gr.pixelate=e):typeof define=="function"&&define.amd?define([],function(){return e}):o.Pixelate=e})(Gr)});var hh="1.3.4";function Du(o,t,e){return Math.max(o,Math.min(t,e))}function fh(o,t,e){return(1-e)*o+e*t}function ch(o,t,e,i){return fh(o,t,1-Math.exp(-e*i))}function dh(o,t){return(o%t+t)%t}var ph=class{constructor(){W(this,"isRunning",!1);W(this,"value",0);W(this,"from",0);W(this,"to",0);W(this,"currentTime",0);W(this,"lerp");W(this,"duration");W(this,"easing");W(this,"onUpdate")}advance(o){if(!this.isRunning)return;let t=!1;if(this.duration&&this.easing){this.currentTime+=o;let e=Du(0,this.currentTime/this.duration,1);t=e>=1;let i=t?1:this.easing(e);this.value=this.from+(this.to-this.from)*i}else this.lerp?(this.value=ch(this.value,this.to,this.lerp*60,o),Math.round(this.value)===this.to&&(this.value=this.to,t=!0)):(this.value=this.to,t=!0);t&&this.stop(),this.onUpdate?.(this.value,t)}stop(){this.isRunning=!1}fromTo(o,t,{lerp:e,duration:i,easing:r,onStart:n,onUpdate:s}){this.from=this.value=o,this.to=t,this.lerp=e,this.duration=i,this.easing=r,this.currentTime=0,this.isRunning=!0,n?.(),this.onUpdate=s}};function _h(o,t){let e;return function(...i){let r=this;clearTimeout(e),e=setTimeout(()=>{e=void 0,o.apply(r,i)},t)}}var gh=class{constructor(o,t,{autoResize:e=!0,debounce:i=250}={}){W(this,"width",0);W(this,"height",0);W(this,"scrollHeight",0);W(this,"scrollWidth",0);W(this,"debouncedResize");W(this,"wrapperResizeObserver");W(this,"contentResizeObserver");W(this,"resize",()=>{this.onWrapperResize(),this.onContentResize()});W(this,"onWrapperResize",()=>{this.wrapper instanceof Window?(this.width=window.innerWidth,this.height=window.innerHeight):(this.width=this.wrapper.clientWidth,this.height=this.wrapper.clientHeight)});W(this,"onContentResize",()=>{this.wrapper instanceof Window?(this.scrollHeight=this.content.scrollHeight,this.scrollWidth=this.content.scrollWidth):(this.scrollHeight=this.wrapper.scrollHeight,this.scrollWidth=this.wrapper.scrollWidth)});this.wrapper=o,this.content=t,e&&(this.debouncedResize=_h(this.resize,i),this.wrapper instanceof Window?window.addEventListener("resize",this.debouncedResize,!1):(this.wrapperResizeObserver=new ResizeObserver(this.debouncedResize),this.wrapperResizeObserver.observe(this.wrapper)),this.contentResizeObserver=new ResizeObserver(this.debouncedResize),this.contentResizeObserver.observe(this.content)),this.resize()}destroy(){this.wrapperResizeObserver?.disconnect(),this.contentResizeObserver?.disconnect(),this.wrapper===window&&this.debouncedResize&&window.removeEventListener("resize",this.debouncedResize,!1)}get limit(){return{x:this.scrollWidth-this.width,y:this.scrollHeight-this.height}}},mu=class{constructor(){W(this,"events",{})}emit(o,...t){let e=this.events[o]||[];for(let i=0,r=e.length;i<r;i++)e[i]?.(...t)}on(o,t){return this.events[o]?.push(t)||(this.events[o]=[t]),()=>{this.events[o]=this.events[o]?.filter(e=>t!==e)}}off(o,t){this.events[o]=this.events[o]?.filter(e=>t!==e)}destroy(){this.events={}}},_u=100/6,Ei={passive:!1},Dh=class{constructor(o,t={wheelMultiplier:1,touchMultiplier:1}){W(this,"touchStart",{x:0,y:0});W(this,"lastDelta",{x:0,y:0});W(this,"window",{width:0,height:0});W(this,"emitter",new mu);W(this,"onTouchStart",o=>{let{clientX:t,clientY:e}=o.targetTouches?o.targetTouches[0]:o;this.touchStart.x=t,this.touchStart.y=e,this.lastDelta={x:0,y:0},this.emitter.emit("scroll",{deltaX:0,deltaY:0,event:o})});W(this,"onTouchMove",o=>{let{clientX:t,clientY:e}=o.targetTouches?o.targetTouches[0]:o,i=-(t-this.touchStart.x)*this.options.touchMultiplier,r=-(e-this.touchStart.y)*this.options.touchMultiplier;this.touchStart.x=t,this.touchStart.y=e,this.lastDelta={x:i,y:r},this.emitter.emit("scroll",{deltaX:i,deltaY:r,event:o})});W(this,"onTouchEnd",o=>{this.emitter.emit("scroll",{deltaX:this.lastDelta.x,deltaY:this.lastDelta.y,event:o})});W(this,"onWheel",o=>{let{deltaX:t,deltaY:e,deltaMode:i}=o,r=i===1?_u:i===2?this.window.width:1,n=i===1?_u:i===2?this.window.height:1;t*=r,e*=n,t*=this.options.wheelMultiplier,e*=this.options.wheelMultiplier,this.emitter.emit("scroll",{deltaX:t,deltaY:e,event:o})});W(this,"onWindowResize",()=>{this.window={width:window.innerWidth,height:window.innerHeight}});this.element=o,this.options=t,window.addEventListener("resize",this.onWindowResize,!1),this.onWindowResize(),this.element.addEventListener("wheel",this.onWheel,Ei),this.element.addEventListener("touchstart",this.onTouchStart,Ei),this.element.addEventListener("touchmove",this.onTouchMove,Ei),this.element.addEventListener("touchend",this.onTouchEnd,Ei)}on(o,t){return this.emitter.on(o,t)}destroy(){this.emitter.destroy(),window.removeEventListener("resize",this.onWindowResize,!1),this.element.removeEventListener("wheel",this.onWheel,Ei),this.element.removeEventListener("touchstart",this.onTouchStart,Ei),this.element.removeEventListener("touchmove",this.onTouchMove,Ei),this.element.removeEventListener("touchend",this.onTouchEnd,Ei)}},gu=o=>Math.min(1,1.001-Math.pow(2,-10*o)),yu=class{constructor({wrapper:o=window,content:t=document.documentElement,eventsTarget:e=o,smoothWheel:i=!0,syncTouch:r=!1,syncTouchLerp:n=.075,touchInertiaMultiplier:s=35,duration:u,easing:a,lerp:l=.1,infinite:h=!1,orientation:d="vertical",gestureOrientation:f="vertical",touchMultiplier:c=1,wheelMultiplier:_=1,autoResize:p=!0,prevent:g,virtualScroll:D,overscroll:v=!0,autoRaf:x=!1,anchors:y=!1,autoToggle:C=!1,allowNestedScroll:w=!1,__experimental__naiveDimensions:S=!1}={}){W(this,"_isScrolling",!1);W(this,"_isStopped",!1);W(this,"_isLocked",!1);W(this,"_preventNextNativeScrollEvent",!1);W(this,"_resetVelocityTimeout",null);W(this,"__rafID",null);W(this,"isTouching");W(this,"time",0);W(this,"userData",{});W(this,"lastVelocity",0);W(this,"velocity",0);W(this,"direction",0);W(this,"options");W(this,"targetScroll");W(this,"animatedScroll");W(this,"animate",new ph);W(this,"emitter",new mu);W(this,"dimensions");W(this,"virtualScroll");W(this,"onScrollEnd",o=>{o instanceof CustomEvent||(this.isScrolling==="smooth"||this.isScrolling===!1)&&o.stopPropagation()});W(this,"dispatchScrollendEvent",()=>{this.options.wrapper.dispatchEvent(new CustomEvent("scrollend",{bubbles:this.options.wrapper===window,detail:{lenisScrollEnd:!0}}))});W(this,"onTransitionEnd",o=>{if(o.propertyName.includes("overflow")){let t=this.isHorizontal?"overflow-x":"overflow-y",e=getComputedStyle(this.rootElement)[t];["hidden","clip"].includes(e)?this.stop():this.start()}});W(this,"onClick",o=>{let e=o.composedPath().find(i=>i instanceof HTMLAnchorElement&&(i.getAttribute("href")?.startsWith("#")||i.getAttribute("href")?.startsWith("/#")||i.getAttribute("href")?.startsWith("./#")));if(e){let i=e.getAttribute("href");if(i){let r=typeof this.options.anchors=="object"&&this.options.anchors?this.options.anchors:void 0,n=`#${i.split("#")[1]}`;["#","/#","./#","#top","/#top","./#top"].includes(i)&&(n=0),this.scrollTo(n,r)}}});W(this,"onPointerDown",o=>{o.button===1&&this.reset()});W(this,"onVirtualScroll",o=>{if(typeof this.options.virtualScroll=="function"&&this.options.virtualScroll(o)===!1)return;let{deltaX:t,deltaY:e,event:i}=o;if(this.emitter.emit("virtual-scroll",{deltaX:t,deltaY:e,event:i}),i.ctrlKey||i.lenisStopPropagation)return;let r=i.type.includes("touch"),n=i.type.includes("wheel");this.isTouching=i.type==="touchstart"||i.type==="touchmove";let s=t===0&&e===0;if(this.options.syncTouch&&r&&i.type==="touchstart"&&s&&!this.isStopped&&!this.isLocked){this.reset();return}let a=this.options.gestureOrientation==="vertical"&&e===0||this.options.gestureOrientation==="horizontal"&&t===0;if(s||a)return;let l=i.composedPath();l=l.slice(0,l.indexOf(this.rootElement));let h=this.options.prevent;if(l.find(g=>g instanceof HTMLElement&&(typeof h=="function"&&h?.(g)||g.hasAttribute?.("data-lenis-prevent")||r&&g.hasAttribute?.("data-lenis-prevent-touch")||n&&g.hasAttribute?.("data-lenis-prevent-wheel")||this.options.allowNestedScroll&&this.checkNestedScroll(g,{deltaX:t,deltaY:e}))))return;if(this.isStopped||this.isLocked){i.preventDefault();return}if(!(this.options.syncTouch&&r||this.options.smoothWheel&&n)){this.isScrolling="native",this.animate.stop(),i.lenisStopPropagation=!0;return}let f=e;this.options.gestureOrientation==="both"?f=Math.abs(e)>Math.abs(t)?e:t:this.options.gestureOrientation==="horizontal"&&(f=t),(!this.options.overscroll||this.options.infinite||this.options.wrapper!==window&&(this.animatedScroll>0&&this.animatedScroll<this.limit||this.animatedScroll===0&&e>0||this.animatedScroll===this.limit&&e<0))&&(i.lenisStopPropagation=!0),i.preventDefault();let c=r&&this.options.syncTouch,p=r&&i.type==="touchend"&&Math.abs(f)>5;p&&(f=this.velocity*this.options.touchInertiaMultiplier),this.scrollTo(this.targetScroll+f,{programmatic:!1,...c?{lerp:p?this.options.syncTouchLerp:1}:{lerp:this.options.lerp,duration:this.options.duration,easing:this.options.easing}})});W(this,"onNativeScroll",()=>{if(this._resetVelocityTimeout!==null&&(clearTimeout(this._resetVelocityTimeout),this._resetVelocityTimeout=null),this._preventNextNativeScrollEvent){this._preventNextNativeScrollEvent=!1;return}if(this.isScrolling===!1||this.isScrolling==="native"){let o=this.animatedScroll;this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity,this.velocity=this.animatedScroll-o,this.direction=Math.sign(this.animatedScroll-o),this.isStopped||(this.isScrolling="native"),this.emit(),this.velocity!==0&&(this._resetVelocityTimeout=setTimeout(()=>{this.lastVelocity=this.velocity,this.velocity=0,this.isScrolling=!1,this.emit()},400))}});W(this,"raf",o=>{let t=o-(this.time||o);this.time=o,this.animate.advance(t*.001),this.options.autoRaf&&(this.__rafID=requestAnimationFrame(this.raf))});window.lenisVersion=hh,(!o||o===document.documentElement)&&(o=window),typeof u=="number"&&typeof a!="function"?a=gu:typeof a=="function"&&typeof u!="number"&&(u=1),this.options={wrapper:o,content:t,eventsTarget:e,smoothWheel:i,syncTouch:r,syncTouchLerp:n,touchInertiaMultiplier:s,duration:u,easing:a,lerp:l,infinite:h,gestureOrientation:f,orientation:d,touchMultiplier:c,wheelMultiplier:_,autoResize:p,prevent:g,virtualScroll:D,overscroll:v,autoRaf:x,anchors:y,autoToggle:C,allowNestedScroll:w,__experimental__naiveDimensions:S},this.dimensions=new gh(o,t,{autoResize:p}),this.updateClassName(),this.targetScroll=this.animatedScroll=this.actualScroll,this.options.wrapper.addEventListener("scroll",this.onNativeScroll,!1),this.options.wrapper.addEventListener("scrollend",this.onScrollEnd,{capture:!0}),this.options.anchors&&this.options.wrapper===window&&this.options.wrapper.addEventListener("click",this.onClick,!1),this.options.wrapper.addEventListener("pointerdown",this.onPointerDown,!1),this.virtualScroll=new Dh(e,{touchMultiplier:c,wheelMultiplier:_}),this.virtualScroll.on("scroll",this.onVirtualScroll),this.options.autoToggle&&this.rootElement.addEventListener("transitionend",this.onTransitionEnd,{passive:!0}),this.options.autoRaf&&(this.__rafID=requestAnimationFrame(this.raf))}destroy(){this.emitter.destroy(),this.options.wrapper.removeEventListener("scroll",this.onNativeScroll,!1),this.options.wrapper.removeEventListener("scrollend",this.onScrollEnd,{capture:!0}),this.options.wrapper.removeEventListener("pointerdown",this.onPointerDown,!1),this.options.anchors&&this.options.wrapper===window&&this.options.wrapper.removeEventListener("click",this.onClick,!1),this.virtualScroll.destroy(),this.dimensions.destroy(),this.cleanUpClassName(),this.__rafID&&cancelAnimationFrame(this.__rafID)}on(o,t){return this.emitter.on(o,t)}off(o,t){return this.emitter.off(o,t)}setScroll(o){this.isHorizontal?this.options.wrapper.scrollTo({left:o,behavior:"instant"}):this.options.wrapper.scrollTo({top:o,behavior:"instant"})}resize(){this.dimensions.resize(),this.animatedScroll=this.targetScroll=this.actualScroll,this.emit()}emit(){this.emitter.emit("scroll",this)}reset(){this.isLocked=!1,this.isScrolling=!1,this.animatedScroll=this.targetScroll=this.actualScroll,this.lastVelocity=this.velocity=0,this.animate.stop()}start(){this.isStopped&&(this.reset(),this.isStopped=!1,this.emit())}stop(){this.isStopped||(this.reset(),this.isStopped=!0,this.emit())}scrollTo(o,{offset:t=0,immediate:e=!1,lock:i=!1,duration:r=this.options.duration,easing:n=this.options.easing,lerp:s=this.options.lerp,onStart:u,onComplete:a,force:l=!1,programmatic:h=!0,userData:d}={}){if(!((this.isStopped||this.isLocked)&&!l)){if(typeof o=="string"&&["top","left","start"].includes(o))o=0;else if(typeof o=="string"&&["bottom","right","end"].includes(o))o=this.limit;else{let f;if(typeof o=="string"?f=document.querySelector(o):o instanceof HTMLElement&&o?.nodeType&&(f=o),f){if(this.options.wrapper!==window){let _=this.rootElement.getBoundingClientRect();t-=this.isHorizontal?_.left:_.top}let c=f.getBoundingClientRect();o=(this.isHorizontal?c.left:c.top)+this.animatedScroll}}if(typeof o=="number"){if(o+=t,o=Math.round(o),this.options.infinite){if(h){this.targetScroll=this.animatedScroll=this.scroll;let f=o-this.animatedScroll;f>this.limit/2?o=o-this.limit:f<-this.limit/2&&(o=o+this.limit)}}else o=Du(0,o,this.limit);if(o===this.targetScroll){u?.(this),a?.(this);return}if(this.userData=d??{},e){this.animatedScroll=this.targetScroll=o,this.setScroll(this.scroll),this.reset(),this.preventNextNativeScrollEvent(),this.emit(),a?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()});return}h||(this.targetScroll=o),typeof r=="number"&&typeof n!="function"?n=gu:typeof n=="function"&&typeof r!="number"&&(r=1),this.animate.fromTo(this.animatedScroll,o,{duration:r,easing:n,lerp:s,onStart:()=>{i&&(this.isLocked=!0),this.isScrolling="smooth",u?.(this)},onUpdate:(f,c)=>{this.isScrolling="smooth",this.lastVelocity=this.velocity,this.velocity=f-this.animatedScroll,this.direction=Math.sign(this.velocity),this.animatedScroll=f,this.setScroll(this.scroll),h&&(this.targetScroll=f),c||this.emit(),c&&(this.reset(),this.emit(),a?.(this),this.userData={},requestAnimationFrame(()=>{this.dispatchScrollendEvent()}),this.preventNextNativeScrollEvent())}})}}}preventNextNativeScrollEvent(){this._preventNextNativeScrollEvent=!0,requestAnimationFrame(()=>{this._preventNextNativeScrollEvent=!1})}checkNestedScroll(o,{deltaX:t,deltaY:e}){let i=Date.now(),r=o._lenis??(o._lenis={}),n,s,u,a,l,h,d,f,c=this.options.gestureOrientation;if(i-(r.time??0)>2e3){r.time=Date.now();let C=window.getComputedStyle(o);r.computedStyle=C;let w=C.overflowX,S=C.overflowY;if(n=["auto","overlay","scroll"].includes(w),s=["auto","overlay","scroll"].includes(S),r.hasOverflowX=n,r.hasOverflowY=s,!n&&!s||c==="vertical"&&!s||c==="horizontal"&&!n)return!1;l=o.scrollWidth,h=o.scrollHeight,d=o.clientWidth,f=o.clientHeight,u=l>d,a=h>f,r.isScrollableX=u,r.isScrollableY=a,r.scrollWidth=l,r.scrollHeight=h,r.clientWidth=d,r.clientHeight=f}else u=r.isScrollableX,a=r.isScrollableY,n=r.hasOverflowX,s=r.hasOverflowY,l=r.scrollWidth,h=r.scrollHeight,d=r.clientWidth,f=r.clientHeight;if(!n&&!s||!u&&!a||c==="vertical"&&(!s||!a)||c==="horizontal"&&(!n||!u))return!1;let _;if(c==="horizontal")_="x";else if(c==="vertical")_="y";else{let C=t!==0,w=e!==0;C&&n&&u&&(_="x"),w&&s&&a&&(_="y")}if(!_)return!1;let p,g,D,v,x;if(_==="x")p=o.scrollLeft,g=l-d,D=t,v=n,x=u;else if(_==="y")p=o.scrollTop,g=h-f,D=e,v=s,x=a;else return!1;return(D>0?p<g:p>0)&&v&&x}get rootElement(){return this.options.wrapper===window?document.documentElement:this.options.wrapper}get limit(){return this.options.__experimental__naiveDimensions?this.isHorizontal?this.rootElement.scrollWidth-this.rootElement.clientWidth:this.rootElement.scrollHeight-this.rootElement.clientHeight:this.dimensions.limit[this.isHorizontal?"x":"y"]}get isHorizontal(){return this.options.orientation==="horizontal"}get actualScroll(){let o=this.options.wrapper;return this.isHorizontal?o.scrollX??o.scrollLeft:o.scrollY??o.scrollTop}get scroll(){return this.options.infinite?dh(this.animatedScroll,this.limit):this.animatedScroll}get progress(){return this.limit===0?1:this.scroll/this.limit}get isScrolling(){return this._isScrolling}set isScrolling(o){this._isScrolling!==o&&(this._isScrolling=o,this.updateClassName())}get isStopped(){return this._isStopped}set isStopped(o){this._isStopped!==o&&(this._isStopped=o,this.updateClassName())}get isLocked(){return this._isLocked}set isLocked(o){this._isLocked!==o&&(this._isLocked=o,this.updateClassName())}get isSmooth(){return this.isScrolling==="smooth"}get className(){let o="lenis";return this.options.autoToggle&&(o+=" lenis-autoToggle"),this.isStopped&&(o+=" lenis-stopped"),this.isLocked&&(o+=" lenis-locked"),this.isScrolling&&(o+=" lenis-scrolling"),this.isScrolling==="smooth"&&(o+=" lenis-smooth"),o}updateClassName(){this.cleanUpClassName(),this.rootElement.className=`${this.rootElement.className} ${this.className}`.trim()}cleanUpClassName(){this.rootElement.className=this.rootElement.className.replace(/lenis(-\w+)?/g,"").trim()}};var Ld=lh(vu(),1);function ai(o){if(o===void 0)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return o}function Fu(o,t){o.prototype=Object.create(t.prototype),o.prototype.constructor=o,o.__proto__=t}var De={autoSleep:120,force3D:"auto",nullTargetWarn:1,units:{lineHeight:""}},mr={duration:.5,overwrite:!1,delay:0},eo,Ut,pt,Oe=1e8,lt=1/Oe,Hs=Math.PI*2,mh=Hs/4,yh=0,Au=Math.sqrt,vh=Math.cos,xh=Math.sin,Bt=function(t){return typeof t=="string"},Ct=function(t){return typeof t=="function"},hi=function(t){return typeof t=="number"},jn=function(t){return typeof t>"u"},Je=function(t){return typeof t=="object"},ge=function(t){return t!==!1},io=function(){return typeof window<"u"},In=function(t){return Ct(t)||Bt(t)},Pu=typeof ArrayBuffer=="function"&&ArrayBuffer.isView||function(){},Jt=Array.isArray,qs=/(?:-?\.?\d|\.)+/gi,ro=/[-+=.]*\d+[.e\-+]*\d*[e\-+]*\d*/g,Gi=/[-+=.]*\d+[.e-]*\d*[a-z%]*/g,zs=/[-+=.]*\d+\.?\d*(?:e-|e\+)?\d*/gi,no=/[+-]=-?[.\d]+/,Mu=/[^,'"\[\]\s]+/gi,Ch=/^[+\-=e\s\d]*\d+[.\d]*([a-z]*|%)\s*$/i,mt,$e,Us,so,Ee={},Vn={},ku,Ou=function(t){return(Vn=yr(t,Ee))&&te},Qn=function(t,e){return console.warn("Invalid property",t,"set to",e,"Missing plugin? gsap.registerPlugin()")},Jr=function(t,e){return!e&&console.warn(t)},Ru=function(t,e){return t&&(Ee[t]=e)&&Vn&&(Vn[t]=e)||Ee},tn=function(){return 0},wh={suppressEvents:!0,isStart:!0,kill:!1},Yn={suppressEvents:!0,kill:!1},Sh={suppressEvents:!0},oo={},Ti=[],Gs={},Lu,pe={},Ns={},xu=30,Wn=[],uo="",ao=function(t){var e=t[0],i,r;if(Je(e)||Ct(e)||(t=[t]),!(i=(e._gsap||{}).harness)){for(r=Wn.length;r--&&!Wn[r].targetTest(e););i=Wn[r]}for(r=t.length;r--;)t[r]&&(t[r]._gsap||(t[r]._gsap=new co(t[r],i)))||t.splice(r,1);return t},Fi=function(t){return t._gsap||ao(Re(t))[0]._gsap},lo=function(t,e,i){return(i=t[e])&&Ct(i)?t[e]():jn(i)&&t.getAttribute&&t.getAttribute(e)||i},se=function(t,e){return(t=t.split(",")).forEach(e)||t},wt=function(t){return Math.round(t*1e5)/1e5||0},Mt=function(t){return Math.round(t*1e7)/1e7||0},ji=function(t,e){var i=e.charAt(0),r=parseFloat(e.substr(2));return t=parseFloat(t),i==="+"?t+r:i==="-"?t-r:i==="*"?t*r:t/r},Eh=function(t,e){for(var i=e.length,r=0;t.indexOf(e[r])<0&&++r<i;);return r<i},Hn=function(){var t=Ti.length,e=Ti.slice(0),i,r;for(Gs={},Ti.length=0,i=0;i<t;i++)r=e[i],r&&r._lazy&&(r.render(r._lazy[0],r._lazy[1],!0)._lazy=0)},ho=function(t){return!!(t._initted||t._startAt||t.add)},Bu=function(t,e,i,r){Ti.length&&!Ut&&Hn(),t.render(e,i,r||!!(Ut&&e<0&&ho(t))),Ti.length&&!Ut&&Hn()},zu=function(t){var e=parseFloat(t);return(e||e===0)&&(t+"").match(Mu).length<2?e:Bt(t)?t.trim():t},Nu=function(t){return t},be=function(t,e){for(var i in e)i in t||(t[i]=e[i]);return t},bh=function(t){return function(e,i){for(var r in i)r in e||r==="duration"&&t||r==="ease"||(e[r]=i[r])}},yr=function(t,e){for(var i in e)t[i]=e[i];return t},Cu=function o(t,e){for(var i in e)i!=="__proto__"&&i!=="constructor"&&i!=="prototype"&&(t[i]=Je(e[i])?o(t[i]||(t[i]={}),e[i]):e[i]);return t},qn=function(t,e){var i={},r;for(r in t)r in e||(i[r]=t[r]);return i},Kr=function(t){var e=t.parent||mt,i=t.keyframes?bh(Jt(t.keyframes)):be;if(ge(t.inherit))for(;e;)i(t,e.vars.defaults),e=e.parent||e._dp;return t},Th=function(t,e){for(var i=t.length,r=i===e.length;r&&i--&&t[i]===e[i];);return i<0},Iu=function(t,e,i,r,n){i===void 0&&(i="_first"),r===void 0&&(r="_last");var s=t[r],u;if(n)for(u=e[n];s&&s[n]>u;)s=s._prev;return s?(e._next=s._next,s._next=e):(e._next=t[i],t[i]=e),e._next?e._next._prev=e:t[r]=e,e._prev=s,e.parent=e._dp=t,e},Kn=function(t,e,i,r){i===void 0&&(i="_first"),r===void 0&&(r="_last");var n=e._prev,s=e._next;n?n._next=s:t[i]===e&&(t[i]=s),s?s._prev=n:t[r]===e&&(t[r]=n),e._next=e._prev=e.parent=null},Ai=function(t,e){t.parent&&(!e||t.parent.autoRemoveChildren)&&t.parent.remove&&t.parent.remove(t),t._act=0},Hi=function(t,e){if(t&&(!e||e._end>t._dur||e._start<0))for(var i=t;i;)i._dirty=1,i=i.parent;return t},Fh=function(t){for(var e=t.parent;e&&e.parent;)e._dirty=1,e.totalDuration(),e=e.parent;return t},js=function(t,e,i,r){return t._startAt&&(Ut?t._startAt.revert(Yn):t.vars.immediateRender&&!t.vars.autoRevert||t._startAt.render(e,!0,r))},Ah=function o(t){return!t||t._ts&&o(t.parent)},wu=function(t){return t._repeat?vr(t._tTime,t=t.duration()+t._rDelay)*t:0},vr=function(t,e){var i=Math.floor(t=Mt(t/e));return t&&i===t?i-1:i},Un=function(t,e){return(t-e._start)*e._ts+(e._ts>=0?0:e._dirty?e.totalDuration():e._tDur)},$n=function(t){return t._end=Mt(t._start+(t._tDur/Math.abs(t._ts||t._rts||lt)||0))},Zn=function(t,e){var i=t._dp;return i&&i.smoothChildTiming&&t._ts&&(t._start=Mt(i._time-(t._ts>0?e/t._ts:((t._dirty?t.totalDuration():t._tDur)-e)/-t._ts)),$n(t),i._dirty||Hi(i,t)),t},Yu=function(t,e){var i;if((e._time||!e._dur&&e._initted||e._start<t._time&&(e._dur||!e.add))&&(i=Un(t.rawTime(),e),(!e._dur||nn(0,e.totalDuration(),i)-e._tTime>lt)&&e.render(i,!0)),Hi(t,e)._dp&&t._initted&&t._time>=t._dur&&t._ts){if(t._dur<t.duration())for(i=t;i._dp;)i.rawTime()>=0&&i.totalTime(i._tTime),i=i._dp;t._zTime=-lt}},Ze=function(t,e,i,r){return e.parent&&Ai(e),e._start=Mt((hi(i)?i:i||t!==mt?ke(t,i,e):t._time)+e._delay),e._end=Mt(e._start+(e.totalDuration()/Math.abs(e.timeScale())||0)),Iu(t,e,"_first","_last",t._sort?"_start":0),Qs(e)||(t._recent=e),r||Yu(t,e),t._ts<0&&Zn(t,t._tTime),t},Wu=function(t,e){return(Ee.ScrollTrigger||Qn("scrollTrigger",e))&&Ee.ScrollTrigger.create(e,t)},Xu=function(t,e,i,r,n){if(go(t,e,n),!t._initted)return 1;if(!i&&t._pt&&!Ut&&(t._dur&&t.vars.lazy!==!1||!t._dur&&t.vars.lazy)&&Lu!==_e.frame)return Ti.push(t),t._lazy=[n,r],1},Ph=function o(t){var e=t.parent;return e&&e._ts&&e._initted&&!e._lock&&(e.rawTime()<0||o(e))},Qs=function(t){var e=t.data;return e==="isFromStart"||e==="isStart"},Mh=function(t,e,i,r){var n=t.ratio,s=e<0||!e&&(!t._start&&Ph(t)&&!(!t._initted&&Qs(t))||(t._ts<0||t._dp._ts<0)&&!Qs(t))?0:1,u=t._rDelay,a=0,l,h,d;if(u&&t._repeat&&(a=nn(0,t._tDur,e),h=vr(a,u),t._yoyo&&h&1&&(s=1-s),h!==vr(t._tTime,u)&&(n=1-s,t.vars.repeatRefresh&&t._initted&&t.invalidate())),s!==n||Ut||r||t._zTime===lt||!e&&t._zTime){if(!t._initted&&Xu(t,e,r,i,a))return;for(d=t._zTime,t._zTime=e||(i?lt:0),i||(i=e&&!d),t.ratio=s,t._from&&(s=1-s),t._time=0,t._tTime=a,l=t._pt;l;)l.r(s,l.d),l=l._next;e<0&&js(t,e,i,!0),t._onUpdate&&!i&&Se(t,"onUpdate"),a&&t._repeat&&!i&&t.parent&&Se(t,"onRepeat"),(e>=t._tDur||e<0)&&t.ratio===s&&(s&&Ai(t,1),!i&&!Ut&&(Se(t,s?"onComplete":"onReverseComplete",!0),t._prom&&t._prom()))}else t._zTime||(t._zTime=e)},kh=function(t,e,i){var r;if(i>e)for(r=t._first;r&&r._start<=i;){if(r.data==="isPause"&&r._start>e)return r;r=r._next}else for(r=t._last;r&&r._start>=i;){if(r.data==="isPause"&&r._start<e)return r;r=r._prev}},xr=function(t,e,i,r){var n=t._repeat,s=Mt(e)||0,u=t._tTime/t._tDur;return u&&!r&&(t._time*=s/t._dur),t._dur=s,t._tDur=n?n<0?1e10:Mt(s*(n+1)+t._rDelay*n):s,u>0&&!r&&Zn(t,t._tTime=t._tDur*u),t.parent&&$n(t),i||Hi(t.parent,t),t},Su=function(t){return t instanceof qt?Hi(t):xr(t,t._dur)},Oh={_start:0,endTime:tn,totalDuration:tn},ke=function o(t,e,i){var r=t.labels,n=t._recent||Oh,s=t.duration()>=Oe?n.endTime(!1):t._dur,u,a,l;return Bt(e)&&(isNaN(e)||e in r)?(a=e.charAt(0),l=e.substr(-1)==="%",u=e.indexOf("="),a==="<"||a===">"?(u>=0&&(e=e.replace(/=/,"")),(a==="<"?n._start:n.endTime(n._repeat>=0))+(parseFloat(e.substr(1))||0)*(l?(u<0?n:i).totalDuration()/100:1)):u<0?(e in r||(r[e]=s),r[e]):(a=parseFloat(e.charAt(u-1)+e.substr(u+1)),l&&i&&(a=a/100*(Jt(i)?i[0]:i).totalDuration()),u>1?o(t,e.substr(0,u-1),i)+a:s+a)):e==null?s:+e},$r=function(t,e,i){var r=hi(e[1]),n=(r?2:1)+(t<2?0:1),s=e[n],u,a;if(r&&(s.duration=e[1]),s.parent=i,t){for(u=s,a=i;a&&!("immediateRender"in u);)u=a.vars.defaults||{},a=ge(a.vars.inherit)&&a.parent;s.immediateRender=ge(u.immediateRender),t<2?s.runBackwards=1:s.startAt=e[n-1]}return new Ft(e[0],s,e[n+1])},Pi=function(t,e){return t||t===0?e(t):e},nn=function(t,e,i){return i<t?t:i>e?e:i},Gt=function(t,e){return!Bt(t)||!(e=Ch.exec(t))?"":e[1]},Rh=function(t,e,i){return Pi(i,function(r){return nn(t,e,r)})},Ks=[].slice,Vu=function(t,e){return t&&Je(t)&&"length"in t&&(!e&&!t.length||t.length-1 in t&&Je(t[0]))&&!t.nodeType&&t!==$e},Lh=function(t,e,i){return i===void 0&&(i=[]),t.forEach(function(r){var n;return Bt(r)&&!e||Vu(r,1)?(n=i).push.apply(n,Re(r)):i.push(r)})||i},Re=function(t,e,i){return pt&&!e&&pt.selector?pt.selector(t):Bt(t)&&!i&&(Us||!Cr())?Ks.call((e||so).querySelectorAll(t),0):Jt(t)?Lh(t,i):Vu(t)?Ks.call(t,0):t?[t]:[]},$s=function(t){return t=Re(t)[0]||Jr("Invalid scope")||{},function(e){var i=t.current||t.nativeElement||t;return Re(e,i.querySelectorAll?i:i===t?Jr("Invalid scope")||so.createElement("div"):t)}},Hu=function(t){return t.sort(function(){return .5-Math.random()})},qu=function(t){if(Ct(t))return t;var e=Je(t)?t:{each:t},i=qi(e.ease),r=e.from||0,n=parseFloat(e.base)||0,s={},u=r>0&&r<1,a=isNaN(r)||u,l=e.axis,h=r,d=r;return Bt(r)?h=d={center:.5,edges:.5,end:1}[r]||0:!u&&a&&(h=r[0],d=r[1]),function(f,c,_){var p=(_||e).length,g=s[p],D,v,x,y,C,w,S,b,E;if(!g){if(E=e.grid==="auto"?0:(e.grid||[1,Oe])[1],!E){for(S=-Oe;S<(S=_[E++].getBoundingClientRect().left)&&E<p;);E<p&&E--}for(g=s[p]=[],D=a?Math.min(E,p)*h-.5:r%E,v=E===Oe?0:a?p*d/E-.5:r/E|0,S=0,b=Oe,w=0;w<p;w++)x=w%E-D,y=v-(w/E|0),g[w]=C=l?Math.abs(l==="y"?y:x):Au(x*x+y*y),C>S&&(S=C),C<b&&(b=C);r==="random"&&Hu(g),g.max=S-b,g.min=b,g.v=p=(parseFloat(e.amount)||parseFloat(e.each)*(E>p?p-1:l?l==="y"?p/E:E:Math.max(E,p/E))||0)*(r==="edges"?-1:1),g.b=p<0?n-p:n,g.u=Gt(e.amount||e.each)||0,i=i&&p<0?ta(i):i}return p=(g[f]-g.min)/g.max||0,Mt(g.b+(i?i(p):p)*g.v)+g.u}},Zs=function(t){var e=Math.pow(10,((t+"").split(".")[1]||"").length);return function(i){var r=Mt(Math.round(parseFloat(i)/t)*t*e);return(r-r%1)/e+(hi(i)?0:Gt(i))}},Uu=function(t,e){var i=Jt(t),r,n;return!i&&Je(t)&&(r=i=t.radius||Oe,t.values?(t=Re(t.values),(n=!hi(t[0]))&&(r*=r)):t=Zs(t.increment)),Pi(e,i?Ct(t)?function(s){return n=t(s),Math.abs(n-s)<=r?n:s}:function(s){for(var u=parseFloat(n?s.x:s),a=parseFloat(n?s.y:0),l=Oe,h=0,d=t.length,f,c;d--;)n?(f=t[d].x-u,c=t[d].y-a,f=f*f+c*c):f=Math.abs(t[d]-u),f<l&&(l=f,h=d);return h=!r||l<=r?t[h]:s,n||h===s||hi(s)?h:h+Gt(s)}:Zs(t))},Gu=function(t,e,i,r){return Pi(Jt(t)?!e:i===!0?!!(i=0):!r,function(){return Jt(t)?t[~~(Math.random()*t.length)]:(i=i||1e-5)&&(r=i<1?Math.pow(10,(i+"").length-2):1)&&Math.floor(Math.round((t-i/2+Math.random()*(e-t+i*.99))/i)*i*r)/r})},Bh=function(){for(var t=arguments.length,e=new Array(t),i=0;i<t;i++)e[i]=arguments[i];return function(r){return e.reduce(function(n,s){return s(n)},r)}},zh=function(t,e){return function(i){return t(parseFloat(i))+(e||Gt(i))}},Nh=function(t,e,i){return Qu(t,e,0,1,i)},ju=function(t,e,i){return Pi(i,function(r){return t[~~e(r)]})},Ih=function o(t,e,i){var r=e-t;return Jt(t)?ju(t,o(0,t.length),e):Pi(i,function(n){return(r+(n-t)%r)%r+t})},Yh=function o(t,e,i){var r=e-t,n=r*2;return Jt(t)?ju(t,o(0,t.length-1),e):Pi(i,function(s){return s=(n+(s-t)%n)%n||0,t+(s>r?n-s:s)})},wr=function(t){for(var e=0,i="",r,n,s,u;~(r=t.indexOf("random(",e));)s=t.indexOf(")",r),u=t.charAt(r+7)==="[",n=t.substr(r+7,s-r-7).match(u?Mu:qs),i+=t.substr(e,r-e)+Gu(u?n:+n[0],u?0:+n[1],+n[2]||1e-5),e=s+1;return i+t.substr(e,t.length-e)},Qu=function(t,e,i,r,n){var s=e-t,u=r-i;return Pi(n,function(a){return i+((a-t)/s*u||0)})},Wh=function o(t,e,i,r){var n=isNaN(t+e)?0:function(c){return(1-c)*t+c*e};if(!n){var s=Bt(t),u={},a,l,h,d,f;if(i===!0&&(r=1)&&(i=null),s)t={p:t},e={p:e};else if(Jt(t)&&!Jt(e)){for(h=[],d=t.length,f=d-2,l=1;l<d;l++)h.push(o(t[l-1],t[l]));d--,n=function(_){_*=d;var p=Math.min(f,~~_);return h[p](_-p)},i=e}else r||(t=yr(Jt(t)?[]:{},t));if(!h){for(a in e)po.call(u,t,a,"get",e[a]);n=function(_){return yo(_,u)||(s?t.p:t)}}}return Pi(i,n)},Eu=function(t,e,i){var r=t.labels,n=Oe,s,u,a;for(s in r)u=r[s]-e,u<0==!!i&&u&&n>(u=Math.abs(u))&&(a=s,n=u);return a},Se=function(t,e,i){var r=t.vars,n=r[e],s=pt,u=t._ctx,a,l,h;if(n)return a=r[e+"Params"],l=r.callbackScope||t,i&&Ti.length&&Hn(),u&&(pt=u),h=a?n.apply(l,a):n.call(l),pt=s,h},jr=function(t){return Ai(t),t.scrollTrigger&&t.scrollTrigger.kill(!!Ut),t.progress()<1&&Se(t,"onInterrupt"),t},Dr,Ku=[],$u=function(t){if(t)if(t=!t.name&&t.default||t,io()||t.headless){var e=t.name,i=Ct(t),r=e&&!i&&t.init?function(){this._props=[]}:t,n={init:tn,render:yo,add:po,kill:nf,modifier:rf,rawVars:0},s={targetTest:0,get:0,getSetter:Jn,aliases:{},register:0};if(Cr(),t!==r){if(pe[e])return;be(r,be(qn(t,n),s)),yr(r.prototype,yr(n,qn(t,s))),pe[r.prop=e]=r,t.targetTest&&(Wn.push(r),oo[e]=1),e=(e==="css"?"CSS":e.charAt(0).toUpperCase()+e.substr(1))+"Plugin"}Ru(e,r),t.register&&t.register(te,r,oe)}else Ku.push(t)},at=255,Qr={aqua:[0,at,at],lime:[0,at,0],silver:[192,192,192],black:[0,0,0],maroon:[128,0,0],teal:[0,128,128],blue:[0,0,at],navy:[0,0,128],white:[at,at,at],olive:[128,128,0],yellow:[at,at,0],orange:[at,165,0],gray:[128,128,128],purple:[128,0,128],green:[0,128,0],red:[at,0,0],pink:[at,192,203],cyan:[0,at,at],transparent:[at,at,at,0]},Is=function(t,e,i){return t+=t<0?1:t>1?-1:0,(t*6<1?e+(i-e)*t*6:t<.5?i:t*3<2?e+(i-e)*(2/3-t)*6:e)*at+.5|0},Zu=function(t,e,i){var r=t?hi(t)?[t>>16,t>>8&at,t&at]:0:Qr.black,n,s,u,a,l,h,d,f,c,_;if(!r){if(t.substr(-1)===","&&(t=t.substr(0,t.length-1)),Qr[t])r=Qr[t];else if(t.charAt(0)==="#"){if(t.length<6&&(n=t.charAt(1),s=t.charAt(2),u=t.charAt(3),t="#"+n+n+s+s+u+u+(t.length===5?t.charAt(4)+t.charAt(4):"")),t.length===9)return r=parseInt(t.substr(1,6),16),[r>>16,r>>8&at,r&at,parseInt(t.substr(7),16)/255];t=parseInt(t.substr(1),16),r=[t>>16,t>>8&at,t&at]}else if(t.substr(0,3)==="hsl"){if(r=_=t.match(qs),!e)a=+r[0]%360/360,l=+r[1]/100,h=+r[2]/100,s=h<=.5?h*(l+1):h+l-h*l,n=h*2-s,r.length>3&&(r[3]*=1),r[0]=Is(a+1/3,n,s),r[1]=Is(a,n,s),r[2]=Is(a-1/3,n,s);else if(~t.indexOf("="))return r=t.match(ro),i&&r.length<4&&(r[3]=1),r}else r=t.match(qs)||Qr.transparent;r=r.map(Number)}return e&&!_&&(n=r[0]/at,s=r[1]/at,u=r[2]/at,d=Math.max(n,s,u),f=Math.min(n,s,u),h=(d+f)/2,d===f?a=l=0:(c=d-f,l=h>.5?c/(2-d-f):c/(d+f),a=d===n?(s-u)/c+(s<u?6:0):d===s?(u-n)/c+2:(n-s)/c+4,a*=60),r[0]=~~(a+.5),r[1]=~~(l*100+.5),r[2]=~~(h*100+.5)),i&&r.length<4&&(r[3]=1),r},Ju=function(t){var e=[],i=[],r=-1;return t.split(li).forEach(function(n){var s=n.match(Gi)||[];e.push.apply(e,s),i.push(r+=s.length+1)}),e.c=i,e},bu=function(t,e,i){var r="",n=(t+r).match(li),s=e?"hsla(":"rgba(",u=0,a,l,h,d;if(!n)return t;if(n=n.map(function(f){return(f=Zu(f,e,1))&&s+(e?f[0]+","+f[1]+"%,"+f[2]+"%,"+f[3]:f.join(","))+")"}),i&&(h=Ju(t),a=i.c,a.join(r)!==h.c.join(r)))for(l=t.replace(li,"1").split(Gi),d=l.length-1;u<d;u++)r+=l[u]+(~a.indexOf(u)?n.shift()||s+"0,0,0,0)":(h.length?h:n.length?n:i).shift());if(!l)for(l=t.split(li),d=l.length-1;u<d;u++)r+=l[u]+n[u];return r+l[d]},li=function(){var o="(?:\\b(?:(?:rgb|rgba|hsl|hsla)\\(.+?\\))|\\B#(?:[0-9a-f]{3,4}){1,2}\\b",t;for(t in Qr)o+="|"+t+"\\b";return new RegExp(o+")","gi")}(),Xh=/hsl[a]?\(/,fo=function(t){var e=t.join(" "),i;if(li.lastIndex=0,li.test(e))return i=Xh.test(e),t[1]=bu(t[1],i),t[0]=bu(t[0],i,Ju(t[1])),!0},en,_e=function(){var o=Date.now,t=500,e=33,i=o(),r=i,n=1e3/240,s=n,u=[],a,l,h,d,f,c,_=function p(g){var D=o()-r,v=g===!0,x,y,C,w;if((D>t||D<0)&&(i+=D-e),r+=D,C=r-i,x=C-s,(x>0||v)&&(w=++d.frame,f=C-d.time*1e3,d.time=C=C/1e3,s+=x+(x>=n?4:n-x),y=1),v||(a=l(p)),y)for(c=0;c<u.length;c++)u[c](C,f,w,g)};return d={time:0,frame:0,tick:function(){_(!0)},deltaRatio:function(g){return f/(1e3/(g||60))},wake:function(){ku&&(!Us&&io()&&($e=Us=window,so=$e.document||{},Ee.gsap=te,($e.gsapVersions||($e.gsapVersions=[])).push(te.version),Ou(Vn||$e.GreenSockGlobals||!$e.gsap&&$e||{}),Ku.forEach($u)),h=typeof requestAnimationFrame<"u"&&requestAnimationFrame,a&&d.sleep(),l=h||function(g){return setTimeout(g,s-d.time*1e3+1|0)},en=1,_(2))},sleep:function(){(h?cancelAnimationFrame:clearTimeout)(a),en=0,l=tn},lagSmoothing:function(g,D){t=g||1/0,e=Math.min(D||33,t)},fps:function(g){n=1e3/(g||240),s=d.time*1e3+n},add:function(g,D,v){var x=D?function(y,C,w,S){g(y,C,w,S),d.remove(x)}:g;return d.remove(g),u[v?"unshift":"push"](x),Cr(),x},remove:function(g,D){~(D=u.indexOf(g))&&u.splice(D,1)&&c>=D&&c--},_listeners:u},d}(),Cr=function(){return!en&&_e.wake()},et={},Vh=/^[\d.\-M][\d.\-,\s]/,Hh=/["']/g,qh=function(t){for(var e={},i=t.substr(1,t.length-3).split(":"),r=i[0],n=1,s=i.length,u,a,l;n<s;n++)a=i[n],u=n!==s-1?a.lastIndexOf(","):a.length,l=a.substr(0,u),e[r]=isNaN(l)?l.replace(Hh,"").trim():+l,r=a.substr(u+1).trim();return e},Uh=function(t){var e=t.indexOf("(")+1,i=t.indexOf(")"),r=t.indexOf("(",e);return t.substring(e,~r&&r<i?t.indexOf(")",i+1):i)},Gh=function(t){var e=(t+"").split("("),i=et[e[0]];return i&&e.length>1&&i.config?i.config.apply(null,~t.indexOf("{")?[qh(e[1])]:Uh(t).split(",").map(zu)):et._CE&&Vh.test(t)?et._CE("",t):i},ta=function(t){return function(e){return 1-t(1-e)}},ea=function o(t,e){for(var i=t._first,r;i;)i instanceof qt?o(i,e):i.vars.yoyoEase&&(!i._yoyo||!i._repeat)&&i._yoyo!==e&&(i.timeline?o(i.timeline,e):(r=i._ease,i._ease=i._yEase,i._yEase=r,i._yoyo=e)),i=i._next},qi=function(t,e){return t&&(Ct(t)?t:et[t]||Gh(t))||e},Qi=function(t,e,i,r){i===void 0&&(i=function(a){return 1-e(1-a)}),r===void 0&&(r=function(a){return a<.5?e(a*2)/2:1-e((1-a)*2)/2});var n={easeIn:e,easeOut:i,easeInOut:r},s;return se(t,function(u){et[u]=Ee[u]=n,et[s=u.toLowerCase()]=i;for(var a in n)et[s+(a==="easeIn"?".in":a==="easeOut"?".out":".inOut")]=et[u+"."+a]=n[a]}),n},ia=function(t){return function(e){return e<.5?(1-t(1-e*2))/2:.5+t((e-.5)*2)/2}},Ys=function o(t,e,i){var r=e>=1?e:1,n=(i||(t?.3:.45))/(e<1?e:1),s=n/Hs*(Math.asin(1/r)||0),u=function(h){return h===1?1:r*Math.pow(2,-10*h)*xh((h-s)*n)+1},a=t==="out"?u:t==="in"?function(l){return 1-u(1-l)}:ia(u);return n=Hs/n,a.config=function(l,h){return o(t,l,h)},a},Ws=function o(t,e){e===void 0&&(e=1.70158);var i=function(s){return s?--s*s*((e+1)*s+e)+1:0},r=t==="out"?i:t==="in"?function(n){return 1-i(1-n)}:ia(i);return r.config=function(n){return o(t,n)},r};se("Linear,Quad,Cubic,Quart,Quint,Strong",function(o,t){var e=t<5?t+1:t;Qi(o+",Power"+(e-1),t?function(i){return Math.pow(i,e)}:function(i){return i},function(i){return 1-Math.pow(1-i,e)},function(i){return i<.5?Math.pow(i*2,e)/2:1-Math.pow((1-i)*2,e)/2})});et.Linear.easeNone=et.none=et.Linear.easeIn;Qi("Elastic",Ys("in"),Ys("out"),Ys());(function(o,t){var e=1/t,i=2*e,r=2.5*e,n=function(u){return u<e?o*u*u:u<i?o*Math.pow(u-1.5/t,2)+.75:u<r?o*(u-=2.25/t)*u+.9375:o*Math.pow(u-2.625/t,2)+.984375};Qi("Bounce",function(s){return 1-n(1-s)},n)})(7.5625,2.75);Qi("Expo",function(o){return Math.pow(2,10*(o-1))*o+o*o*o*o*o*o*(1-o)});Qi("Circ",function(o){return-(Au(1-o*o)-1)});Qi("Sine",function(o){return o===1?1:-vh(o*mh)+1});Qi("Back",Ws("in"),Ws("out"),Ws());et.SteppedEase=et.steps=Ee.SteppedEase={config:function(t,e){t===void 0&&(t=1);var i=1/t,r=t+(e?0:1),n=e?1:0,s=1-lt;return function(u){return((r*nn(0,s,u)|0)+n)*i}}};mr.ease=et["quad.out"];se("onComplete,onUpdate,onStart,onRepeat,onReverseComplete,onInterrupt",function(o){return uo+=o+","+o+"Params,"});var co=function(t,e){this.id=yh++,t._gsap=this,this.target=t,this.harness=e,this.get=e?e.get:lo,this.set=e?e.getSetter:Jn},rn=function(){function o(e){this.vars=e,this._delay=+e.delay||0,(this._repeat=e.repeat===1/0?-2:e.repeat||0)&&(this._rDelay=e.repeatDelay||0,this._yoyo=!!e.yoyo||!!e.yoyoEase),this._ts=1,xr(this,+e.duration,1,1),this.data=e.data,pt&&(this._ctx=pt,pt.data.push(this)),en||_e.wake()}var t=o.prototype;return t.delay=function(i){return i||i===0?(this.parent&&this.parent.smoothChildTiming&&this.startTime(this._start+i-this._delay),this._delay=i,this):this._delay},t.duration=function(i){return arguments.length?this.totalDuration(this._repeat>0?i+(i+this._rDelay)*this._repeat:i):this.totalDuration()&&this._dur},t.totalDuration=function(i){return arguments.length?(this._dirty=0,xr(this,this._repeat<0?i:(i-this._repeat*this._rDelay)/(this._repeat+1))):this._tDur},t.totalTime=function(i,r){if(Cr(),!arguments.length)return this._tTime;var n=this._dp;if(n&&n.smoothChildTiming&&this._ts){for(Zn(this,i),!n._dp||n.parent||Yu(n,this);n&&n.parent;)n.parent._time!==n._start+(n._ts>=0?n._tTime/n._ts:(n.totalDuration()-n._tTime)/-n._ts)&&n.totalTime(n._tTime,!0),n=n.parent;!this.parent&&this._dp.autoRemoveChildren&&(this._ts>0&&i<this._tDur||this._ts<0&&i>0||!this._tDur&&!i)&&Ze(this._dp,this,this._start-this._delay)}return(this._tTime!==i||!this._dur&&!r||this._initted&&Math.abs(this._zTime)===lt||!i&&!this._initted&&(this.add||this._ptLookup))&&(this._ts||(this._pTime=i),Bu(this,i,r)),this},t.time=function(i,r){return arguments.length?this.totalTime(Math.min(this.totalDuration(),i+wu(this))%(this._dur+this._rDelay)||(i?this._dur:0),r):this._time},t.totalProgress=function(i,r){return arguments.length?this.totalTime(this.totalDuration()*i,r):this.totalDuration()?Math.min(1,this._tTime/this._tDur):this.rawTime()>=0&&this._initted?1:0},t.progress=function(i,r){return arguments.length?this.totalTime(this.duration()*(this._yoyo&&!(this.iteration()&1)?1-i:i)+wu(this),r):this.duration()?Math.min(1,this._time/this._dur):this.rawTime()>0?1:0},t.iteration=function(i,r){var n=this.duration()+this._rDelay;return arguments.length?this.totalTime(this._time+(i-1)*n,r):this._repeat?vr(this._tTime,n)+1:1},t.timeScale=function(i,r){if(!arguments.length)return this._rts===-lt?0:this._rts;if(this._rts===i)return this;var n=this.parent&&this._ts?Un(this.parent._time,this):this._tTime;return this._rts=+i||0,this._ts=this._ps||i===-lt?0:this._rts,this.totalTime(nn(-Math.abs(this._delay),this.totalDuration(),n),r!==!1),$n(this),Fh(this)},t.paused=function(i){return arguments.length?(this._ps!==i&&(this._ps=i,i?(this._pTime=this._tTime||Math.max(-this._delay,this.rawTime()),this._ts=this._act=0):(Cr(),this._ts=this._rts,this.totalTime(this.parent&&!this.parent.smoothChildTiming?this.rawTime():this._tTime||this._pTime,this.progress()===1&&Math.abs(this._zTime)!==lt&&(this._tTime-=lt)))),this):this._ps},t.startTime=function(i){if(arguments.length){this._start=i;var r=this.parent||this._dp;return r&&(r._sort||!this.parent)&&Ze(r,this,i-this._delay),this}return this._start},t.endTime=function(i){return this._start+(ge(i)?this.totalDuration():this.duration())/Math.abs(this._ts||1)},t.rawTime=function(i){var r=this.parent||this._dp;return r?i&&(!this._ts||this._repeat&&this._time&&this.totalProgress()<1)?this._tTime%(this._dur+this._rDelay):this._ts?Un(r.rawTime(i),this):this._tTime:this._tTime},t.revert=function(i){i===void 0&&(i=Sh);var r=Ut;return Ut=i,ho(this)&&(this.timeline&&this.timeline.revert(i),this.totalTime(-.01,i.suppressEvents)),this.data!=="nested"&&i.kill!==!1&&this.kill(),Ut=r,this},t.globalTime=function(i){for(var r=this,n=arguments.length?i:r.rawTime();r;)n=r._start+n/(Math.abs(r._ts)||1),r=r._dp;return!this.parent&&this._sat?this._sat.globalTime(i):n},t.repeat=function(i){return arguments.length?(this._repeat=i===1/0?-2:i,Su(this)):this._repeat===-2?1/0:this._repeat},t.repeatDelay=function(i){if(arguments.length){var r=this._time;return this._rDelay=i,Su(this),r?this.time(r):this}return this._rDelay},t.yoyo=function(i){return arguments.length?(this._yoyo=i,this):this._yoyo},t.seek=function(i,r){return this.totalTime(ke(this,i),ge(r))},t.restart=function(i,r){return this.play().totalTime(i?-this._delay:0,ge(r)),this._dur||(this._zTime=-lt),this},t.play=function(i,r){return i!=null&&this.seek(i,r),this.reversed(!1).paused(!1)},t.reverse=function(i,r){return i!=null&&this.seek(i||this.totalDuration(),r),this.reversed(!0).paused(!1)},t.pause=function(i,r){return i!=null&&this.seek(i,r),this.paused(!0)},t.resume=function(){return this.paused(!1)},t.reversed=function(i){return arguments.length?(!!i!==this.reversed()&&this.timeScale(-this._rts||(i?-lt:0)),this):this._rts<0},t.invalidate=function(){return this._initted=this._act=0,this._zTime=-lt,this},t.isActive=function(){var i=this.parent||this._dp,r=this._start,n;return!!(!i||this._ts&&this._initted&&i.isActive()&&(n=i.rawTime(!0))>=r&&n<this.endTime(!0)-lt)},t.eventCallback=function(i,r,n){var s=this.vars;return arguments.length>1?(r?(s[i]=r,n&&(s[i+"Params"]=n),i==="onUpdate"&&(this._onUpdate=r)):delete s[i],this):s[i]},t.then=function(i){var r=this;return new Promise(function(n){var s=Ct(i)?i:Nu,u=function(){var l=r.then;r.then=null,Ct(s)&&(s=s(r))&&(s.then||s===r)&&(r.then=l),n(s),r.then=l};r._initted&&r.totalProgress()===1&&r._ts>=0||!r._tTime&&r._ts<0?u():r._prom=u})},t.kill=function(){jr(this)},o}();be(rn.prototype,{_time:0,_start:0,_end:0,_tTime:0,_tDur:0,_dirty:0,_repeat:0,_yoyo:!1,parent:null,_initted:!1,_rDelay:0,_ts:1,_dp:0,ratio:0,_zTime:-lt,_prom:0,_ps:!1,_rts:1});var qt=function(o){Fu(t,o);function t(i,r){var n;return i===void 0&&(i={}),n=o.call(this,i)||this,n.labels={},n.smoothChildTiming=!!i.smoothChildTiming,n.autoRemoveChildren=!!i.autoRemoveChildren,n._sort=ge(i.sortChildren),mt&&Ze(i.parent||mt,ai(n),r),i.reversed&&n.reverse(),i.paused&&n.paused(!0),i.scrollTrigger&&Wu(ai(n),i.scrollTrigger),n}var e=t.prototype;return e.to=function(r,n,s){return $r(0,arguments,this),this},e.from=function(r,n,s){return $r(1,arguments,this),this},e.fromTo=function(r,n,s,u){return $r(2,arguments,this),this},e.set=function(r,n,s){return n.duration=0,n.parent=this,Kr(n).repeatDelay||(n.repeat=0),n.immediateRender=!!n.immediateRender,new Ft(r,n,ke(this,s),1),this},e.call=function(r,n,s){return Ze(this,Ft.delayedCall(0,r,n),s)},e.staggerTo=function(r,n,s,u,a,l,h){return s.duration=n,s.stagger=s.stagger||u,s.onComplete=l,s.onCompleteParams=h,s.parent=this,new Ft(r,s,ke(this,a)),this},e.staggerFrom=function(r,n,s,u,a,l,h){return s.runBackwards=1,Kr(s).immediateRender=ge(s.immediateRender),this.staggerTo(r,n,s,u,a,l,h)},e.staggerFromTo=function(r,n,s,u,a,l,h,d){return u.startAt=s,Kr(u).immediateRender=ge(u.immediateRender),this.staggerTo(r,n,u,a,l,h,d)},e.render=function(r,n,s){var u=this._time,a=this._dirty?this.totalDuration():this._tDur,l=this._dur,h=r<=0?0:Mt(r),d=this._zTime<0!=r<0&&(this._initted||!l),f,c,_,p,g,D,v,x,y,C,w,S;if(this!==mt&&h>a&&r>=0&&(h=a),h!==this._tTime||s||d){if(u!==this._time&&l&&(h+=this._time-u,r+=this._time-u),f=h,y=this._start,x=this._ts,D=!x,d&&(l||(u=this._zTime),(r||!n)&&(this._zTime=r)),this._repeat){if(w=this._yoyo,g=l+this._rDelay,this._repeat<-1&&r<0)return this.totalTime(g*100+r,n,s);if(f=Mt(h%g),h===a?(p=this._repeat,f=l):(C=Mt(h/g),p=~~C,p&&p===C&&(f=l,p--),f>l&&(f=l)),C=vr(this._tTime,g),!u&&this._tTime&&C!==p&&this._tTime-C*g-this._dur<=0&&(C=p),w&&p&1&&(f=l-f,S=1),p!==C&&!this._lock){var b=w&&C&1,E=b===(w&&p&1);if(p<C&&(b=!b),u=b?0:h%l?l:h,this._lock=1,this.render(u||(S?0:Mt(p*g)),n,!l)._lock=0,this._tTime=h,!n&&this.parent&&Se(this,"onRepeat"),this.vars.repeatRefresh&&!S&&(this.invalidate()._lock=1),u&&u!==this._time||D!==!this._ts||this.vars.onRepeat&&!this.parent&&!this._act)return this;if(l=this._dur,a=this._tDur,E&&(this._lock=2,u=b?l:-1e-4,this.render(u,!0),this.vars.repeatRefresh&&!S&&this.invalidate()),this._lock=0,!this._ts&&!D)return this;ea(this,S)}}if(this._hasPause&&!this._forcing&&this._lock<2&&(v=kh(this,Mt(u),Mt(f)),v&&(h-=f-(f=v._start))),this._tTime=h,this._time=f,this._act=!x,this._initted||(this._onUpdate=this.vars.onUpdate,this._initted=1,this._zTime=r,u=0),!u&&h&&!n&&!C&&(Se(this,"onStart"),this._tTime!==h))return this;if(f>=u&&r>=0)for(c=this._first;c;){if(_=c._next,(c._act||f>=c._start)&&c._ts&&v!==c){if(c.parent!==this)return this.render(r,n,s);if(c.render(c._ts>0?(f-c._start)*c._ts:(c._dirty?c.totalDuration():c._tDur)+(f-c._start)*c._ts,n,s),f!==this._time||!this._ts&&!D){v=0,_&&(h+=this._zTime=-lt);break}}c=_}else{c=this._last;for(var F=r<0?r:f;c;){if(_=c._prev,(c._act||F<=c._end)&&c._ts&&v!==c){if(c.parent!==this)return this.render(r,n,s);if(c.render(c._ts>0?(F-c._start)*c._ts:(c._dirty?c.totalDuration():c._tDur)+(F-c._start)*c._ts,n,s||Ut&&ho(c)),f!==this._time||!this._ts&&!D){v=0,_&&(h+=this._zTime=F?-lt:lt);break}}c=_}}if(v&&!n&&(this.pause(),v.render(f>=u?0:-lt)._zTime=f>=u?1:-1,this._ts))return this._start=y,$n(this),this.render(r,n,s);this._onUpdate&&!n&&Se(this,"onUpdate",!0),(h===a&&this._tTime>=this.totalDuration()||!h&&u)&&(y===this._start||Math.abs(x)!==Math.abs(this._ts))&&(this._lock||((r||!l)&&(h===a&&this._ts>0||!h&&this._ts<0)&&Ai(this,1),!n&&!(r<0&&!u)&&(h||u||!a)&&(Se(this,h===a&&r>=0?"onComplete":"onReverseComplete",!0),this._prom&&!(h<a&&this.timeScale()>0)&&this._prom())))}return this},e.add=function(r,n){var s=this;if(hi(n)||(n=ke(this,n,r)),!(r instanceof rn)){if(Jt(r))return r.forEach(function(u){return s.add(u,n)}),this;if(Bt(r))return this.addLabel(r,n);if(Ct(r))r=Ft.delayedCall(0,r);else return this}return this!==r?Ze(this,r,n):this},e.getChildren=function(r,n,s,u){r===void 0&&(r=!0),n===void 0&&(n=!0),s===void 0&&(s=!0),u===void 0&&(u=-Oe);for(var a=[],l=this._first;l;)l._start>=u&&(l instanceof Ft?n&&a.push(l):(s&&a.push(l),r&&a.push.apply(a,l.getChildren(!0,n,s)))),l=l._next;return a},e.getById=function(r){for(var n=this.getChildren(1,1,1),s=n.length;s--;)if(n[s].vars.id===r)return n[s]},e.remove=function(r){return Bt(r)?this.removeLabel(r):Ct(r)?this.killTweensOf(r):(r.parent===this&&Kn(this,r),r===this._recent&&(this._recent=this._last),Hi(this))},e.totalTime=function(r,n){return arguments.length?(this._forcing=1,!this._dp&&this._ts&&(this._start=Mt(_e.time-(this._ts>0?r/this._ts:(this.totalDuration()-r)/-this._ts))),o.prototype.totalTime.call(this,r,n),this._forcing=0,this):this._tTime},e.addLabel=function(r,n){return this.labels[r]=ke(this,n),this},e.removeLabel=function(r){return delete this.labels[r],this},e.addPause=function(r,n,s){var u=Ft.delayedCall(0,n||tn,s);return u.data="isPause",this._hasPause=1,Ze(this,u,ke(this,r))},e.removePause=function(r){var n=this._first;for(r=ke(this,r);n;)n._start===r&&n.data==="isPause"&&Ai(n),n=n._next},e.killTweensOf=function(r,n,s){for(var u=this.getTweensOf(r,s),a=u.length;a--;)bi!==u[a]&&u[a].kill(r,n);return this},e.getTweensOf=function(r,n){for(var s=[],u=Re(r),a=this._first,l=hi(n),h;a;)a instanceof Ft?Eh(a._targets,u)&&(l?(!bi||a._initted&&a._ts)&&a.globalTime(0)<=n&&a.globalTime(a.totalDuration())>n:!n||a.isActive())&&s.push(a):(h=a.getTweensOf(u,n)).length&&s.push.apply(s,h),a=a._next;return s},e.tweenTo=function(r,n){n=n||{};var s=this,u=ke(s,r),a=n,l=a.startAt,h=a.onStart,d=a.onStartParams,f=a.immediateRender,c,_=Ft.to(s,be({ease:n.ease||"none",lazy:!1,immediateRender:!1,time:u,overwrite:"auto",duration:n.duration||Math.abs((u-(l&&"time"in l?l.time:s._time))/s.timeScale())||lt,onStart:function(){if(s.pause(),!c){var g=n.duration||Math.abs((u-(l&&"time"in l?l.time:s._time))/s.timeScale());_._dur!==g&&xr(_,g,0,1).render(_._time,!0,!0),c=1}h&&h.apply(_,d||[])}},n));return f?_.render(0):_},e.tweenFromTo=function(r,n,s){return this.tweenTo(n,be({startAt:{time:ke(this,r)}},s))},e.recent=function(){return this._recent},e.nextLabel=function(r){return r===void 0&&(r=this._time),Eu(this,ke(this,r))},e.previousLabel=function(r){return r===void 0&&(r=this._time),Eu(this,ke(this,r),1)},e.currentLabel=function(r){return arguments.length?this.seek(r,!0):this.previousLabel(this._time+lt)},e.shiftChildren=function(r,n,s){s===void 0&&(s=0);for(var u=this._first,a=this.labels,l;u;)u._start>=s&&(u._start+=r,u._end+=r),u=u._next;if(n)for(l in a)a[l]>=s&&(a[l]+=r);return Hi(this)},e.invalidate=function(r){var n=this._first;for(this._lock=0;n;)n.invalidate(r),n=n._next;return o.prototype.invalidate.call(this,r)},e.clear=function(r){r===void 0&&(r=!0);for(var n=this._first,s;n;)s=n._next,this.remove(n),n=s;return this._dp&&(this._time=this._tTime=this._pTime=0),r&&(this.labels={}),Hi(this)},e.totalDuration=function(r){var n=0,s=this,u=s._last,a=Oe,l,h,d;if(arguments.length)return s.timeScale((s._repeat<0?s.duration():s.totalDuration())/(s.reversed()?-r:r));if(s._dirty){for(d=s.parent;u;)l=u._prev,u._dirty&&u.totalDuration(),h=u._start,h>a&&s._sort&&u._ts&&!s._lock?(s._lock=1,Ze(s,u,h-u._delay,1)._lock=0):a=h,h<0&&u._ts&&(n-=h,(!d&&!s._dp||d&&d.smoothChildTiming)&&(s._start+=h/s._ts,s._time-=h,s._tTime-=h),s.shiftChildren(-h,!1,-1/0),a=0),u._end>n&&u._ts&&(n=u._end),u=l;xr(s,s===mt&&s._time>n?s._time:n,1,1),s._dirty=0}return s._tDur},t.updateRoot=function(r){if(mt._ts&&(Bu(mt,Un(r,mt)),Lu=_e.frame),_e.frame>=xu){xu+=De.autoSleep||120;var n=mt._first;if((!n||!n._ts)&&De.autoSleep&&_e._listeners.length<2){for(;n&&!n._ts;)n=n._next;n||_e.sleep()}}},t}(rn);be(qt.prototype,{_lock:0,_hasPause:0,_forcing:0});var jh=function(t,e,i,r,n,s,u){var a=new oe(this._pt,t,e,0,1,mo,null,n),l=0,h=0,d,f,c,_,p,g,D,v;for(a.b=i,a.e=r,i+="",r+="",(D=~r.indexOf("random("))&&(r=wr(r)),s&&(v=[i,r],s(v,t,e),i=v[0],r=v[1]),f=i.match(zs)||[];d=zs.exec(r);)_=d[0],p=r.substring(l,d.index),c?c=(c+1)%5:p.substr(-5)==="rgba("&&(c=1),_!==f[h++]&&(g=parseFloat(f[h-1])||0,a._pt={_next:a._pt,p:p||h===1?p:",",s:g,c:_.charAt(1)==="="?ji(g,_)-g:parseFloat(_)-g,m:c&&c<4?Math.round:0},l=zs.lastIndex);return a.c=l<r.length?r.substring(l,r.length):"",a.fp=u,(no.test(r)||D)&&(a.e=0),this._pt=a,a},po=function(t,e,i,r,n,s,u,a,l,h){Ct(r)&&(r=r(n||0,t,s));var d=t[e],f=i!=="get"?i:Ct(d)?l?t[e.indexOf("set")||!Ct(t["get"+e.substr(3)])?e:"get"+e.substr(3)](l):t[e]():d,c=Ct(d)?l?Jh:sa:Do,_;if(Bt(r)&&(~r.indexOf("random(")&&(r=wr(r)),r.charAt(1)==="="&&(_=ji(f,r)+(Gt(f)||0),(_||_===0)&&(r=_))),!h||f!==r||Js)return!isNaN(f*r)&&r!==""?(_=new oe(this._pt,t,e,+f||0,r-(f||0),typeof d=="boolean"?ef:oa,0,c),l&&(_.fp=l),u&&_.modifier(u,this,t),this._pt=_):(!d&&!(e in t)&&Qn(e,r),jh.call(this,t,e,f,r,c,a||De.stringFilter,l))},Qh=function(t,e,i,r,n){if(Ct(t)&&(t=Zr(t,n,e,i,r)),!Je(t)||t.style&&t.nodeType||Jt(t)||Pu(t))return Bt(t)?Zr(t,n,e,i,r):t;var s={},u;for(u in t)s[u]=Zr(t[u],n,e,i,r);return s},_o=function(t,e,i,r,n,s){var u,a,l,h;if(pe[t]&&(u=new pe[t]).init(n,u.rawVars?e[t]:Qh(e[t],r,n,s,i),i,r,s)!==!1&&(i._pt=a=new oe(i._pt,n,t,0,1,u.render,u,0,u.priority),i!==Dr))for(l=i._ptLookup[i._targets.indexOf(n)],h=u._props.length;h--;)l[u._props[h]]=a;return u},bi,Js,go=function o(t,e,i){var r=t.vars,n=r.ease,s=r.startAt,u=r.immediateRender,a=r.lazy,l=r.onUpdate,h=r.runBackwards,d=r.yoyoEase,f=r.keyframes,c=r.autoRevert,_=t._dur,p=t._startAt,g=t._targets,D=t.parent,v=D&&D.data==="nested"?D.vars.targets:g,x=t._overwrite==="auto"&&!eo,y=t.timeline,C,w,S,b,E,F,B,A,R,I,P,k,M;if(y&&(!f||!n)&&(n="none"),t._ease=qi(n,mr.ease),t._yEase=d?ta(qi(d===!0?n:d,mr.ease)):0,d&&t._yoyo&&!t._repeat&&(d=t._yEase,t._yEase=t._ease,t._ease=d),t._from=!y&&!!r.runBackwards,!y||f&&!r.stagger){if(A=g[0]?Fi(g[0]).harness:0,k=A&&r[A.prop],C=qn(r,oo),p&&(p._zTime<0&&p.progress(1),e<0&&h&&u&&!c?p.render(-1,!0):p.revert(h&&_?Yn:wh),p._lazy=0),s){if(Ai(t._startAt=Ft.set(g,be({data:"isStart",overwrite:!1,parent:D,immediateRender:!0,lazy:!p&&ge(a),startAt:null,delay:0,onUpdate:l&&function(){return Se(t,"onUpdate")},stagger:0},s))),t._startAt._dp=0,t._startAt._sat=t,e<0&&(Ut||!u&&!c)&&t._startAt.revert(Yn),u&&_&&e<=0&&i<=0){e&&(t._zTime=e);return}}else if(h&&_&&!p){if(e&&(u=!1),S=be({overwrite:!1,data:"isFromStart",lazy:u&&!p&&ge(a),immediateRender:u,stagger:0,parent:D},C),k&&(S[A.prop]=k),Ai(t._startAt=Ft.set(g,S)),t._startAt._dp=0,t._startAt._sat=t,e<0&&(Ut?t._startAt.revert(Yn):t._startAt.render(-1,!0)),t._zTime=e,!u)o(t._startAt,lt,lt);else if(!e)return}for(t._pt=t._ptCache=0,a=_&&ge(a)||a&&!_,w=0;w<g.length;w++){if(E=g[w],B=E._gsap||ao(g)[w]._gsap,t._ptLookup[w]=I={},Gs[B.id]&&Ti.length&&Hn(),P=v===g?w:v.indexOf(E),A&&(R=new A).init(E,k||C,t,P,v)!==!1&&(t._pt=b=new oe(t._pt,E,R.name,0,1,R.render,R,0,R.priority),R._props.forEach(function(O){I[O]=b}),R.priority&&(F=1)),!A||k)for(S in C)pe[S]&&(R=_o(S,C,t,P,E,v))?R.priority&&(F=1):I[S]=b=po.call(t,E,S,"get",C[S],P,v,0,r.stringFilter);t._op&&t._op[w]&&t.kill(E,t._op[w]),x&&t._pt&&(bi=t,mt.killTweensOf(E,I,t.globalTime(e)),M=!t.parent,bi=0),t._pt&&a&&(Gs[B.id]=1)}F&&vo(t),t._onInit&&t._onInit(t)}t._onUpdate=l,t._initted=(!t._op||t._pt)&&!M,f&&e<=0&&y.render(Oe,!0,!0)},Kh=function(t,e,i,r,n,s,u,a){var l=(t._pt&&t._ptCache||(t._ptCache={}))[e],h,d,f,c;if(!l)for(l=t._ptCache[e]=[],f=t._ptLookup,c=t._targets.length;c--;){if(h=f[c][e],h&&h.d&&h.d._pt)for(h=h.d._pt;h&&h.p!==e&&h.fp!==e;)h=h._next;if(!h)return Js=1,t.vars[e]="+=0",go(t,u),Js=0,a?Jr(e+" not eligible for reset"):1;l.push(h)}for(c=l.length;c--;)d=l[c],h=d._pt||d,h.s=(r||r===0)&&!n?r:h.s+(r||0)+s*h.c,h.c=i-h.s,d.e&&(d.e=wt(i)+Gt(d.e)),d.b&&(d.b=h.s+Gt(d.b))},$h=function(t,e){var i=t[0]?Fi(t[0]).harness:0,r=i&&i.aliases,n,s,u,a;if(!r)return e;n=yr({},e);for(s in r)if(s in n)for(a=r[s].split(","),u=a.length;u--;)n[a[u]]=n[s];return n},Zh=function(t,e,i,r){var n=e.ease||r||"power1.inOut",s,u;if(Jt(e))u=i[t]||(i[t]=[]),e.forEach(function(a,l){return u.push({t:l/(e.length-1)*100,v:a,e:n})});else for(s in e)u=i[s]||(i[s]=[]),s==="ease"||u.push({t:parseFloat(t),v:e[s],e:n})},Zr=function(t,e,i,r,n){return Ct(t)?t.call(e,i,r,n):Bt(t)&&~t.indexOf("random(")?wr(t):t},ra=uo+"repeat,repeatDelay,yoyo,repeatRefresh,yoyoEase,autoRevert",na={};se(ra+",id,stagger,delay,duration,paused,scrollTrigger",function(o){return na[o]=1});var Ft=function(o){Fu(t,o);function t(i,r,n,s){var u;typeof r=="number"&&(n.duration=r,r=n,n=null),u=o.call(this,s?r:Kr(r))||this;var a=u.vars,l=a.duration,h=a.delay,d=a.immediateRender,f=a.stagger,c=a.overwrite,_=a.keyframes,p=a.defaults,g=a.scrollTrigger,D=a.yoyoEase,v=r.parent||mt,x=(Jt(i)||Pu(i)?hi(i[0]):"length"in r)?[i]:Re(i),y,C,w,S,b,E,F,B;if(u._targets=x.length?ao(x):Jr("GSAP target "+i+" not found. https://gsap.com",!De.nullTargetWarn)||[],u._ptLookup=[],u._overwrite=c,_||f||In(l)||In(h)){if(r=u.vars,y=u.timeline=new qt({data:"nested",defaults:p||{},targets:v&&v.data==="nested"?v.vars.targets:x}),y.kill(),y.parent=y._dp=ai(u),y._start=0,f||In(l)||In(h)){if(S=x.length,F=f&&qu(f),Je(f))for(b in f)~ra.indexOf(b)&&(B||(B={}),B[b]=f[b]);for(C=0;C<S;C++)w=qn(r,na),w.stagger=0,D&&(w.yoyoEase=D),B&&yr(w,B),E=x[C],w.duration=+Zr(l,ai(u),C,E,x),w.delay=(+Zr(h,ai(u),C,E,x)||0)-u._delay,!f&&S===1&&w.delay&&(u._delay=h=w.delay,u._start+=h,w.delay=0),y.to(E,w,F?F(C,E,x):0),y._ease=et.none;y.duration()?l=h=0:u.timeline=0}else if(_){Kr(be(y.vars.defaults,{ease:"none"})),y._ease=qi(_.ease||r.ease||"none");var A=0,R,I,P;if(Jt(_))_.forEach(function(k){return y.to(x,k,">")}),y.duration();else{w={};for(b in _)b==="ease"||b==="easeEach"||Zh(b,_[b],w,_.easeEach);for(b in w)for(R=w[b].sort(function(k,M){return k.t-M.t}),A=0,C=0;C<R.length;C++)I=R[C],P={ease:I.e,duration:(I.t-(C?R[C-1].t:0))/100*l},P[b]=I.v,y.to(x,P,A),A+=P.duration;y.duration()<l&&y.to({},{duration:l-y.duration()})}}l||u.duration(l=y.duration())}else u.timeline=0;return c===!0&&!eo&&(bi=ai(u),mt.killTweensOf(x),bi=0),Ze(v,ai(u),n),r.reversed&&u.reverse(),r.paused&&u.paused(!0),(d||!l&&!_&&u._start===Mt(v._time)&&ge(d)&&Ah(ai(u))&&v.data!=="nested")&&(u._tTime=-lt,u.render(Math.max(0,-h)||0)),g&&Wu(ai(u),g),u}var e=t.prototype;return e.render=function(r,n,s){var u=this._time,a=this._tDur,l=this._dur,h=r<0,d=r>a-lt&&!h?a:r<lt?0:r,f,c,_,p,g,D,v,x,y;if(!l)Mh(this,r,n,s);else if(d!==this._tTime||!r||s||!this._initted&&this._tTime||this._startAt&&this._zTime<0!==h||this._lazy){if(f=d,x=this.timeline,this._repeat){if(p=l+this._rDelay,this._repeat<-1&&h)return this.totalTime(p*100+r,n,s);if(f=Mt(d%p),d===a?(_=this._repeat,f=l):(g=Mt(d/p),_=~~g,_&&_===g?(f=l,_--):f>l&&(f=l)),D=this._yoyo&&_&1,D&&(y=this._yEase,f=l-f),g=vr(this._tTime,p),f===u&&!s&&this._initted&&_===g)return this._tTime=d,this;_!==g&&(x&&this._yEase&&ea(x,D),this.vars.repeatRefresh&&!D&&!this._lock&&f!==p&&this._initted&&(this._lock=s=1,this.render(Mt(p*_),!0).invalidate()._lock=0))}if(!this._initted){if(Xu(this,h?r:f,s,n,d))return this._tTime=0,this;if(u!==this._time&&!(s&&this.vars.repeatRefresh&&_!==g))return this;if(l!==this._dur)return this.render(r,n,s)}if(this._tTime=d,this._time=f,!this._act&&this._ts&&(this._act=1,this._lazy=0),this.ratio=v=(y||this._ease)(f/l),this._from&&(this.ratio=v=1-v),!u&&d&&!n&&!g&&(Se(this,"onStart"),this._tTime!==d))return this;for(c=this._pt;c;)c.r(v,c.d),c=c._next;x&&x.render(r<0?r:x._dur*x._ease(f/this._dur),n,s)||this._startAt&&(this._zTime=r),this._onUpdate&&!n&&(h&&js(this,r,n,s),Se(this,"onUpdate")),this._repeat&&_!==g&&this.vars.onRepeat&&!n&&this.parent&&Se(this,"onRepeat"),(d===this._tDur||!d)&&this._tTime===d&&(h&&!this._onUpdate&&js(this,r,!0,!0),(r||!l)&&(d===this._tDur&&this._ts>0||!d&&this._ts<0)&&Ai(this,1),!n&&!(h&&!u)&&(d||u||D)&&(Se(this,d===a?"onComplete":"onReverseComplete",!0),this._prom&&!(d<a&&this.timeScale()>0)&&this._prom()))}return this},e.targets=function(){return this._targets},e.invalidate=function(r){return(!r||!this.vars.runBackwards)&&(this._startAt=0),this._pt=this._op=this._onUpdate=this._lazy=this.ratio=0,this._ptLookup=[],this.timeline&&this.timeline.invalidate(r),o.prototype.invalidate.call(this,r)},e.resetTo=function(r,n,s,u,a){en||_e.wake(),this._ts||this.play();var l=Math.min(this._dur,(this._dp._time-this._start)*this._ts),h;return this._initted||go(this,l),h=this._ease(l/this._dur),Kh(this,r,n,s,u,h,l,a)?this.resetTo(r,n,s,u,1):(Zn(this,0),this.parent||Iu(this._dp,this,"_first","_last",this._dp._sort?"_start":0),this.render(0))},e.kill=function(r,n){if(n===void 0&&(n="all"),!r&&(!n||n==="all"))return this._lazy=this._pt=0,this.parent?jr(this):this.scrollTrigger&&this.scrollTrigger.kill(!!Ut),this;if(this.timeline){var s=this.timeline.totalDuration();return this.timeline.killTweensOf(r,n,bi&&bi.vars.overwrite!==!0)._first||jr(this),this.parent&&s!==this.timeline.totalDuration()&&xr(this,this._dur*this.timeline._tDur/s,0,1),this}var u=this._targets,a=r?Re(r):u,l=this._ptLookup,h=this._pt,d,f,c,_,p,g,D;if((!n||n==="all")&&Th(u,a))return n==="all"&&(this._pt=0),jr(this);for(d=this._op=this._op||[],n!=="all"&&(Bt(n)&&(p={},se(n,function(v){return p[v]=1}),n=p),n=$h(u,n)),D=u.length;D--;)if(~a.indexOf(u[D])){f=l[D],n==="all"?(d[D]=n,_=f,c={}):(c=d[D]=d[D]||{},_=n);for(p in _)g=f&&f[p],g&&((!("kill"in g.d)||g.d.kill(p)===!0)&&Kn(this,g,"_pt"),delete f[p]),c!=="all"&&(c[p]=1)}return this._initted&&!this._pt&&h&&jr(this),this},t.to=function(r,n){return new t(r,n,arguments[2])},t.from=function(r,n){return $r(1,arguments)},t.delayedCall=function(r,n,s,u){return new t(n,0,{immediateRender:!1,lazy:!1,overwrite:!1,delay:r,onComplete:n,onReverseComplete:n,onCompleteParams:s,onReverseCompleteParams:s,callbackScope:u})},t.fromTo=function(r,n,s){return $r(2,arguments)},t.set=function(r,n){return n.duration=0,n.repeatDelay||(n.repeat=0),new t(r,n)},t.killTweensOf=function(r,n,s){return mt.killTweensOf(r,n,s)},t}(rn);be(Ft.prototype,{_targets:[],_lazy:0,_startAt:0,_op:0,_onInit:0});se("staggerTo,staggerFrom,staggerFromTo",function(o){Ft[o]=function(){var t=new qt,e=Ks.call(arguments,0);return e.splice(o==="staggerFromTo"?5:4,0,0),t[o].apply(t,e)}});var Do=function(t,e,i){return t[e]=i},sa=function(t,e,i){return t[e](i)},Jh=function(t,e,i,r){return t[e](r.fp,i)},tf=function(t,e,i){return t.setAttribute(e,i)},Jn=function(t,e){return Ct(t[e])?sa:jn(t[e])&&t.setAttribute?tf:Do},oa=function(t,e){return e.set(e.t,e.p,Math.round((e.s+e.c*t)*1e6)/1e6,e)},ef=function(t,e){return e.set(e.t,e.p,!!(e.s+e.c*t),e)},mo=function(t,e){var i=e._pt,r="";if(!t&&e.b)r=e.b;else if(t===1&&e.e)r=e.e;else{for(;i;)r=i.p+(i.m?i.m(i.s+i.c*t):Math.round((i.s+i.c*t)*1e4)/1e4)+r,i=i._next;r+=e.c}e.set(e.t,e.p,r,e)},yo=function(t,e){for(var i=e._pt;i;)i.r(t,i.d),i=i._next},rf=function(t,e,i,r){for(var n=this._pt,s;n;)s=n._next,n.p===r&&n.modifier(t,e,i),n=s},nf=function(t){for(var e=this._pt,i,r;e;)r=e._next,e.p===t&&!e.op||e.op===t?Kn(this,e,"_pt"):e.dep||(i=1),e=r;return!i},sf=function(t,e,i,r){r.mSet(t,e,r.m.call(r.tween,i,r.mt),r)},vo=function(t){for(var e=t._pt,i,r,n,s;e;){for(i=e._next,r=n;r&&r.pr>e.pr;)r=r._next;(e._prev=r?r._prev:s)?e._prev._next=e:n=e,(e._next=r)?r._prev=e:s=e,e=i}t._pt=n},oe=function(){function o(e,i,r,n,s,u,a,l,h){this.t=i,this.s=n,this.c=s,this.p=r,this.r=u||oa,this.d=a||this,this.set=l||Do,this.pr=h||0,this._next=e,e&&(e._prev=this)}var t=o.prototype;return t.modifier=function(i,r,n){this.mSet=this.mSet||this.set,this.set=sf,this.m=i,this.mt=n,this.tween=r},o}();se(uo+"parent,duration,ease,delay,overwrite,runBackwards,startAt,yoyo,immediateRender,repeat,repeatDelay,data,paused,reversed,lazy,callbackScope,stringFilter,id,yoyoEase,stagger,inherit,repeatRefresh,keyframes,autoRevert,scrollTrigger",function(o){return oo[o]=1});Ee.TweenMax=Ee.TweenLite=Ft;Ee.TimelineLite=Ee.TimelineMax=qt;mt=new qt({sortChildren:!1,defaults:mr,autoRemoveChildren:!0,id:"root",smoothChildTiming:!0});De.stringFilter=fo;var Ui=[],Xn={},of=[],Tu=0,uf=0,Xs=function(t){return(Xn[t]||of).map(function(e){return e()})},to=function(){var t=Date.now(),e=[];t-Tu>2&&(Xs("matchMediaInit"),Ui.forEach(function(i){var r=i.queries,n=i.conditions,s,u,a,l;for(u in r)s=$e.matchMedia(r[u]).matches,s&&(a=1),s!==n[u]&&(n[u]=s,l=1);l&&(i.revert(),a&&e.push(i))}),Xs("matchMediaRevert"),e.forEach(function(i){return i.onMatch(i,function(r){return i.add(null,r)})}),Tu=t,Xs("matchMedia"))},ua=function(){function o(e,i){this.selector=i&&$s(i),this.data=[],this._r=[],this.isReverted=!1,this.id=uf++,e&&this.add(e)}var t=o.prototype;return t.add=function(i,r,n){Ct(i)&&(n=r,r=i,i=Ct);var s=this,u=function(){var l=pt,h=s.selector,d;return l&&l!==s&&l.data.push(s),n&&(s.selector=$s(n)),pt=s,d=r.apply(s,arguments),Ct(d)&&s._r.push(d),pt=l,s.selector=h,s.isReverted=!1,d};return s.last=u,i===Ct?u(s,function(a){return s.add(null,a)}):i?s[i]=u:u},t.ignore=function(i){var r=pt;pt=null,i(this),pt=r},t.getTweens=function(){var i=[];return this.data.forEach(function(r){return r instanceof o?i.push.apply(i,r.getTweens()):r instanceof Ft&&!(r.parent&&r.parent.data==="nested")&&i.push(r)}),i},t.clear=function(){this._r.length=this.data.length=0},t.kill=function(i,r){var n=this;if(i?function(){for(var u=n.getTweens(),a=n.data.length,l;a--;)l=n.data[a],l.data==="isFlip"&&(l.revert(),l.getChildren(!0,!0,!1).forEach(function(h){return u.splice(u.indexOf(h),1)}));for(u.map(function(h){return{g:h._dur||h._delay||h._sat&&!h._sat.vars.immediateRender?h.globalTime(0):-1/0,t:h}}).sort(function(h,d){return d.g-h.g||-1/0}).forEach(function(h){return h.t.revert(i)}),a=n.data.length;a--;)l=n.data[a],l instanceof qt?l.data!=="nested"&&(l.scrollTrigger&&l.scrollTrigger.revert(),l.kill()):!(l instanceof Ft)&&l.revert&&l.revert(i);n._r.forEach(function(h){return h(i,n)}),n.isReverted=!0}():this.data.forEach(function(u){return u.kill&&u.kill()}),this.clear(),r)for(var s=Ui.length;s--;)Ui[s].id===this.id&&Ui.splice(s,1)},t.revert=function(i){this.kill(i||{})},o}(),af=function(){function o(e){this.contexts=[],this.scope=e,pt&&pt.data.push(this)}var t=o.prototype;return t.add=function(i,r,n){Je(i)||(i={matches:i});var s=new ua(0,n||this.scope),u=s.conditions={},a,l,h;pt&&!s.selector&&(s.selector=pt.selector),this.contexts.push(s),r=s.add("onMatch",r),s.queries=i;for(l in i)l==="all"?h=1:(a=$e.matchMedia(i[l]),a&&(Ui.indexOf(s)<0&&Ui.push(s),(u[l]=a.matches)&&(h=1),a.addListener?a.addListener(to):a.addEventListener("change",to)));return h&&r(s,function(d){return s.add(null,d)}),this},t.revert=function(i){this.kill(i||{})},t.kill=function(i){this.contexts.forEach(function(r){return r.kill(i,!0)})},o}(),Gn={registerPlugin:function(){for(var t=arguments.length,e=new Array(t),i=0;i<t;i++)e[i]=arguments[i];e.forEach(function(r){return $u(r)})},timeline:function(t){return new qt(t)},getTweensOf:function(t,e){return mt.getTweensOf(t,e)},getProperty:function(t,e,i,r){Bt(t)&&(t=Re(t)[0]);var n=Fi(t||{}).get,s=i?Nu:zu;return i==="native"&&(i=""),t&&(e?s((pe[e]&&pe[e].get||n)(t,e,i,r)):function(u,a,l){return s((pe[u]&&pe[u].get||n)(t,u,a,l))})},quickSetter:function(t,e,i){if(t=Re(t),t.length>1){var r=t.map(function(h){return te.quickSetter(h,e,i)}),n=r.length;return function(h){for(var d=n;d--;)r[d](h)}}t=t[0]||{};var s=pe[e],u=Fi(t),a=u.harness&&(u.harness.aliases||{})[e]||e,l=s?function(h){var d=new s;Dr._pt=0,d.init(t,i?h+i:h,Dr,0,[t]),d.render(1,d),Dr._pt&&yo(1,Dr)}:u.set(t,a);return s?l:function(h){return l(t,a,i?h+i:h,u,1)}},quickTo:function(t,e,i){var r,n=te.to(t,be((r={},r[e]="+=0.1",r.paused=!0,r.stagger=0,r),i||{})),s=function(a,l,h){return n.resetTo(e,a,l,h)};return s.tween=n,s},isTweening:function(t){return mt.getTweensOf(t,!0).length>0},defaults:function(t){return t&&t.ease&&(t.ease=qi(t.ease,mr.ease)),Cu(mr,t||{})},config:function(t){return Cu(De,t||{})},registerEffect:function(t){var e=t.name,i=t.effect,r=t.plugins,n=t.defaults,s=t.extendTimeline;(r||"").split(",").forEach(function(u){return u&&!pe[u]&&!Ee[u]&&Jr(e+" effect requires "+u+" plugin.")}),Ns[e]=function(u,a,l){return i(Re(u),be(a||{},n),l)},s&&(qt.prototype[e]=function(u,a,l){return this.add(Ns[e](u,Je(a)?a:(l=a)&&{},this),l)})},registerEase:function(t,e){et[t]=qi(e)},parseEase:function(t,e){return arguments.length?qi(t,e):et},getById:function(t){return mt.getById(t)},exportRoot:function(t,e){t===void 0&&(t={});var i=new qt(t),r,n;for(i.smoothChildTiming=ge(t.smoothChildTiming),mt.remove(i),i._dp=0,i._time=i._tTime=mt._time,r=mt._first;r;)n=r._next,(e||!(!r._dur&&r instanceof Ft&&r.vars.onComplete===r._targets[0]))&&Ze(i,r,r._start-r._delay),r=n;return Ze(mt,i,0),i},context:function(t,e){return t?new ua(t,e):pt},matchMedia:function(t){return new af(t)},matchMediaRefresh:function(){return Ui.forEach(function(t){var e=t.conditions,i,r;for(r in e)e[r]&&(e[r]=!1,i=1);i&&t.revert()})||to()},addEventListener:function(t,e){var i=Xn[t]||(Xn[t]=[]);~i.indexOf(e)||i.push(e)},removeEventListener:function(t,e){var i=Xn[t],r=i&&i.indexOf(e);r>=0&&i.splice(r,1)},utils:{wrap:Ih,wrapYoyo:Yh,distribute:qu,random:Gu,snap:Uu,normalize:Nh,getUnit:Gt,clamp:Rh,splitColor:Zu,toArray:Re,selector:$s,mapRange:Qu,pipe:Bh,unitize:zh,interpolate:Wh,shuffle:Hu},install:Ou,effects:Ns,ticker:_e,updateRoot:qt.updateRoot,plugins:pe,globalTimeline:mt,core:{PropTween:oe,globals:Ru,Tween:Ft,Timeline:qt,Animation:rn,getCache:Fi,_removeLinkedListItem:Kn,reverting:function(){return Ut},context:function(t){return t&&pt&&(pt.data.push(t),t._ctx=pt),pt},suppressOverwrites:function(t){return eo=t}}};se("to,from,fromTo,delayedCall,set,killTweensOf",function(o){return Gn[o]=Ft[o]});_e.add(qt.updateRoot);Dr=Gn.to({},{duration:0});var lf=function(t,e){for(var i=t._pt;i&&i.p!==e&&i.op!==e&&i.fp!==e;)i=i._next;return i},hf=function(t,e){var i=t._targets,r,n,s;for(r in e)for(n=i.length;n--;)s=t._ptLookup[n][r],s&&(s=s.d)&&(s._pt&&(s=lf(s,r)),s&&s.modifier&&s.modifier(e[r],t,i[n],r))},Vs=function(t,e){return{name:t,headless:1,rawVars:1,init:function(r,n,s){s._onInit=function(u){var a,l;if(Bt(n)&&(a={},se(n,function(h){return a[h]=1}),n=a),e){a={};for(l in n)a[l]=e(n[l]);n=a}hf(u,n)}}}},te=Gn.registerPlugin({name:"attr",init:function(t,e,i,r,n){var s,u,a;this.tween=i;for(s in e)a=t.getAttribute(s)||"",u=this.add(t,"setAttribute",(a||0)+"",e[s],r,n,0,0,s),u.op=s,u.b=a,this._props.push(s)},render:function(t,e){for(var i=e._pt;i;)Ut?i.set(i.t,i.p,i.b,i):i.r(t,i.d),i=i._next}},{name:"endArray",headless:1,init:function(t,e){for(var i=e.length;i--;)this.add(t,i,t[i]||0,e[i],0,0,0,0,0,1)}},Vs("roundProps",Zs),Vs("modifiers"),Vs("snap",Uu))||Gn;Ft.version=qt.version=te.version="3.13.0";ku=1;io()&&Cr();var ff=et.Power0,cf=et.Power1,df=et.Power2,pf=et.Power3,_f=et.Power4,gf=et.Linear,Df=et.Quad,mf=et.Cubic,yf=et.Quart,vf=et.Quint,xf=et.Strong,Cf=et.Elastic,wf=et.Back,Sf=et.SteppedEase,Ef=et.Bounce,bf=et.Sine,Tf=et.Expo,Ff=et.Circ;var aa,Mi,Er,bo,Ji,Af,la,To,Pf=function(){return typeof window<"u"},ci={},Zi=180/Math.PI,br=Math.PI/180,Sr=Math.atan2,ha=1e8,Fo=/([A-Z])/g,Mf=/(left|right|width|margin|padding|x)/i,kf=/[\s,\(]\S/,ti={autoAlpha:"opacity,visibility",scale:"scaleX,scaleY",alpha:"opacity"},Co=function(t,e){return e.set(e.t,e.p,Math.round((e.s+e.c*t)*1e4)/1e4+e.u,e)},Of=function(t,e){return e.set(e.t,e.p,t===1?e.e:Math.round((e.s+e.c*t)*1e4)/1e4+e.u,e)},Rf=function(t,e){return e.set(e.t,e.p,t?Math.round((e.s+e.c*t)*1e4)/1e4+e.u:e.b,e)},Lf=function(t,e){var i=e.s+e.c*t;e.set(e.t,e.p,~~(i+(i<0?-.5:.5))+e.u,e)},ma=function(t,e){return e.set(e.t,e.p,t?e.e:e.b,e)},ya=function(t,e){return e.set(e.t,e.p,t!==1?e.b:e.e,e)},Bf=function(t,e,i){return t.style[e]=i},zf=function(t,e,i){return t.style.setProperty(e,i)},Nf=function(t,e,i){return t._gsap[e]=i},If=function(t,e,i){return t._gsap.scaleX=t._gsap.scaleY=i},Yf=function(t,e,i,r,n){var s=t._gsap;s.scaleX=s.scaleY=i,s.renderTransform(n,s)},Wf=function(t,e,i,r,n){var s=t._gsap;s[e]=i,s.renderTransform(n,s)},yt="transform",me=yt+"Origin",Xf=function o(t,e){var i=this,r=this.target,n=r.style,s=r._gsap;if(t in ci&&n){if(this.tfm=this.tfm||{},t!=="transform")t=ti[t]||t,~t.indexOf(",")?t.split(",").forEach(function(u){return i.tfm[u]=fi(r,u)}):this.tfm[t]=s.x?s[t]:fi(r,t),t===me&&(this.tfm.zOrigin=s.zOrigin);else return ti.transform.split(",").forEach(function(u){return o.call(i,u,e)});if(this.props.indexOf(yt)>=0)return;s.svg&&(this.svgo=r.getAttribute("data-svg-origin"),this.props.push(me,e,"")),t=yt}(n||e)&&this.props.push(t,e,n[t])},va=function(t){t.translate&&(t.removeProperty("translate"),t.removeProperty("scale"),t.removeProperty("rotate"))},Vf=function(){var t=this.props,e=this.target,i=e.style,r=e._gsap,n,s;for(n=0;n<t.length;n+=3)t[n+1]?t[n+1]===2?e[t[n]](t[n+2]):e[t[n]]=t[n+2]:t[n+2]?i[t[n]]=t[n+2]:i.removeProperty(t[n].substr(0,2)==="--"?t[n]:t[n].replace(Fo,"-$1").toLowerCase());if(this.tfm){for(s in this.tfm)r[s]=this.tfm[s];r.svg&&(r.renderTransform(),e.setAttribute("data-svg-origin",this.svgo||"")),n=To(),(!n||!n.isStart)&&!i[yt]&&(va(i),r.zOrigin&&i[me]&&(i[me]+=" "+r.zOrigin+"px",r.zOrigin=0,r.renderTransform()),r.uncache=1)}},xa=function(t,e){var i={target:t,props:[],revert:Vf,save:Xf};return t._gsap||te.core.getCache(t),e&&t.style&&t.nodeType&&e.split(",").forEach(function(r){return i.save(r)}),i},Ca,wo=function(t,e){var i=Mi.createElementNS?Mi.createElementNS((e||"http://www.w3.org/1999/xhtml").replace(/^https/,"http"),t):Mi.createElement(t);return i&&i.style?i:Mi.createElement(t)},Le=function o(t,e,i){var r=getComputedStyle(t);return r[e]||r.getPropertyValue(e.replace(Fo,"-$1").toLowerCase())||r.getPropertyValue(e)||!i&&o(t,Tr(e)||e,1)||""},fa="O,Moz,ms,Ms,Webkit".split(","),Tr=function(t,e,i){var r=e||Ji,n=r.style,s=5;if(t in n&&!i)return t;for(t=t.charAt(0).toUpperCase()+t.substr(1);s--&&!(fa[s]+t in n););return s<0?null:(s===3?"ms":s>=0?fa[s]:"")+t},So=function(){Pf()&&window.document&&(aa=window,Mi=aa.document,Er=Mi.documentElement,Ji=wo("div")||{style:{}},Af=wo("div"),yt=Tr(yt),me=yt+"Origin",Ji.style.cssText="border-width:0;line-height:0;position:absolute;padding:0",Ca=!!Tr("perspective"),To=te.core.reverting,bo=1)},ca=function(t){var e=t.ownerSVGElement,i=wo("svg",e&&e.getAttribute("xmlns")||"http://www.w3.org/2000/svg"),r=t.cloneNode(!0),n;r.style.display="block",i.appendChild(r),Er.appendChild(i);try{n=r.getBBox()}catch{}return i.removeChild(r),Er.removeChild(i),n},da=function(t,e){for(var i=e.length;i--;)if(t.hasAttribute(e[i]))return t.getAttribute(e[i])},wa=function(t){var e,i;try{e=t.getBBox()}catch{e=ca(t),i=1}return e&&(e.width||e.height)||i||(e=ca(t)),e&&!e.width&&!e.x&&!e.y?{x:+da(t,["x","cx","x1"])||0,y:+da(t,["y","cy","y1"])||0,width:0,height:0}:e},Sa=function(t){return!!(t.getCTM&&(!t.parentNode||t.ownerSVGElement)&&wa(t))},tr=function(t,e){if(e){var i=t.style,r;e in ci&&e!==me&&(e=yt),i.removeProperty?(r=e.substr(0,2),(r==="ms"||e.substr(0,6)==="webkit")&&(e="-"+e),i.removeProperty(r==="--"?e:e.replace(Fo,"-$1").toLowerCase())):i.removeAttribute(e)}},ki=function(t,e,i,r,n,s){var u=new oe(t._pt,e,i,0,1,s?ya:ma);return t._pt=u,u.b=r,u.e=n,t._props.push(i),u},pa={deg:1,rad:1,turn:1},Hf={grid:1,flex:1},Oi=function o(t,e,i,r){var n=parseFloat(i)||0,s=(i+"").trim().substr((n+"").length)||"px",u=Ji.style,a=Mf.test(e),l=t.tagName.toLowerCase()==="svg",h=(l?"client":"offset")+(a?"Width":"Height"),d=100,f=r==="px",c=r==="%",_,p,g,D;if(r===s||!n||pa[r]||pa[s])return n;if(s!=="px"&&!f&&(n=o(t,e,i,"px")),D=t.getCTM&&Sa(t),(c||s==="%")&&(ci[e]||~e.indexOf("adius")))return _=D?t.getBBox()[a?"width":"height"]:t[h],wt(c?n/_*d:n/100*_);if(u[a?"width":"height"]=d+(f?s:r),p=r!=="rem"&&~e.indexOf("adius")||r==="em"&&t.appendChild&&!l?t:t.parentNode,D&&(p=(t.ownerSVGElement||{}).parentNode),(!p||p===Mi||!p.appendChild)&&(p=Mi.body),g=p._gsap,g&&c&&g.width&&a&&g.time===_e.time&&!g.uncache)return wt(n/g.width*d);if(c&&(e==="height"||e==="width")){var v=t.style[e];t.style[e]=d+r,_=t[h],v?t.style[e]=v:tr(t,e)}else(c||s==="%")&&!Hf[Le(p,"display")]&&(u.position=Le(t,"position")),p===t&&(u.position="static"),p.appendChild(Ji),_=Ji[h],p.removeChild(Ji),u.position="absolute";return a&&c&&(g=Fi(p),g.time=_e.time,g.width=p[h]),wt(f?_*n/d:_&&n?d/_*n:0)},fi=function(t,e,i,r){var n;return bo||So(),e in ti&&e!=="transform"&&(e=ti[e],~e.indexOf(",")&&(e=e.split(",")[0])),ci[e]&&e!=="transform"?(n=un(t,r),n=e!=="transformOrigin"?n[e]:n.svg?n.origin:es(Le(t,me))+" "+n.zOrigin+"px"):(n=t.style[e],(!n||n==="auto"||r||~(n+"").indexOf("calc("))&&(n=ts[e]&&ts[e](t,e,i)||Le(t,e)||lo(t,e)||(e==="opacity"?1:0))),i&&!~(n+"").trim().indexOf(" ")?Oi(t,e,n,i)+i:n},qf=function(t,e,i,r){if(!i||i==="none"){var n=Tr(e,t,1),s=n&&Le(t,n,1);s&&s!==i?(e=n,i=s):e==="borderColor"&&(i=Le(t,"borderTopColor"))}var u=new oe(this._pt,t.style,e,0,1,mo),a=0,l=0,h,d,f,c,_,p,g,D,v,x,y,C;if(u.b=i,u.e=r,i+="",r+="",r.substring(0,6)==="var(--"&&(r=Le(t,r.substring(4,r.indexOf(")")))),r==="auto"&&(p=t.style[e],t.style[e]=r,r=Le(t,e)||r,p?t.style[e]=p:tr(t,e)),h=[i,r],fo(h),i=h[0],r=h[1],f=i.match(Gi)||[],C=r.match(Gi)||[],C.length){for(;d=Gi.exec(r);)g=d[0],v=r.substring(a,d.index),_?_=(_+1)%5:(v.substr(-5)==="rgba("||v.substr(-5)==="hsla(")&&(_=1),g!==(p=f[l++]||"")&&(c=parseFloat(p)||0,y=p.substr((c+"").length),g.charAt(1)==="="&&(g=ji(c,g)+y),D=parseFloat(g),x=g.substr((D+"").length),a=Gi.lastIndex-x.length,x||(x=x||De.units[e]||y,a===r.length&&(r+=x,u.e+=x)),y!==x&&(c=Oi(t,e,p,x)||0),u._pt={_next:u._pt,p:v||l===1?v:",",s:c,c:D-c,m:_&&_<4||e==="zIndex"?Math.round:0});u.c=a<r.length?r.substring(a,r.length):""}else u.r=e==="display"&&r==="none"?ya:ma;return no.test(r)&&(u.e=0),this._pt=u,u},_a={top:"0%",bottom:"100%",left:"0%",right:"100%",center:"50%"},Uf=function(t){var e=t.split(" "),i=e[0],r=e[1]||"50%";return(i==="top"||i==="bottom"||r==="left"||r==="right")&&(t=i,i=r,r=t),e[0]=_a[i]||i,e[1]=_a[r]||r,e.join(" ")},Gf=function(t,e){if(e.tween&&e.tween._time===e.tween._dur){var i=e.t,r=i.style,n=e.u,s=i._gsap,u,a,l;if(n==="all"||n===!0)r.cssText="",a=1;else for(n=n.split(","),l=n.length;--l>-1;)u=n[l],ci[u]&&(a=1,u=u==="transformOrigin"?me:yt),tr(i,u);a&&(tr(i,yt),s&&(s.svg&&i.removeAttribute("transform"),r.scale=r.rotate=r.translate="none",un(i,1),s.uncache=1,va(r)))}},ts={clearProps:function(t,e,i,r,n){if(n.data!=="isFromStart"){var s=t._pt=new oe(t._pt,e,i,0,0,Gf);return s.u=r,s.pr=-10,s.tween=n,t._props.push(i),1}}},on=[1,0,0,1,0,0],Ea={},ba=function(t){return t==="matrix(1, 0, 0, 1, 0, 0)"||t==="none"||!t},ga=function(t){var e=Le(t,yt);return ba(e)?on:e.substr(7).match(ro).map(wt)},Ao=function(t,e){var i=t._gsap||Fi(t),r=t.style,n=ga(t),s,u,a,l;return i.svg&&t.getAttribute("transform")?(a=t.transform.baseVal.consolidate().matrix,n=[a.a,a.b,a.c,a.d,a.e,a.f],n.join(",")==="1,0,0,1,0,0"?on:n):(n===on&&!t.offsetParent&&t!==Er&&!i.svg&&(a=r.display,r.display="block",s=t.parentNode,(!s||!t.offsetParent&&!t.getBoundingClientRect().width)&&(l=1,u=t.nextElementSibling,Er.appendChild(t)),n=ga(t),a?r.display=a:tr(t,"display"),l&&(u?s.insertBefore(t,u):s?s.appendChild(t):Er.removeChild(t))),e&&n.length>6?[n[0],n[1],n[4],n[5],n[12],n[13]]:n)},Eo=function(t,e,i,r,n,s){var u=t._gsap,a=n||Ao(t,!0),l=u.xOrigin||0,h=u.yOrigin||0,d=u.xOffset||0,f=u.yOffset||0,c=a[0],_=a[1],p=a[2],g=a[3],D=a[4],v=a[5],x=e.split(" "),y=parseFloat(x[0])||0,C=parseFloat(x[1])||0,w,S,b,E;i?a!==on&&(S=c*g-_*p)&&(b=y*(g/S)+C*(-p/S)+(p*v-g*D)/S,E=y*(-_/S)+C*(c/S)-(c*v-_*D)/S,y=b,C=E):(w=wa(t),y=w.x+(~x[0].indexOf("%")?y/100*w.width:y),C=w.y+(~(x[1]||x[0]).indexOf("%")?C/100*w.height:C)),r||r!==!1&&u.smooth?(D=y-l,v=C-h,u.xOffset=d+(D*c+v*p)-D,u.yOffset=f+(D*_+v*g)-v):u.xOffset=u.yOffset=0,u.xOrigin=y,u.yOrigin=C,u.smooth=!!r,u.origin=e,u.originIsAbsolute=!!i,t.style[me]="0px 0px",s&&(ki(s,u,"xOrigin",l,y),ki(s,u,"yOrigin",h,C),ki(s,u,"xOffset",d,u.xOffset),ki(s,u,"yOffset",f,u.yOffset)),t.setAttribute("data-svg-origin",y+" "+C)},un=function(t,e){var i=t._gsap||new co(t);if("x"in i&&!e&&!i.uncache)return i;var r=t.style,n=i.scaleX<0,s="px",u="deg",a=getComputedStyle(t),l=Le(t,me)||"0",h,d,f,c,_,p,g,D,v,x,y,C,w,S,b,E,F,B,A,R,I,P,k,M,O,z,m,Y,H,J,nt,ft;return h=d=f=p=g=D=v=x=y=0,c=_=1,i.svg=!!(t.getCTM&&Sa(t)),a.translate&&((a.translate!=="none"||a.scale!=="none"||a.rotate!=="none")&&(r[yt]=(a.translate!=="none"?"translate3d("+(a.translate+" 0 0").split(" ").slice(0,3).join(", ")+") ":"")+(a.rotate!=="none"?"rotate("+a.rotate+") ":"")+(a.scale!=="none"?"scale("+a.scale.split(" ").join(",")+") ":"")+(a[yt]!=="none"?a[yt]:"")),r.scale=r.rotate=r.translate="none"),S=Ao(t,i.svg),i.svg&&(i.uncache?(O=t.getBBox(),l=i.xOrigin-O.x+"px "+(i.yOrigin-O.y)+"px",M=""):M=!e&&t.getAttribute("data-svg-origin"),Eo(t,M||l,!!M||i.originIsAbsolute,i.smooth!==!1,S)),C=i.xOrigin||0,w=i.yOrigin||0,S!==on&&(B=S[0],A=S[1],R=S[2],I=S[3],h=P=S[4],d=k=S[5],S.length===6?(c=Math.sqrt(B*B+A*A),_=Math.sqrt(I*I+R*R),p=B||A?Sr(A,B)*Zi:0,v=R||I?Sr(R,I)*Zi+p:0,v&&(_*=Math.abs(Math.cos(v*br))),i.svg&&(h-=C-(C*B+w*R),d-=w-(C*A+w*I))):(ft=S[6],J=S[7],m=S[8],Y=S[9],H=S[10],nt=S[11],h=S[12],d=S[13],f=S[14],b=Sr(ft,H),g=b*Zi,b&&(E=Math.cos(-b),F=Math.sin(-b),M=P*E+m*F,O=k*E+Y*F,z=ft*E+H*F,m=P*-F+m*E,Y=k*-F+Y*E,H=ft*-F+H*E,nt=J*-F+nt*E,P=M,k=O,ft=z),b=Sr(-R,H),D=b*Zi,b&&(E=Math.cos(-b),F=Math.sin(-b),M=B*E-m*F,O=A*E-Y*F,z=R*E-H*F,nt=I*F+nt*E,B=M,A=O,R=z),b=Sr(A,B),p=b*Zi,b&&(E=Math.cos(b),F=Math.sin(b),M=B*E+A*F,O=P*E+k*F,A=A*E-B*F,k=k*E-P*F,B=M,P=O),g&&Math.abs(g)+Math.abs(p)>359.9&&(g=p=0,D=180-D),c=wt(Math.sqrt(B*B+A*A+R*R)),_=wt(Math.sqrt(k*k+ft*ft)),b=Sr(P,k),v=Math.abs(b)>2e-4?b*Zi:0,y=nt?1/(nt<0?-nt:nt):0),i.svg&&(M=t.getAttribute("transform"),i.forceCSS=t.setAttribute("transform","")||!ba(Le(t,yt)),M&&t.setAttribute("transform",M))),Math.abs(v)>90&&Math.abs(v)<270&&(n?(c*=-1,v+=p<=0?180:-180,p+=p<=0?180:-180):(_*=-1,v+=v<=0?180:-180)),e=e||i.uncache,i.x=h-((i.xPercent=h&&(!e&&i.xPercent||(Math.round(t.offsetWidth/2)===Math.round(-h)?-50:0)))?t.offsetWidth*i.xPercent/100:0)+s,i.y=d-((i.yPercent=d&&(!e&&i.yPercent||(Math.round(t.offsetHeight/2)===Math.round(-d)?-50:0)))?t.offsetHeight*i.yPercent/100:0)+s,i.z=f+s,i.scaleX=wt(c),i.scaleY=wt(_),i.rotation=wt(p)+u,i.rotationX=wt(g)+u,i.rotationY=wt(D)+u,i.skewX=v+u,i.skewY=x+u,i.transformPerspective=y+s,(i.zOrigin=parseFloat(l.split(" ")[2])||!e&&i.zOrigin||0)&&(r[me]=es(l)),i.xOffset=i.yOffset=0,i.force3D=De.force3D,i.renderTransform=i.svg?Qf:Ca?Ta:jf,i.uncache=0,i},es=function(t){return(t=t.split(" "))[0]+" "+t[1]},xo=function(t,e,i){var r=Gt(e);return wt(parseFloat(e)+parseFloat(Oi(t,"x",i+"px",r)))+r},jf=function(t,e){e.z="0px",e.rotationY=e.rotationX="0deg",e.force3D=0,Ta(t,e)},Ki="0deg",sn="0px",$i=") ",Ta=function(t,e){var i=e||this,r=i.xPercent,n=i.yPercent,s=i.x,u=i.y,a=i.z,l=i.rotation,h=i.rotationY,d=i.rotationX,f=i.skewX,c=i.skewY,_=i.scaleX,p=i.scaleY,g=i.transformPerspective,D=i.force3D,v=i.target,x=i.zOrigin,y="",C=D==="auto"&&t&&t!==1||D===!0;if(x&&(d!==Ki||h!==Ki)){var w=parseFloat(h)*br,S=Math.sin(w),b=Math.cos(w),E;w=parseFloat(d)*br,E=Math.cos(w),s=xo(v,s,S*E*-x),u=xo(v,u,-Math.sin(w)*-x),a=xo(v,a,b*E*-x+x)}g!==sn&&(y+="perspective("+g+$i),(r||n)&&(y+="translate("+r+"%, "+n+"%) "),(C||s!==sn||u!==sn||a!==sn)&&(y+=a!==sn||C?"translate3d("+s+", "+u+", "+a+") ":"translate("+s+", "+u+$i),l!==Ki&&(y+="rotate("+l+$i),h!==Ki&&(y+="rotateY("+h+$i),d!==Ki&&(y+="rotateX("+d+$i),(f!==Ki||c!==Ki)&&(y+="skew("+f+", "+c+$i),(_!==1||p!==1)&&(y+="scale("+_+", "+p+$i),v.style[yt]=y||"translate(0, 0)"},Qf=function(t,e){var i=e||this,r=i.xPercent,n=i.yPercent,s=i.x,u=i.y,a=i.rotation,l=i.skewX,h=i.skewY,d=i.scaleX,f=i.scaleY,c=i.target,_=i.xOrigin,p=i.yOrigin,g=i.xOffset,D=i.yOffset,v=i.forceCSS,x=parseFloat(s),y=parseFloat(u),C,w,S,b,E;a=parseFloat(a),l=parseFloat(l),h=parseFloat(h),h&&(h=parseFloat(h),l+=h,a+=h),a||l?(a*=br,l*=br,C=Math.cos(a)*d,w=Math.sin(a)*d,S=Math.sin(a-l)*-f,b=Math.cos(a-l)*f,l&&(h*=br,E=Math.tan(l-h),E=Math.sqrt(1+E*E),S*=E,b*=E,h&&(E=Math.tan(h),E=Math.sqrt(1+E*E),C*=E,w*=E)),C=wt(C),w=wt(w),S=wt(S),b=wt(b)):(C=d,b=f,w=S=0),(x&&!~(s+"").indexOf("px")||y&&!~(u+"").indexOf("px"))&&(x=Oi(c,"x",s,"px"),y=Oi(c,"y",u,"px")),(_||p||g||D)&&(x=wt(x+_-(_*C+p*S)+g),y=wt(y+p-(_*w+p*b)+D)),(r||n)&&(E=c.getBBox(),x=wt(x+r/100*E.width),y=wt(y+n/100*E.height)),E="matrix("+C+","+w+","+S+","+b+","+x+","+y+")",c.setAttribute("transform",E),v&&(c.style[yt]=E)},Kf=function(t,e,i,r,n){var s=360,u=Bt(n),a=parseFloat(n)*(u&&~n.indexOf("rad")?Zi:1),l=a-r,h=r+l+"deg",d,f;return u&&(d=n.split("_")[1],d==="short"&&(l%=s,l!==l%(s/2)&&(l+=l<0?s:-s)),d==="cw"&&l<0?l=(l+s*ha)%s-~~(l/s)*s:d==="ccw"&&l>0&&(l=(l-s*ha)%s-~~(l/s)*s)),t._pt=f=new oe(t._pt,e,i,r,l,Of),f.e=h,f.u="deg",t._props.push(i),f},Da=function(t,e){for(var i in e)t[i]=e[i];return t},$f=function(t,e,i){var r=Da({},i._gsap),n="perspective,force3D,transformOrigin,svgOrigin",s=i.style,u,a,l,h,d,f,c,_;r.svg?(l=i.getAttribute("transform"),i.setAttribute("transform",""),s[yt]=e,u=un(i,1),tr(i,yt),i.setAttribute("transform",l)):(l=getComputedStyle(i)[yt],s[yt]=e,u=un(i,1),s[yt]=l);for(a in ci)l=r[a],h=u[a],l!==h&&n.indexOf(a)<0&&(c=Gt(l),_=Gt(h),d=c!==_?Oi(i,a,l,_):parseFloat(l),f=parseFloat(h),t._pt=new oe(t._pt,u,a,d,f-d,Co),t._pt.u=_||0,t._props.push(a));Da(u,r)};se("padding,margin,Width,Radius",function(o,t){var e="Top",i="Right",r="Bottom",n="Left",s=(t<3?[e,i,r,n]:[e+n,e+i,r+i,r+n]).map(function(u){return t<2?o+u:"border"+u+o});ts[t>1?"border"+o:o]=function(u,a,l,h,d){var f,c;if(arguments.length<4)return f=s.map(function(_){return fi(u,_,l)}),c=f.join(" "),c.split(f[0]).length===5?f[0]:c;f=(h+"").split(" "),c={},s.forEach(function(_,p){return c[_]=f[p]=f[p]||f[(p-1)/2|0]}),u.init(a,c,d)}});var Po={name:"css",register:So,targetTest:function(t){return t.style&&t.nodeType},init:function(t,e,i,r,n){var s=this._props,u=t.style,a=i.vars.startAt,l,h,d,f,c,_,p,g,D,v,x,y,C,w,S,b;bo||So(),this.styles=this.styles||xa(t),b=this.styles.props,this.tween=i;for(p in e)if(p!=="autoRound"&&(h=e[p],!(pe[p]&&_o(p,e,i,r,t,n)))){if(c=typeof h,_=ts[p],c==="function"&&(h=h.call(i,r,t,n),c=typeof h),c==="string"&&~h.indexOf("random(")&&(h=wr(h)),_)_(this,t,p,h,i)&&(S=1);else if(p.substr(0,2)==="--")l=(getComputedStyle(t).getPropertyValue(p)+"").trim(),h+="",li.lastIndex=0,li.test(l)||(g=Gt(l),D=Gt(h)),D?g!==D&&(l=Oi(t,p,l,D)+D):g&&(h+=g),this.add(u,"setProperty",l,h,r,n,0,0,p),s.push(p),b.push(p,0,u[p]);else if(c!=="undefined"){if(a&&p in a?(l=typeof a[p]=="function"?a[p].call(i,r,t,n):a[p],Bt(l)&&~l.indexOf("random(")&&(l=wr(l)),Gt(l+"")||l==="auto"||(l+=De.units[p]||Gt(fi(t,p))||""),(l+"").charAt(1)==="="&&(l=fi(t,p))):l=fi(t,p),f=parseFloat(l),v=c==="string"&&h.charAt(1)==="="&&h.substr(0,2),v&&(h=h.substr(2)),d=parseFloat(h),p in ti&&(p==="autoAlpha"&&(f===1&&fi(t,"visibility")==="hidden"&&d&&(f=0),b.push("visibility",0,u.visibility),ki(this,u,"visibility",f?"inherit":"hidden",d?"inherit":"hidden",!d)),p!=="scale"&&p!=="transform"&&(p=ti[p],~p.indexOf(",")&&(p=p.split(",")[0]))),x=p in ci,x){if(this.styles.save(p),c==="string"&&h.substring(0,6)==="var(--"&&(h=Le(t,h.substring(4,h.indexOf(")"))),d=parseFloat(h)),y||(C=t._gsap,C.renderTransform&&!e.parseTransform||un(t,e.parseTransform),w=e.smoothOrigin!==!1&&C.smooth,y=this._pt=new oe(this._pt,u,yt,0,1,C.renderTransform,C,0,-1),y.dep=1),p==="scale")this._pt=new oe(this._pt,C,"scaleY",C.scaleY,(v?ji(C.scaleY,v+d):d)-C.scaleY||0,Co),this._pt.u=0,s.push("scaleY",p),p+="X";else if(p==="transformOrigin"){b.push(me,0,u[me]),h=Uf(h),C.svg?Eo(t,h,0,w,0,this):(D=parseFloat(h.split(" ")[2])||0,D!==C.zOrigin&&ki(this,C,"zOrigin",C.zOrigin,D),ki(this,u,p,es(l),es(h)));continue}else if(p==="svgOrigin"){Eo(t,h,1,w,0,this);continue}else if(p in Ea){Kf(this,C,p,f,v?ji(f,v+h):h);continue}else if(p==="smoothOrigin"){ki(this,C,"smooth",C.smooth,h);continue}else if(p==="force3D"){C[p]=h;continue}else if(p==="transform"){$f(this,h,t);continue}}else p in u||(p=Tr(p)||p);if(x||(d||d===0)&&(f||f===0)&&!kf.test(h)&&p in u)g=(l+"").substr((f+"").length),d||(d=0),D=Gt(h)||(p in De.units?De.units[p]:g),g!==D&&(f=Oi(t,p,l,D)),this._pt=new oe(this._pt,x?C:u,p,f,(v?ji(f,v+d):d)-f,!x&&(D==="px"||p==="zIndex")&&e.autoRound!==!1?Lf:Co),this._pt.u=D||0,g!==D&&D!=="%"&&(this._pt.b=l,this._pt.r=Rf);else if(p in u)qf.call(this,t,p,l,v?v+h:h);else if(p in t)this.add(t,p,l||t[p],v?v+h:h,r,n);else if(p!=="parseTransform"){Qn(p,h);continue}x||(p in u?b.push(p,0,u[p]):typeof t[p]=="function"?b.push(p,2,t[p]()):b.push(p,1,l||t[p])),s.push(p)}}S&&vo(this)},render:function(t,e){if(e.tween._time||!To())for(var i=e._pt;i;)i.r(t,i.d),i=i._next;else e.styles.revert()},get:fi,aliases:ti,getSetter:function(t,e,i){var r=ti[e];return r&&r.indexOf(",")<0&&(e=r),e in ci&&e!==me&&(t._gsap.x||fi(t,"x"))?i&&la===i?e==="scale"?If:Nf:(la=i||{})&&(e==="scale"?Yf:Wf):t.style&&!jn(t.style[e])?Bf:~e.indexOf("-")?zf:Jn(t,e)},core:{_removeProperty:tr,_getMatrix:Ao}};te.utils.checkPrefix=Tr;te.core.getStyleSaver=xa;(function(o,t,e,i){var r=se(o+","+t+","+e,function(n){ci[n]=1});se(t,function(n){De.units[n]="deg",Ea[n]=1}),ti[r[13]]=o+","+t,se(i,function(n){var s=n.split(":");ti[s[1]]=r[s[0]]})})("x,y,z,scale,scaleX,scaleY,xPercent,yPercent","rotation,rotationX,rotationY,skewX,skewY","transform,transformOrigin,svgOrigin,force3D,smoothOrigin,transformPerspective","0:translateX,1:translateY,2:translateZ,8:rotate,8:rotationZ,8:rotateZ,9:rotateX,10:rotateY");se("x,y,z,top,right,bottom,left,width,height,fontSize,padding,margin,perspective",function(o){De.units[o]="px"});te.registerPlugin(Po);var it=te.registerPlugin(Po)||te,Dd=it.core.Tween;function Fa(o,t){for(var e=0;e<t.length;e++){var i=t[e];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(o,i.key,i)}}function Zf(o,t,e){return t&&Fa(o.prototype,t),e&&Fa(o,e),o}var jt,ns,Jf,Te,Ri,Li,Ar,Pa,er,ln,Ma,di,He,ka,Oa=function(){return jt||typeof window<"u"&&(jt=window.gsap)&&jt.registerPlugin&&jt},Ra=1,Fr=[],j=[],qe=[],hn=Date.now,Mo=function(t,e){return e},tc=function(){var t=ln.core,e=t.bridge||{},i=t._scrollers,r=t._proxies;i.push.apply(i,j),r.push.apply(r,qe),j=i,qe=r,Mo=function(s,u){return e[s](u)}},_i=function(t,e){return~qe.indexOf(t)&&qe[qe.indexOf(t)+1][e]},fn=function(t){return!!~Ma.indexOf(t)},ae=function(t,e,i,r,n){return t.addEventListener(e,i,{passive:r!==!1,capture:!!n})},ue=function(t,e,i,r){return t.removeEventListener(e,i,!!r)},is="scrollLeft",rs="scrollTop",ko=function(){return di&&di.isPressed||j.cache++},ss=function(t,e){var i=function r(n){if(n||n===0){Ra&&(Te.history.scrollRestoration="manual");var s=di&&di.isPressed;n=r.v=Math.round(n)||(di&&di.iOS?1:0),t(n),r.cacheID=j.cache,s&&Mo("ss",n)}else(e||j.cache!==r.cacheID||Mo("ref"))&&(r.cacheID=j.cache,r.v=t());return r.v+r.offset};return i.offset=0,t&&i},ee={s:is,p:"left",p2:"Left",os:"right",os2:"Right",d:"width",d2:"Width",a:"x",sc:ss(function(o){return arguments.length?Te.scrollTo(o,kt.sc()):Te.pageXOffset||Ri[is]||Li[is]||Ar[is]||0})},kt={s:rs,p:"top",p2:"Top",os:"bottom",os2:"Bottom",d:"height",d2:"Height",a:"y",op:ee,sc:ss(function(o){return arguments.length?Te.scrollTo(ee.sc(),o):Te.pageYOffset||Ri[rs]||Li[rs]||Ar[rs]||0})},le=function(t,e){return(e&&e._ctx&&e._ctx.selector||jt.utils.toArray)(t)[0]||(typeof t=="string"&&jt.config().nullTargetWarn!==!1?console.warn("Element not found:",t):null)},ec=function(t,e){for(var i=e.length;i--;)if(e[i]===t||e[i].contains(t))return!0;return!1},pi=function(t,e){var i=e.s,r=e.sc;fn(t)&&(t=Ri.scrollingElement||Li);var n=j.indexOf(t),s=r===kt.sc?1:2;!~n&&(n=j.push(t)-1),j[n+s]||ae(t,"scroll",ko);var u=j[n+s],a=u||(j[n+s]=ss(_i(t,i),!0)||(fn(t)?r:ss(function(l){return arguments.length?t[i]=l:t[i]})));return a.target=t,u||(a.smooth=jt.getProperty(t,"scrollBehavior")==="smooth"),a},os=function(t,e,i){var r=t,n=t,s=hn(),u=s,a=e||50,l=Math.max(500,a*3),h=function(_,p){var g=hn();p||g-s>a?(n=r,r=_,u=s,s=g):i?r+=_:r=n+(_-n)/(g-u)*(s-u)},d=function(){n=r=i?0:r,u=s=0},f=function(_){var p=u,g=n,D=hn();return(_||_===0)&&_!==r&&h(_),s===u||D-u>l?0:(r+(i?g:-g))/((i?D:s)-p)*1e3};return{update:h,reset:d,getVelocity:f}},an=function(t,e){return e&&!t._gsapAllow&&t.preventDefault(),t.changedTouches?t.changedTouches[0]:t},Aa=function(t){var e=Math.max.apply(Math,t),i=Math.min.apply(Math,t);return Math.abs(e)>=Math.abs(i)?e:i},La=function(){ln=jt.core.globals().ScrollTrigger,ln&&ln.core&&tc()},Ba=function(t){return jt=t||Oa(),!ns&&jt&&typeof document<"u"&&document.body&&(Te=window,Ri=document,Li=Ri.documentElement,Ar=Ri.body,Ma=[Te,Ri,Li,Ar],Jf=jt.utils.clamp,ka=jt.core.context||function(){},er="onpointerenter"in Ar?"pointer":"mouse",Pa=_t.isTouch=Te.matchMedia&&Te.matchMedia("(hover: none), (pointer: coarse)").matches?1:"ontouchstart"in Te||navigator.maxTouchPoints>0||navigator.msMaxTouchPoints>0?2:0,He=_t.eventTypes=("ontouchstart"in Li?"touchstart,touchmove,touchcancel,touchend":"onpointerdown"in Li?"pointerdown,pointermove,pointercancel,pointerup":"mousedown,mousemove,mouseup,mouseup").split(","),setTimeout(function(){return Ra=0},500),La(),ns=1),ns};ee.op=kt;j.cache=0;var _t=function(){function o(e){this.init(e)}var t=o.prototype;return t.init=function(i){ns||Ba(jt)||console.warn("Please gsap.registerPlugin(Observer)"),ln||La();var r=i.tolerance,n=i.dragMinimum,s=i.type,u=i.target,a=i.lineHeight,l=i.debounce,h=i.preventDefault,d=i.onStop,f=i.onStopDelay,c=i.ignore,_=i.wheelSpeed,p=i.event,g=i.onDragStart,D=i.onDragEnd,v=i.onDrag,x=i.onPress,y=i.onRelease,C=i.onRight,w=i.onLeft,S=i.onUp,b=i.onDown,E=i.onChangeX,F=i.onChangeY,B=i.onChange,A=i.onToggleX,R=i.onToggleY,I=i.onHover,P=i.onHoverEnd,k=i.onMove,M=i.ignoreCheck,O=i.isNormalizer,z=i.onGestureStart,m=i.onGestureEnd,Y=i.onWheel,H=i.onEnable,J=i.onDisable,nt=i.onClick,ft=i.scrollSpeed,St=i.capture,ct=i.allowClicks,Rt=i.lockAxis,At=i.onLockAxis;this.target=u=le(u)||Li,this.vars=i,c&&(c=jt.utils.toArray(c)),r=r||1e-9,n=n||0,_=_||1,ft=ft||1,s=s||"wheel,touch,pointer",l=l!==!1,a||(a=parseFloat(Te.getComputedStyle(Ar).lineHeight)||22);var gt,Xt,Qt,rt,Et,de,xe,T=this,Ce=0,ri=0,vi=i.passive||!h&&i.passive!==!1,vt=pi(u,ee),ni=pi(u,kt),xi=vt(),Ii=ni(),Nt=~s.indexOf("touch")&&!~s.indexOf("pointer")&&He[0]==="pointerdown",Ci=fn(u),bt=u.ownerDocument||Ri,Ie=[0,0,0],Me=[0,0,0],si=0,Vr=function(){return si=hn()},Pt=function(V,st){return(T.event=V)&&c&&ec(V.target,c)||st&&Nt&&V.pointerType!=="touch"||M&&M(V,st)},Ln=function(){T._vx.reset(),T._vy.reset(),Xt.pause(),d&&d(T)},oi=function(){var V=T.deltaX=Aa(Ie),st=T.deltaY=Aa(Me),L=Math.abs(V)>=r,q=Math.abs(st)>=r;B&&(L||q)&&B(T,V,st,Ie,Me),L&&(C&&T.deltaX>0&&C(T),w&&T.deltaX<0&&w(T),E&&E(T),A&&T.deltaX<0!=Ce<0&&A(T),Ce=T.deltaX,Ie[0]=Ie[1]=Ie[2]=0),q&&(b&&T.deltaY>0&&b(T),S&&T.deltaY<0&&S(T),F&&F(T),R&&T.deltaY<0!=ri<0&&R(T),ri=T.deltaY,Me[0]=Me[1]=Me[2]=0),(rt||Qt)&&(k&&k(T),Qt&&(g&&Qt===1&&g(T),v&&v(T),Qt=0),rt=!1),de&&!(de=!1)&&At&&At(T),Et&&(Y(T),Et=!1),gt=0},pr=function(V,st,L){Ie[L]+=V,Me[L]+=st,T._vx.update(V),T._vy.update(st),l?gt||(gt=requestAnimationFrame(oi)):oi()},_r=function(V,st){Rt&&!xe&&(T.axis=xe=Math.abs(V)>Math.abs(st)?"x":"y",de=!0),xe!=="y"&&(Ie[2]+=V,T._vx.update(V,!0)),xe!=="x"&&(Me[2]+=st,T._vy.update(st,!0)),l?gt||(gt=requestAnimationFrame(oi)):oi()},wi=function(V){if(!Pt(V,1)){V=an(V,h);var st=V.clientX,L=V.clientY,q=st-T.x,X=L-T.y,U=T.isDragging;T.x=st,T.y=L,(U||(q||X)&&(Math.abs(T.startX-st)>=n||Math.abs(T.startY-L)>=n))&&(Qt=U?2:1,U||(T.isDragging=!0),_r(q,X))}},Yi=T.onPress=function(G){Pt(G,1)||G&&G.button||(T.axis=xe=null,Xt.pause(),T.isPressed=!0,G=an(G),Ce=ri=0,T.startX=T.x=G.clientX,T.startY=T.y=G.clientY,T._vx.reset(),T._vy.reset(),ae(O?u:bt,He[1],wi,vi,!0),T.deltaX=T.deltaY=0,x&&x(T))},Z=T.onRelease=function(G){if(!Pt(G,1)){ue(O?u:bt,He[1],wi,!0);var V=!isNaN(T.y-T.startY),st=T.isDragging,L=st&&(Math.abs(T.x-T.startX)>3||Math.abs(T.y-T.startY)>3),q=an(G);!L&&V&&(T._vx.reset(),T._vy.reset(),h&&ct&&jt.delayedCall(.08,function(){if(hn()-si>300&&!G.defaultPrevented){if(G.target.click)G.target.click();else if(bt.createEvent){var X=bt.createEvent("MouseEvents");X.initMouseEvent("click",!0,!0,Te,1,q.screenX,q.screenY,q.clientX,q.clientY,!1,!1,!1,!1,0,null),G.target.dispatchEvent(X)}}})),T.isDragging=T.isGesturing=T.isPressed=!1,d&&st&&!O&&Xt.restart(!0),Qt&&oi(),D&&st&&D(T),y&&y(T,L)}},Wi=function(V){return V.touches&&V.touches.length>1&&(T.isGesturing=!0)&&z(V,T.isDragging)},Ye=function(){return(T.isGesturing=!1)||m(T)},We=function(V){if(!Pt(V)){var st=vt(),L=ni();pr((st-xi)*ft,(L-Ii)*ft,1),xi=st,Ii=L,d&&Xt.restart(!0)}},Xe=function(V){if(!Pt(V)){V=an(V,h),Y&&(Et=!0);var st=(V.deltaMode===1?a:V.deltaMode===2?Te.innerHeight:1)*_;pr(V.deltaX*st,V.deltaY*st,0),d&&!O&&Xt.restart(!0)}},Xi=function(V){if(!Pt(V)){var st=V.clientX,L=V.clientY,q=st-T.x,X=L-T.y;T.x=st,T.y=L,rt=!0,d&&Xt.restart(!0),(q||X)&&_r(q,X)}},gr=function(V){T.event=V,I(T)},ui=function(V){T.event=V,P(T)},Hr=function(V){return Pt(V)||an(V,h)&&nt(T)};Xt=T._dc=jt.delayedCall(f||.25,Ln).pause(),T.deltaX=T.deltaY=0,T._vx=os(0,50,!0),T._vy=os(0,50,!0),T.scrollX=vt,T.scrollY=ni,T.isDragging=T.isGesturing=T.isPressed=!1,ka(this),T.enable=function(G){return T.isEnabled||(ae(Ci?bt:u,"scroll",ko),s.indexOf("scroll")>=0&&ae(Ci?bt:u,"scroll",We,vi,St),s.indexOf("wheel")>=0&&ae(u,"wheel",Xe,vi,St),(s.indexOf("touch")>=0&&Pa||s.indexOf("pointer")>=0)&&(ae(u,He[0],Yi,vi,St),ae(bt,He[2],Z),ae(bt,He[3],Z),ct&&ae(u,"click",Vr,!0,!0),nt&&ae(u,"click",Hr),z&&ae(bt,"gesturestart",Wi),m&&ae(bt,"gestureend",Ye),I&&ae(u,er+"enter",gr),P&&ae(u,er+"leave",ui),k&&ae(u,er+"move",Xi)),T.isEnabled=!0,T.isDragging=T.isGesturing=T.isPressed=rt=Qt=!1,T._vx.reset(),T._vy.reset(),xi=vt(),Ii=ni(),G&&G.type&&Yi(G),H&&H(T)),T},T.disable=function(){T.isEnabled&&(Fr.filter(function(G){return G!==T&&fn(G.target)}).length||ue(Ci?bt:u,"scroll",ko),T.isPressed&&(T._vx.reset(),T._vy.reset(),ue(O?u:bt,He[1],wi,!0)),ue(Ci?bt:u,"scroll",We,St),ue(u,"wheel",Xe,St),ue(u,He[0],Yi,St),ue(bt,He[2],Z),ue(bt,He[3],Z),ue(u,"click",Vr,!0),ue(u,"click",Hr),ue(bt,"gesturestart",Wi),ue(bt,"gestureend",Ye),ue(u,er+"enter",gr),ue(u,er+"leave",ui),ue(u,er+"move",Xi),T.isEnabled=T.isPressed=T.isDragging=!1,J&&J(T))},T.kill=T.revert=function(){T.disable();var G=Fr.indexOf(T);G>=0&&Fr.splice(G,1),di===T&&(di=0)},Fr.push(T),O&&fn(u)&&(di=T),T.enable(p)},Zf(o,[{key:"velocityX",get:function(){return this._vx.getVelocity()}},{key:"velocityY",get:function(){return this._vy.getVelocity()}}]),o}();_t.version="3.13.0";_t.create=function(o){return new _t(o)};_t.register=Ba;_t.getAll=function(){return Fr.slice()};_t.getById=function(o){return Fr.filter(function(t){return t.vars.id===o})[0]};Oa()&&jt.registerPlugin(_t);var N,kr,$,ht,Pe,ot,Go,Cs,Sn,mn,dn,us,ie,bs,Yo,fe,za,Na,Or,tl,Oo,el,he,Wo,il,rl,Bi,Xo,jo,Rr,Qo,ws,Vo,Ro,as=1,re=Date.now,Lo=re(),Ne=0,pn=0,Ia=function(t,e,i){var r=Ae(t)&&(t.substr(0,6)==="clamp("||t.indexOf("max")>-1);return i["_"+e+"Clamp"]=r,r?t.substr(6,t.length-7):t},Ya=function(t,e){return e&&(!Ae(t)||t.substr(0,6)!=="clamp(")?"clamp("+t+")":t},ic=function o(){return pn&&requestAnimationFrame(o)},Wa=function(){return bs=1},Xa=function(){return bs=0},ei=function(t){return t},_n=function(t){return Math.round(t*1e5)/1e5||0},nl=function(){return typeof window<"u"},sl=function(){return N||nl()&&(N=window.gsap)&&N.registerPlugin&&N},ur=function(t){return!!~Go.indexOf(t)},ol=function(t){return(t==="Height"?Qo:$["inner"+t])||Pe["client"+t]||ot["client"+t]},ul=function(t){return _i(t,"getBoundingClientRect")||(ur(t)?function(){return xs.width=$.innerWidth,xs.height=Qo,xs}:function(){return gi(t)})},rc=function(t,e,i){var r=i.d,n=i.d2,s=i.a;return(s=_i(t,"getBoundingClientRect"))?function(){return s()[r]}:function(){return(e?ol(n):t["client"+n])||0}},nc=function(t,e){return!e||~qe.indexOf(t)?ul(t):function(){return xs}},ii=function(t,e){var i=e.s,r=e.d2,n=e.d,s=e.a;return Math.max(0,(i="scroll"+r)&&(s=_i(t,i))?s()-ul(t)()[n]:ur(t)?(Pe[i]||ot[i])-ol(r):t[i]-t["offset"+r])},ls=function(t,e){for(var i=0;i<Or.length;i+=3)(!e||~e.indexOf(Or[i+1]))&&t(Or[i],Or[i+1],Or[i+2])},Ae=function(t){return typeof t=="string"},ne=function(t){return typeof t=="function"},gn=function(t){return typeof t=="number"},ir=function(t){return typeof t=="object"},cn=function(t,e,i){return t&&t.progress(e?0:1)&&i&&t.pause()},Bo=function(t,e){if(t.enabled){var i=t._ctx?t._ctx.add(function(){return e(t)}):e(t);i&&i.totalTime&&(t.callbackAnimation=i)}},Pr=Math.abs,al="left",ll="top",Ko="right",$o="bottom",nr="width",sr="height",yn="Right",vn="Left",xn="Top",Cn="Bottom",Ot="padding",Be="margin",Br="Width",Zo="Height",zt="px",ze=function(t){return $.getComputedStyle(t)},sc=function(t){var e=ze(t).position;t.style.position=e==="absolute"||e==="fixed"?e:"relative"},Va=function(t,e){for(var i in e)i in t||(t[i]=e[i]);return t},gi=function(t,e){var i=e&&ze(t)[Yo]!=="matrix(1, 0, 0, 1, 0, 0)"&&N.to(t,{x:0,y:0,xPercent:0,yPercent:0,rotation:0,rotationX:0,rotationY:0,scale:1,skewX:0,skewY:0}).progress(1),r=t.getBoundingClientRect();return i&&i.progress(0).kill(),r},Ss=function(t,e){var i=e.d2;return t["offset"+i]||t["client"+i]||0},hl=function(t){var e=[],i=t.labels,r=t.duration(),n;for(n in i)e.push(i[n]/r);return e},oc=function(t){return function(e){return N.utils.snap(hl(t),e)}},Jo=function(t){var e=N.utils.snap(t),i=Array.isArray(t)&&t.slice(0).sort(function(r,n){return r-n});return i?function(r,n,s){s===void 0&&(s=.001);var u;if(!n)return e(r);if(n>0){for(r-=s,u=0;u<i.length;u++)if(i[u]>=r)return i[u];return i[u-1]}else for(u=i.length,r+=s;u--;)if(i[u]<=r)return i[u];return i[0]}:function(r,n,s){s===void 0&&(s=.001);var u=e(r);return!n||Math.abs(u-r)<s||u-r<0==n<0?u:e(n<0?r-t:r+t)}},uc=function(t){return function(e,i){return Jo(hl(t))(e,i.direction)}},hs=function(t,e,i,r){return i.split(",").forEach(function(n){return t(e,n,r)})},Wt=function(t,e,i,r,n){return t.addEventListener(e,i,{passive:!r,capture:!!n})},Yt=function(t,e,i,r){return t.removeEventListener(e,i,!!r)},fs=function(t,e,i){i=i&&i.wheelHandler,i&&(t(e,"wheel",i),t(e,"touchmove",i))},Ha={startColor:"green",endColor:"red",indent:0,fontSize:"16px",fontWeight:"normal"},cs={toggleActions:"play",anticipatePin:0},Es={top:0,left:0,center:.5,bottom:1,right:1},Ds=function(t,e){if(Ae(t)){var i=t.indexOf("="),r=~i?+(t.charAt(i-1)+1)*parseFloat(t.substr(i+1)):0;~i&&(t.indexOf("%")>i&&(r*=e/100),t=t.substr(0,i-1)),t=r+(t in Es?Es[t]*e:~t.indexOf("%")?parseFloat(t)*e/100:parseFloat(t)||0)}return t},ds=function(t,e,i,r,n,s,u,a){var l=n.startColor,h=n.endColor,d=n.fontSize,f=n.indent,c=n.fontWeight,_=ht.createElement("div"),p=ur(i)||_i(i,"pinType")==="fixed",g=t.indexOf("scroller")!==-1,D=p?ot:i,v=t.indexOf("start")!==-1,x=v?l:h,y="border-color:"+x+";font-size:"+d+";color:"+x+";font-weight:"+c+";pointer-events:none;white-space:nowrap;font-family:sans-serif,Arial;z-index:1000;padding:4px 8px;border-width:0;border-style:solid;";return y+="position:"+((g||a)&&p?"fixed;":"absolute;"),(g||a||!p)&&(y+=(r===kt?Ko:$o)+":"+(s+parseFloat(f))+"px;"),u&&(y+="box-sizing:border-box;text-align:left;width:"+u.offsetWidth+"px;"),_._isStart=v,_.setAttribute("class","gsap-marker-"+t+(e?" marker-"+e:"")),_.style.cssText=y,_.innerText=e||e===0?t+"-"+e:t,D.children[0]?D.insertBefore(_,D.children[0]):D.appendChild(_),_._offset=_["offset"+r.op.d2],ms(_,0,r,v),_},ms=function(t,e,i,r){var n={display:"block"},s=i[r?"os2":"p2"],u=i[r?"p2":"os2"];t._isFlipped=r,n[i.a+"Percent"]=r?-100:0,n[i.a]=r?"1px":0,n["border"+s+Br]=1,n["border"+u+Br]=0,n[i.p]=e+"px",N.set(t,n)},Q=[],Ho={},En,qa=function(){return re()-Ne>34&&(En||(En=requestAnimationFrame(Di)))},Mr=function(){(!he||!he.isPressed||he.startX>ot.clientWidth)&&(j.cache++,he?En||(En=requestAnimationFrame(Di)):Di(),Ne||lr("scrollStart"),Ne=re())},zo=function(){rl=$.innerWidth,il=$.innerHeight},Dn=function(t){j.cache++,(t===!0||!ie&&!el&&!ht.fullscreenElement&&!ht.webkitFullscreenElement&&(!Wo||rl!==$.innerWidth||Math.abs($.innerHeight-il)>$.innerHeight*.25))&&Cs.restart(!0)},ar={},ac=[],fl=function o(){return Yt(K,"scrollEnd",o)||rr(!0)},lr=function(t){return ar[t]&&ar[t].map(function(e){return e()})||ac},Fe=[],cl=function(t){for(var e=0;e<Fe.length;e+=5)(!t||Fe[e+4]&&Fe[e+4].query===t)&&(Fe[e].style.cssText=Fe[e+1],Fe[e].getBBox&&Fe[e].setAttribute("transform",Fe[e+2]||""),Fe[e+3].uncache=1)},tu=function(t,e){var i;for(fe=0;fe<Q.length;fe++)i=Q[fe],i&&(!e||i._ctx===e)&&(t?i.kill(1):i.revert(!0,!0));ws=!0,e&&cl(e),e||lr("revert")},dl=function(t,e){j.cache++,(e||!ce)&&j.forEach(function(i){return ne(i)&&i.cacheID++&&(i.rec=0)}),Ae(t)&&($.history.scrollRestoration=jo=t)},ce,or=0,Ua,lc=function(){if(Ua!==or){var t=Ua=or;requestAnimationFrame(function(){return t===or&&rr(!0)})}},pl=function(){ot.appendChild(Rr),Qo=!he&&Rr.offsetHeight||$.innerHeight,ot.removeChild(Rr)},Ga=function(t){return Sn(".gsap-marker-start, .gsap-marker-end, .gsap-marker-scroller-start, .gsap-marker-scroller-end").forEach(function(e){return e.style.display=t?"none":"block"})},rr=function(t,e){if(Pe=ht.documentElement,ot=ht.body,Go=[$,ht,Pe,ot],Ne&&!t&&!ws){Wt(K,"scrollEnd",fl);return}pl(),ce=K.isRefreshing=!0,j.forEach(function(r){return ne(r)&&++r.cacheID&&(r.rec=r())});var i=lr("refreshInit");tl&&K.sort(),e||tu(),j.forEach(function(r){ne(r)&&(r.smooth&&(r.target.style.scrollBehavior="auto"),r(0))}),Q.slice(0).forEach(function(r){return r.refresh()}),ws=!1,Q.forEach(function(r){if(r._subPinOffset&&r.pin){var n=r.vars.horizontal?"offsetWidth":"offsetHeight",s=r.pin[n];r.revert(!0,1),r.adjustPinSpacing(r.pin[n]-s),r.refresh()}}),Vo=1,Ga(!0),Q.forEach(function(r){var n=ii(r.scroller,r._dir),s=r.vars.end==="max"||r._endClamp&&r.end>n,u=r._startClamp&&r.start>=n;(s||u)&&r.setPositions(u?n-1:r.start,s?Math.max(u?n:r.start+1,n):r.end,!0)}),Ga(!1),Vo=0,i.forEach(function(r){return r&&r.render&&r.render(-1)}),j.forEach(function(r){ne(r)&&(r.smooth&&requestAnimationFrame(function(){return r.target.style.scrollBehavior="smooth"}),r.rec&&r(r.rec))}),dl(jo,1),Cs.pause(),or++,ce=2,Di(2),Q.forEach(function(r){return ne(r.vars.onRefresh)&&r.vars.onRefresh(r)}),ce=K.isRefreshing=!1,lr("refresh")},qo=0,ys=1,wn,Di=function(t){if(t===2||!ce&&!ws){K.isUpdating=!0,wn&&wn.update(0);var e=Q.length,i=re(),r=i-Lo>=50,n=e&&Q[0].scroll();if(ys=qo>n?-1:1,ce||(qo=n),r&&(Ne&&!bs&&i-Ne>200&&(Ne=0,lr("scrollEnd")),dn=Lo,Lo=i),ys<0){for(fe=e;fe-- >0;)Q[fe]&&Q[fe].update(0,r);ys=1}else for(fe=0;fe<e;fe++)Q[fe]&&Q[fe].update(0,r);K.isUpdating=!1}En=0},Uo=[al,ll,$o,Ko,Be+Cn,Be+yn,Be+xn,Be+vn,"display","flexShrink","float","zIndex","gridColumnStart","gridColumnEnd","gridRowStart","gridRowEnd","gridArea","justifySelf","alignSelf","placeSelf","order"],vs=Uo.concat([nr,sr,"boxSizing","max"+Br,"max"+Zo,"position",Be,Ot,Ot+xn,Ot+yn,Ot+Cn,Ot+vn]),hc=function(t,e,i){Lr(i);var r=t._gsap;if(r.spacerIsNative)Lr(r.spacerState);else if(t._gsap.swappedIn){var n=e.parentNode;n&&(n.insertBefore(t,e),n.removeChild(e))}t._gsap.swappedIn=!1},No=function(t,e,i,r){if(!t._gsap.swappedIn){for(var n=Uo.length,s=e.style,u=t.style,a;n--;)a=Uo[n],s[a]=i[a];s.position=i.position==="absolute"?"absolute":"relative",i.display==="inline"&&(s.display="inline-block"),u[$o]=u[Ko]="auto",s.flexBasis=i.flexBasis||"auto",s.overflow="visible",s.boxSizing="border-box",s[nr]=Ss(t,ee)+zt,s[sr]=Ss(t,kt)+zt,s[Ot]=u[Be]=u[ll]=u[al]="0",Lr(r),u[nr]=u["max"+Br]=i[nr],u[sr]=u["max"+Zo]=i[sr],u[Ot]=i[Ot],t.parentNode!==e&&(t.parentNode.insertBefore(e,t),e.appendChild(t)),t._gsap.swappedIn=!0}},fc=/([A-Z])/g,Lr=function(t){if(t){var e=t.t.style,i=t.length,r=0,n,s;for((t.t._gsap||N.core.getCache(t.t)).uncache=1;r<i;r+=2)s=t[r+1],n=t[r],s?e[n]=s:e[n]&&e.removeProperty(n.replace(fc,"-$1").toLowerCase())}},ps=function(t){for(var e=vs.length,i=t.style,r=[],n=0;n<e;n++)r.push(vs[n],i[vs[n]]);return r.t=t,r},cc=function(t,e,i){for(var r=[],n=t.length,s=i?8:0,u;s<n;s+=2)u=t[s],r.push(u,u in e?e[u]:t[s+1]);return r.t=t.t,r},xs={left:0,top:0},ja=function(t,e,i,r,n,s,u,a,l,h,d,f,c,_){ne(t)&&(t=t(a)),Ae(t)&&t.substr(0,3)==="max"&&(t=f+(t.charAt(4)==="="?Ds("0"+t.substr(3),i):0));var p=c?c.time():0,g,D,v;if(c&&c.seek(0),isNaN(t)||(t=+t),gn(t))c&&(t=N.utils.mapRange(c.scrollTrigger.start,c.scrollTrigger.end,0,f,t)),u&&ms(u,i,r,!0);else{ne(e)&&(e=e(a));var x=(t||"0").split(" "),y,C,w,S;v=le(e,a)||ot,y=gi(v)||{},(!y||!y.left&&!y.top)&&ze(v).display==="none"&&(S=v.style.display,v.style.display="block",y=gi(v),S?v.style.display=S:v.style.removeProperty("display")),C=Ds(x[0],y[r.d]),w=Ds(x[1]||"0",i),t=y[r.p]-l[r.p]-h+C+n-w,u&&ms(u,w,r,i-w<20||u._isStart&&w>20),i-=i-w}if(_&&(a[_]=t||-.001,t<0&&(t=0)),s){var b=t+i,E=s._isStart;g="scroll"+r.d2,ms(s,b,r,E&&b>20||!E&&(d?Math.max(ot[g],Pe[g]):s.parentNode[g])<=b+1),d&&(l=gi(u),d&&(s.style[r.op.p]=l[r.op.p]-r.op.m-s._offset+zt))}return c&&v&&(g=gi(v),c.seek(f),D=gi(v),c._caScrollDist=g[r.p]-D[r.p],t=t/c._caScrollDist*f),c&&c.seek(p),c?t:Math.round(t)},dc=/(webkit|moz|length|cssText|inset)/i,Qa=function(t,e,i,r){if(t.parentNode!==e){var n=t.style,s,u;if(e===ot){t._stOrig=n.cssText,u=ze(t);for(s in u)!+s&&!dc.test(s)&&u[s]&&typeof n[s]=="string"&&s!=="0"&&(n[s]=u[s]);n.top=i,n.left=r}else n.cssText=t._stOrig;N.core.getCache(t).uncache=1,e.appendChild(t)}},_l=function(t,e,i){var r=e,n=r;return function(s){var u=Math.round(t());return u!==r&&u!==n&&Math.abs(u-r)>3&&Math.abs(u-n)>3&&(s=u,i&&i()),n=r,r=Math.round(s),r}},_s=function(t,e,i){var r={};r[e.p]="+="+i,N.set(t,r)},Ka=function(t,e){var i=pi(t,e),r="_scroll"+e.p2,n=function s(u,a,l,h,d){var f=s.tween,c=a.onComplete,_={};l=l||i();var p=_l(i,l,function(){f.kill(),s.tween=0});return d=h&&d||0,h=h||u-l,f&&f.kill(),a[r]=u,a.inherit=!1,a.modifiers=_,_[r]=function(){return p(l+h*f.ratio+d*f.ratio*f.ratio)},a.onUpdate=function(){j.cache++,s.tween&&Di()},a.onComplete=function(){s.tween=0,c&&c.call(f)},f=s.tween=N.to(t,a),f};return t[r]=i,i.wheelHandler=function(){return n.tween&&n.tween.kill()&&(n.tween=0)},Wt(t,"wheel",i.wheelHandler),K.isTouch&&Wt(t,"touchmove",i.wheelHandler),n},K=function(){function o(e,i){kr||o.register(N)||console.warn("Please gsap.registerPlugin(ScrollTrigger)"),Xo(this),this.init(e,i)}var t=o.prototype;return t.init=function(i,r){if(this.progress=this.start=0,this.vars&&this.kill(!0,!0),!pn){this.update=this.refresh=this.kill=ei;return}i=Va(Ae(i)||gn(i)||i.nodeType?{trigger:i}:i,cs);var n=i,s=n.onUpdate,u=n.toggleClass,a=n.id,l=n.onToggle,h=n.onRefresh,d=n.scrub,f=n.trigger,c=n.pin,_=n.pinSpacing,p=n.invalidateOnRefresh,g=n.anticipatePin,D=n.onScrubComplete,v=n.onSnapComplete,x=n.once,y=n.snap,C=n.pinReparent,w=n.pinSpacer,S=n.containerAnimation,b=n.fastScrollEnd,E=n.preventOverlaps,F=i.horizontal||i.containerAnimation&&i.horizontal!==!1?ee:kt,B=!d&&d!==0,A=le(i.scroller||$),R=N.core.getCache(A),I=ur(A),P=("pinType"in i?i.pinType:_i(A,"pinType")||I&&"fixed")==="fixed",k=[i.onEnter,i.onLeave,i.onEnterBack,i.onLeaveBack],M=B&&i.toggleActions.split(" "),O="markers"in i?i.markers:cs.markers,z=I?0:parseFloat(ze(A)["border"+F.p2+Br])||0,m=this,Y=i.onRefreshInit&&function(){return i.onRefreshInit(m)},H=rc(A,I,F),J=nc(A,I),nt=0,ft=0,St=0,ct=pi(A,F),Rt,At,gt,Xt,Qt,rt,Et,de,xe,T,Ce,ri,vi,vt,ni,xi,Ii,Nt,Ci,bt,Ie,Me,si,Vr,Pt,Ln,oi,pr,_r,wi,Yi,Z,Wi,Ye,We,Xe,Xi,gr,ui;if(m._startClamp=m._endClamp=!1,m._dir=F,g*=45,m.scroller=A,m.scroll=S?S.time.bind(S):ct,Xt=ct(),m.vars=i,r=r||i.animation,"refreshPriority"in i&&(tl=1,i.refreshPriority===-9999&&(wn=m)),R.tweenScroll=R.tweenScroll||{top:Ka(A,kt),left:Ka(A,ee)},m.tweenTo=Rt=R.tweenScroll[F.p],m.scrubDuration=function(L){Wi=gn(L)&&L,Wi?Z?Z.duration(L):Z=N.to(r,{ease:"expo",totalProgress:"+=0",inherit:!1,duration:Wi,paused:!0,onComplete:function(){return D&&D(m)}}):(Z&&Z.progress(1).kill(),Z=0)},r&&(r.vars.lazy=!1,r._initted&&!m.isReverted||r.vars.immediateRender!==!1&&i.immediateRender!==!1&&r.duration()&&r.render(0,!0,!0),m.animation=r.pause(),r.scrollTrigger=m,m.scrubDuration(d),wi=0,a||(a=r.vars.id)),y&&((!ir(y)||y.push)&&(y={snapTo:y}),"scrollBehavior"in ot.style&&N.set(I?[ot,Pe]:A,{scrollBehavior:"auto"}),j.forEach(function(L){return ne(L)&&L.target===(I?ht.scrollingElement||Pe:A)&&(L.smooth=!1)}),gt=ne(y.snapTo)?y.snapTo:y.snapTo==="labels"?oc(r):y.snapTo==="labelsDirectional"?uc(r):y.directional!==!1?function(L,q){return Jo(y.snapTo)(L,re()-ft<500?0:q.direction)}:N.utils.snap(y.snapTo),Ye=y.duration||{min:.1,max:2},Ye=ir(Ye)?mn(Ye.min,Ye.max):mn(Ye,Ye),We=N.delayedCall(y.delay||Wi/2||.1,function(){var L=ct(),q=re()-ft<500,X=Rt.tween;if((q||Math.abs(m.getVelocity())<10)&&!X&&!bs&&nt!==L){var U=(L-rt)/vt,It=r&&!B?r.totalProgress():U,tt=q?0:(It-Yi)/(re()-dn)*1e3||0,Tt=N.utils.clamp(-U,1-U,Pr(tt/2)*tt/.185),Kt=U+(y.inertia===!1?0:Tt),xt,dt,ut=y,Ve=ut.onStart,Dt=ut.onInterrupt,we=ut.onComplete;if(xt=gt(Kt,m),gn(xt)||(xt=Kt),dt=Math.max(0,Math.round(rt+xt*vt)),L<=Et&&L>=rt&&dt!==L){if(X&&!X._initted&&X.data<=Pr(dt-L))return;y.inertia===!1&&(Tt=xt-U),Rt(dt,{duration:Ye(Pr(Math.max(Pr(Kt-It),Pr(xt-It))*.185/tt/.05||0)),ease:y.ease||"power3",data:Pr(dt-L),onInterrupt:function(){return We.restart(!0)&&Dt&&Dt(m)},onComplete:function(){m.update(),nt=ct(),r&&!B&&(Z?Z.resetTo("totalProgress",xt,r._tTime/r._tDur):r.progress(xt)),wi=Yi=r&&!B?r.totalProgress():m.progress,v&&v(m),we&&we(m)}},L,Tt*vt,dt-L-Tt*vt),Ve&&Ve(m,Rt.tween)}}else m.isActive&&nt!==L&&We.restart(!0)}).pause()),a&&(Ho[a]=m),f=m.trigger=le(f||c!==!0&&c),ui=f&&f._gsap&&f._gsap.stRevert,ui&&(ui=ui(m)),c=c===!0?f:le(c),Ae(u)&&(u={targets:f,className:u}),c&&(_===!1||_===Be||(_=!_&&c.parentNode&&c.parentNode.style&&ze(c.parentNode).display==="flex"?!1:Ot),m.pin=c,At=N.core.getCache(c),At.spacer?ni=At.pinState:(w&&(w=le(w),w&&!w.nodeType&&(w=w.current||w.nativeElement),At.spacerIsNative=!!w,w&&(At.spacerState=ps(w))),At.spacer=Nt=w||ht.createElement("div"),Nt.classList.add("pin-spacer"),a&&Nt.classList.add("pin-spacer-"+a),At.pinState=ni=ps(c)),i.force3D!==!1&&N.set(c,{force3D:!0}),m.spacer=Nt=At.spacer,_r=ze(c),Vr=_r[_+F.os2],bt=N.getProperty(c),Ie=N.quickSetter(c,F.a,zt),No(c,Nt,_r),Ii=ps(c)),O){ri=ir(O)?Va(O,Ha):Ha,T=ds("scroller-start",a,A,F,ri,0),Ce=ds("scroller-end",a,A,F,ri,0,T),Ci=T["offset"+F.op.d2];var Hr=le(_i(A,"content")||A);de=this.markerStart=ds("start",a,Hr,F,ri,Ci,0,S),xe=this.markerEnd=ds("end",a,Hr,F,ri,Ci,0,S),S&&(gr=N.quickSetter([de,xe],F.a,zt)),!P&&!(qe.length&&_i(A,"fixedMarkers")===!0)&&(sc(I?ot:A),N.set([T,Ce],{force3D:!0}),Ln=N.quickSetter(T,F.a,zt),pr=N.quickSetter(Ce,F.a,zt))}if(S){var G=S.vars.onUpdate,V=S.vars.onUpdateParams;S.eventCallback("onUpdate",function(){m.update(0,0,1),G&&G.apply(S,V||[])})}if(m.previous=function(){return Q[Q.indexOf(m)-1]},m.next=function(){return Q[Q.indexOf(m)+1]},m.revert=function(L,q){if(!q)return m.kill(!0);var X=L!==!1||!m.enabled,U=ie;X!==m.isReverted&&(X&&(Xe=Math.max(ct(),m.scroll.rec||0),St=m.progress,Xi=r&&r.progress()),de&&[de,xe,T,Ce].forEach(function(It){return It.style.display=X?"none":"block"}),X&&(ie=m,m.update(X)),c&&(!C||!m.isActive)&&(X?hc(c,Nt,ni):No(c,Nt,ze(c),Pt)),X||m.update(X),ie=U,m.isReverted=X)},m.refresh=function(L,q,X,U){if(!((ie||!m.enabled)&&!q)){if(c&&L&&Ne){Wt(o,"scrollEnd",fl);return}!ce&&Y&&Y(m),ie=m,Rt.tween&&!X&&(Rt.tween.kill(),Rt.tween=0),Z&&Z.pause(),p&&r&&(r.revert({kill:!1}).invalidate(),r.getChildren&&r.getChildren(!0,!0,!1).forEach(function(Si){return Si.vars.immediateRender&&Si.render(0,!0,!0)})),m.isReverted||m.revert(!0,!0),m._subPinOffset=!1;var It=H(),tt=J(),Tt=S?S.duration():ii(A,F),Kt=vt<=.01||!vt,xt=0,dt=U||0,ut=ir(X)?X.end:i.end,Ve=i.endTrigger||f,Dt=ir(X)?X.start:i.start||(i.start===0||!f?0:c?"0 0":"0 100%"),we=m.pinnedContainer=i.pinnedContainer&&le(i.pinnedContainer,m),je=f&&Math.max(0,Q.indexOf(m))||0,Vt=je,Ht,$t,Vi,Bn,Zt,Lt,Qe,Ls,pu,qr,Ke,Ur,zn;for(O&&ir(X)&&(Ur=N.getProperty(T,F.p),zn=N.getProperty(Ce,F.p));Vt-- >0;)Lt=Q[Vt],Lt.end||Lt.refresh(0,1)||(ie=m),Qe=Lt.pin,Qe&&(Qe===f||Qe===c||Qe===we)&&!Lt.isReverted&&(qr||(qr=[]),qr.unshift(Lt),Lt.revert(!0,!0)),Lt!==Q[Vt]&&(je--,Vt--);for(ne(Dt)&&(Dt=Dt(m)),Dt=Ia(Dt,"start",m),rt=ja(Dt,f,It,F,ct(),de,T,m,tt,z,P,Tt,S,m._startClamp&&"_startClamp")||(c?-.001:0),ne(ut)&&(ut=ut(m)),Ae(ut)&&!ut.indexOf("+=")&&(~ut.indexOf(" ")?ut=(Ae(Dt)?Dt.split(" ")[0]:"")+ut:(xt=Ds(ut.substr(2),It),ut=Ae(Dt)?Dt:(S?N.utils.mapRange(0,S.duration(),S.scrollTrigger.start,S.scrollTrigger.end,rt):rt)+xt,Ve=f)),ut=Ia(ut,"end",m),Et=Math.max(rt,ja(ut||(Ve?"100% 0":Tt),Ve,It,F,ct()+xt,xe,Ce,m,tt,z,P,Tt,S,m._endClamp&&"_endClamp"))||-.001,xt=0,Vt=je;Vt--;)Lt=Q[Vt],Qe=Lt.pin,Qe&&Lt.start-Lt._pinPush<=rt&&!S&&Lt.end>0&&(Ht=Lt.end-(m._startClamp?Math.max(0,Lt.start):Lt.start),(Qe===f&&Lt.start-Lt._pinPush<rt||Qe===we)&&isNaN(Dt)&&(xt+=Ht*(1-Lt.progress)),Qe===c&&(dt+=Ht));if(rt+=xt,Et+=xt,m._startClamp&&(m._startClamp+=xt),m._endClamp&&!ce&&(m._endClamp=Et||-.001,Et=Math.min(Et,ii(A,F))),vt=Et-rt||(rt-=.01)&&.001,Kt&&(St=N.utils.clamp(0,1,N.utils.normalize(rt,Et,Xe))),m._pinPush=dt,de&&xt&&(Ht={},Ht[F.a]="+="+xt,we&&(Ht[F.p]="-="+ct()),N.set([de,xe],Ht)),c&&!(Vo&&m.end>=ii(A,F)))Ht=ze(c),Bn=F===kt,Vi=ct(),Me=parseFloat(bt(F.a))+dt,!Tt&&Et>1&&(Ke=(I?ht.scrollingElement||Pe:A).style,Ke={style:Ke,value:Ke["overflow"+F.a.toUpperCase()]},I&&ze(ot)["overflow"+F.a.toUpperCase()]!=="scroll"&&(Ke.style["overflow"+F.a.toUpperCase()]="scroll")),No(c,Nt,Ht),Ii=ps(c),$t=gi(c,!0),Ls=P&&pi(A,Bn?ee:kt)(),_?(Pt=[_+F.os2,vt+dt+zt],Pt.t=Nt,Vt=_===Ot?Ss(c,F)+vt+dt:0,Vt&&(Pt.push(F.d,Vt+zt),Nt.style.flexBasis!=="auto"&&(Nt.style.flexBasis=Vt+zt)),Lr(Pt),we&&Q.forEach(function(Si){Si.pin===we&&Si.vars.pinSpacing!==!1&&(Si._subPinOffset=!0)}),P&&ct(Xe)):(Vt=Ss(c,F),Vt&&Nt.style.flexBasis!=="auto"&&(Nt.style.flexBasis=Vt+zt)),P&&(Zt={top:$t.top+(Bn?Vi-rt:Ls)+zt,left:$t.left+(Bn?Ls:Vi-rt)+zt,boxSizing:"border-box",position:"fixed"},Zt[nr]=Zt["max"+Br]=Math.ceil($t.width)+zt,Zt[sr]=Zt["max"+Zo]=Math.ceil($t.height)+zt,Zt[Be]=Zt[Be+xn]=Zt[Be+yn]=Zt[Be+Cn]=Zt[Be+vn]="0",Zt[Ot]=Ht[Ot],Zt[Ot+xn]=Ht[Ot+xn],Zt[Ot+yn]=Ht[Ot+yn],Zt[Ot+Cn]=Ht[Ot+Cn],Zt[Ot+vn]=Ht[Ot+vn],xi=cc(ni,Zt,C),ce&&ct(0)),r?(pu=r._initted,Oo(1),r.render(r.duration(),!0,!0),si=bt(F.a)-Me+vt+dt,oi=Math.abs(vt-si)>1,P&&oi&&xi.splice(xi.length-2,2),r.render(0,!0,!0),pu||r.invalidate(!0),r.parent||r.totalTime(r.totalTime()),Oo(0)):si=vt,Ke&&(Ke.value?Ke.style["overflow"+F.a.toUpperCase()]=Ke.value:Ke.style.removeProperty("overflow-"+F.a));else if(f&&ct()&&!S)for($t=f.parentNode;$t&&$t!==ot;)$t._pinOffset&&(rt-=$t._pinOffset,Et-=$t._pinOffset),$t=$t.parentNode;qr&&qr.forEach(function(Si){return Si.revert(!1,!0)}),m.start=rt,m.end=Et,Xt=Qt=ce?Xe:ct(),!S&&!ce&&(Xt<Xe&&ct(Xe),m.scroll.rec=0),m.revert(!1,!0),ft=re(),We&&(nt=-1,We.restart(!0)),ie=0,r&&B&&(r._initted||Xi)&&r.progress()!==Xi&&r.progress(Xi||0,!0).render(r.time(),!0,!0),(Kt||St!==m.progress||S||p||r&&!r._initted)&&(r&&!B&&(r._initted||St||r.vars.immediateRender!==!1)&&r.totalProgress(S&&rt<-.001&&!St?N.utils.normalize(rt,Et,0):St,!0),m.progress=Kt||(Xt-rt)/vt===St?0:St),c&&_&&(Nt._pinOffset=Math.round(m.progress*si)),Z&&Z.invalidate(),isNaN(Ur)||(Ur-=N.getProperty(T,F.p),zn-=N.getProperty(Ce,F.p),_s(T,F,Ur),_s(de,F,Ur-(U||0)),_s(Ce,F,zn),_s(xe,F,zn-(U||0))),Kt&&!ce&&m.update(),h&&!ce&&!vi&&(vi=!0,h(m),vi=!1)}},m.getVelocity=function(){return(ct()-Qt)/(re()-dn)*1e3||0},m.endAnimation=function(){cn(m.callbackAnimation),r&&(Z?Z.progress(1):r.paused()?B||cn(r,m.direction<0,1):cn(r,r.reversed()))},m.labelToScroll=function(L){return r&&r.labels&&(rt||m.refresh()||rt)+r.labels[L]/r.duration()*vt||0},m.getTrailing=function(L){var q=Q.indexOf(m),X=m.direction>0?Q.slice(0,q).reverse():Q.slice(q+1);return(Ae(L)?X.filter(function(U){return U.vars.preventOverlaps===L}):X).filter(function(U){return m.direction>0?U.end<=rt:U.start>=Et})},m.update=function(L,q,X){if(!(S&&!X&&!L)){var U=ce===!0?Xe:m.scroll(),It=L?0:(U-rt)/vt,tt=It<0?0:It>1?1:It||0,Tt=m.progress,Kt,xt,dt,ut,Ve,Dt,we,je;if(q&&(Qt=Xt,Xt=S?ct():U,y&&(Yi=wi,wi=r&&!B?r.totalProgress():tt)),g&&c&&!ie&&!as&&Ne&&(!tt&&rt<U+(U-Qt)/(re()-dn)*g?tt=1e-4:tt===1&&Et>U+(U-Qt)/(re()-dn)*g&&(tt=.9999)),tt!==Tt&&m.enabled){if(Kt=m.isActive=!!tt&&tt<1,xt=!!Tt&&Tt<1,Dt=Kt!==xt,Ve=Dt||!!tt!=!!Tt,m.direction=tt>Tt?1:-1,m.progress=tt,Ve&&!ie&&(dt=tt&&!Tt?0:tt===1?1:Tt===1?2:3,B&&(ut=!Dt&&M[dt+1]!=="none"&&M[dt+1]||M[dt],je=r&&(ut==="complete"||ut==="reset"||ut in r))),E&&(Dt||je)&&(je||d||!r)&&(ne(E)?E(m):m.getTrailing(E).forEach(function(Vi){return Vi.endAnimation()})),B||(Z&&!ie&&!as?(Z._dp._time-Z._start!==Z._time&&Z.render(Z._dp._time-Z._start),Z.resetTo?Z.resetTo("totalProgress",tt,r._tTime/r._tDur):(Z.vars.totalProgress=tt,Z.invalidate().restart())):r&&r.totalProgress(tt,!!(ie&&(ft||L)))),c){if(L&&_&&(Nt.style[_+F.os2]=Vr),!P)Ie(_n(Me+si*tt));else if(Ve){if(we=!L&&tt>Tt&&Et+1>U&&U+1>=ii(A,F),C)if(!L&&(Kt||we)){var Vt=gi(c,!0),Ht=U-rt;Qa(c,ot,Vt.top+(F===kt?Ht:0)+zt,Vt.left+(F===kt?0:Ht)+zt)}else Qa(c,Nt);Lr(Kt||we?xi:Ii),oi&&tt<1&&Kt||Ie(Me+(tt===1&&!we?si:0))}}y&&!Rt.tween&&!ie&&!as&&We.restart(!0),u&&(Dt||x&&tt&&(tt<1||!Ro))&&Sn(u.targets).forEach(function(Vi){return Vi.classList[Kt||x?"add":"remove"](u.className)}),s&&!B&&!L&&s(m),Ve&&!ie?(B&&(je&&(ut==="complete"?r.pause().totalProgress(1):ut==="reset"?r.restart(!0).pause():ut==="restart"?r.restart(!0):r[ut]()),s&&s(m)),(Dt||!Ro)&&(l&&Dt&&Bo(m,l),k[dt]&&Bo(m,k[dt]),x&&(tt===1?m.kill(!1,1):k[dt]=0),Dt||(dt=tt===1?1:3,k[dt]&&Bo(m,k[dt]))),b&&!Kt&&Math.abs(m.getVelocity())>(gn(b)?b:2500)&&(cn(m.callbackAnimation),Z?Z.progress(1):cn(r,ut==="reverse"?1:!tt,1))):B&&s&&!ie&&s(m)}if(pr){var $t=S?U/S.duration()*(S._caScrollDist||0):U;Ln($t+(T._isFlipped?1:0)),pr($t)}gr&&gr(-U/S.duration()*(S._caScrollDist||0))}},m.enable=function(L,q){m.enabled||(m.enabled=!0,Wt(A,"resize",Dn),I||Wt(A,"scroll",Mr),Y&&Wt(o,"refreshInit",Y),L!==!1&&(m.progress=St=0,Xt=Qt=nt=ct()),q!==!1&&m.refresh())},m.getTween=function(L){return L&&Rt?Rt.tween:Z},m.setPositions=function(L,q,X,U){if(S){var It=S.scrollTrigger,tt=S.duration(),Tt=It.end-It.start;L=It.start+Tt*L/tt,q=It.start+Tt*q/tt}m.refresh(!1,!1,{start:Ya(L,X&&!!m._startClamp),end:Ya(q,X&&!!m._endClamp)},U),m.update()},m.adjustPinSpacing=function(L){if(Pt&&L){var q=Pt.indexOf(F.d)+1;Pt[q]=parseFloat(Pt[q])+L+zt,Pt[1]=parseFloat(Pt[1])+L+zt,Lr(Pt)}},m.disable=function(L,q){if(m.enabled&&(L!==!1&&m.revert(!0,!0),m.enabled=m.isActive=!1,q||Z&&Z.pause(),Xe=0,At&&(At.uncache=1),Y&&Yt(o,"refreshInit",Y),We&&(We.pause(),Rt.tween&&Rt.tween.kill()&&(Rt.tween=0)),!I)){for(var X=Q.length;X--;)if(Q[X].scroller===A&&Q[X]!==m)return;Yt(A,"resize",Dn),I||Yt(A,"scroll",Mr)}},m.kill=function(L,q){m.disable(L,q),Z&&!q&&Z.kill(),a&&delete Ho[a];var X=Q.indexOf(m);X>=0&&Q.splice(X,1),X===fe&&ys>0&&fe--,X=0,Q.forEach(function(U){return U.scroller===m.scroller&&(X=1)}),X||ce||(m.scroll.rec=0),r&&(r.scrollTrigger=null,L&&r.revert({kill:!1}),q||r.kill()),de&&[de,xe,T,Ce].forEach(function(U){return U.parentNode&&U.parentNode.removeChild(U)}),wn===m&&(wn=0),c&&(At&&(At.uncache=1),X=0,Q.forEach(function(U){return U.pin===c&&X++}),X||(At.spacer=0)),i.onKill&&i.onKill(m)},Q.push(m),m.enable(!1,!1),ui&&ui(m),r&&r.add&&!vt){var st=m.update;m.update=function(){m.update=st,j.cache++,rt||Et||m.refresh()},N.delayedCall(.01,m.update),vt=.01,rt=Et=0}else m.refresh();c&&lc()},o.register=function(i){return kr||(N=i||sl(),nl()&&window.document&&o.enable(),kr=pn),kr},o.defaults=function(i){if(i)for(var r in i)cs[r]=i[r];return cs},o.disable=function(i,r){pn=0,Q.forEach(function(s){return s[r?"kill":"disable"](i)}),Yt($,"wheel",Mr),Yt(ht,"scroll",Mr),clearInterval(us),Yt(ht,"touchcancel",ei),Yt(ot,"touchstart",ei),hs(Yt,ht,"pointerdown,touchstart,mousedown",Wa),hs(Yt,ht,"pointerup,touchend,mouseup",Xa),Cs.kill(),ls(Yt);for(var n=0;n<j.length;n+=3)fs(Yt,j[n],j[n+1]),fs(Yt,j[n],j[n+2])},o.enable=function(){if($=window,ht=document,Pe=ht.documentElement,ot=ht.body,N&&(Sn=N.utils.toArray,mn=N.utils.clamp,Xo=N.core.context||ei,Oo=N.core.suppressOverwrites||ei,jo=$.history.scrollRestoration||"auto",qo=$.pageYOffset||0,N.core.globals("ScrollTrigger",o),ot)){pn=1,Rr=document.createElement("div"),Rr.style.height="100vh",Rr.style.position="absolute",pl(),ic(),_t.register(N),o.isTouch=_t.isTouch,Bi=_t.isTouch&&/(iPad|iPhone|iPod|Mac)/g.test(navigator.userAgent),Wo=_t.isTouch===1,Wt($,"wheel",Mr),Go=[$,ht,Pe,ot],N.matchMedia?(o.matchMedia=function(l){var h=N.matchMedia(),d;for(d in l)h.add(d,l[d]);return h},N.addEventListener("matchMediaInit",function(){return tu()}),N.addEventListener("matchMediaRevert",function(){return cl()}),N.addEventListener("matchMedia",function(){rr(0,1),lr("matchMedia")}),N.matchMedia().add("(orientation: portrait)",function(){return zo(),zo})):console.warn("Requires GSAP 3.11.0 or later"),zo(),Wt(ht,"scroll",Mr);var i=ot.hasAttribute("style"),r=ot.style,n=r.borderTopStyle,s=N.core.Animation.prototype,u,a;for(s.revert||Object.defineProperty(s,"revert",{value:function(){return this.time(-.01,!0)}}),r.borderTopStyle="solid",u=gi(ot),kt.m=Math.round(u.top+kt.sc())||0,ee.m=Math.round(u.left+ee.sc())||0,n?r.borderTopStyle=n:r.removeProperty("border-top-style"),i||(ot.setAttribute("style",""),ot.removeAttribute("style")),us=setInterval(qa,250),N.delayedCall(.5,function(){return as=0}),Wt(ht,"touchcancel",ei),Wt(ot,"touchstart",ei),hs(Wt,ht,"pointerdown,touchstart,mousedown",Wa),hs(Wt,ht,"pointerup,touchend,mouseup",Xa),Yo=N.utils.checkPrefix("transform"),vs.push(Yo),kr=re(),Cs=N.delayedCall(.2,rr).pause(),Or=[ht,"visibilitychange",function(){var l=$.innerWidth,h=$.innerHeight;ht.hidden?(za=l,Na=h):(za!==l||Na!==h)&&Dn()},ht,"DOMContentLoaded",rr,$,"load",rr,$,"resize",Dn],ls(Wt),Q.forEach(function(l){return l.enable(0,1)}),a=0;a<j.length;a+=3)fs(Yt,j[a],j[a+1]),fs(Yt,j[a],j[a+2])}},o.config=function(i){"limitCallbacks"in i&&(Ro=!!i.limitCallbacks);var r=i.syncInterval;r&&clearInterval(us)||(us=r)&&setInterval(qa,r),"ignoreMobileResize"in i&&(Wo=o.isTouch===1&&i.ignoreMobileResize),"autoRefreshEvents"in i&&(ls(Yt)||ls(Wt,i.autoRefreshEvents||"none"),el=(i.autoRefreshEvents+"").indexOf("resize")===-1)},o.scrollerProxy=function(i,r){var n=le(i),s=j.indexOf(n),u=ur(n);~s&&j.splice(s,u?6:2),r&&(u?qe.unshift($,r,ot,r,Pe,r):qe.unshift(n,r))},o.clearMatchMedia=function(i){Q.forEach(function(r){return r._ctx&&r._ctx.query===i&&r._ctx.kill(!0,!0)})},o.isInViewport=function(i,r,n){var s=(Ae(i)?le(i):i).getBoundingClientRect(),u=s[n?nr:sr]*r||0;return n?s.right-u>0&&s.left+u<$.innerWidth:s.bottom-u>0&&s.top+u<$.innerHeight},o.positionInViewport=function(i,r,n){Ae(i)&&(i=le(i));var s=i.getBoundingClientRect(),u=s[n?nr:sr],a=r==null?u/2:r in Es?Es[r]*u:~r.indexOf("%")?parseFloat(r)*u/100:parseFloat(r)||0;return n?(s.left+a)/$.innerWidth:(s.top+a)/$.innerHeight},o.killAll=function(i){if(Q.slice(0).forEach(function(n){return n.vars.id!=="ScrollSmoother"&&n.kill()}),i!==!0){var r=ar.killAll||[];ar={},r.forEach(function(n){return n()})}},o}();K.version="3.13.0";K.saveStyles=function(o){return o?Sn(o).forEach(function(t){if(t&&t.style){var e=Fe.indexOf(t);e>=0&&Fe.splice(e,5),Fe.push(t,t.style.cssText,t.getBBox&&t.getAttribute("transform"),N.core.getCache(t),Xo())}}):Fe};K.revert=function(o,t){return tu(!o,t)};K.create=function(o,t){return new K(o,t)};K.refresh=function(o){return o?Dn(!0):(kr||K.register())&&rr(!0)};K.update=function(o){return++j.cache&&Di(o===!0?2:0)};K.clearScrollMemory=dl;K.maxScroll=function(o,t){return ii(o,t?ee:kt)};K.getScrollFunc=function(o,t){return pi(le(o),t?ee:kt)};K.getById=function(o){return Ho[o]};K.getAll=function(){return Q.filter(function(o){return o.vars.id!=="ScrollSmoother"})};K.isScrolling=function(){return!!Ne};K.snapDirectional=Jo;K.addEventListener=function(o,t){var e=ar[o]||(ar[o]=[]);~e.indexOf(t)||e.push(t)};K.removeEventListener=function(o,t){var e=ar[o],i=e&&e.indexOf(t);i>=0&&e.splice(i,1)};K.batch=function(o,t){var e=[],i={},r=t.interval||.016,n=t.batchMax||1e9,s=function(l,h){var d=[],f=[],c=N.delayedCall(r,function(){h(d,f),d=[],f=[]}).pause();return function(_){d.length||c.restart(!0),d.push(_.trigger),f.push(_),n<=d.length&&c.progress(1)}},u;for(u in t)i[u]=u.substr(0,2)==="on"&&ne(t[u])&&u!=="onRefreshInit"?s(u,t[u]):t[u];return ne(n)&&(n=n(),Wt(K,"refresh",function(){return n=t.batchMax()})),Sn(o).forEach(function(a){var l={};for(u in i)l[u]=i[u];l.trigger=a,e.push(K.create(l))}),e};var $a=function(t,e,i,r){return e>r?t(r):e<0&&t(0),i>r?(r-e)/(i-e):i<0?e/(e-i):1},Io=function o(t,e){e===!0?t.style.removeProperty("touch-action"):t.style.touchAction=e===!0?"auto":e?"pan-"+e+(_t.isTouch?" pinch-zoom":""):"none",t===Pe&&o(ot,e)},gs={auto:1,scroll:1},pc=function(t){var e=t.event,i=t.target,r=t.axis,n=(e.changedTouches?e.changedTouches[0]:e).target,s=n._gsap||N.core.getCache(n),u=re(),a;if(!s._isScrollT||u-s._isScrollT>2e3){for(;n&&n!==ot&&(n.scrollHeight<=n.clientHeight&&n.scrollWidth<=n.clientWidth||!(gs[(a=ze(n)).overflowY]||gs[a.overflowX]));)n=n.parentNode;s._isScroll=n&&n!==i&&!ur(n)&&(gs[(a=ze(n)).overflowY]||gs[a.overflowX]),s._isScrollT=u}(s._isScroll||r==="x")&&(e.stopPropagation(),e._gsapAllow=!0)},gl=function(t,e,i,r){return _t.create({target:t,capture:!0,debounce:!1,lockAxis:!0,type:e,onWheel:r=r&&pc,onPress:r,onDrag:r,onScroll:r,onEnable:function(){return i&&Wt(ht,_t.eventTypes[0],Ja,!1,!0)},onDisable:function(){return Yt(ht,_t.eventTypes[0],Ja,!0)}})},_c=/(input|label|select|textarea)/i,Za,Ja=function(t){var e=_c.test(t.target.tagName);(e||Za)&&(t._gsapAllow=!0,Za=e)},gc=function(t){ir(t)||(t={}),t.preventDefault=t.isNormalizer=t.allowClicks=!0,t.type||(t.type="wheel,touch"),t.debounce=!!t.debounce,t.id=t.id||"normalizer";var e=t,i=e.normalizeScrollX,r=e.momentum,n=e.allowNestedScroll,s=e.onRelease,u,a,l=le(t.target)||Pe,h=N.core.globals().ScrollSmoother,d=h&&h.get(),f=Bi&&(t.content&&le(t.content)||d&&t.content!==!1&&!d.smooth()&&d.content()),c=pi(l,kt),_=pi(l,ee),p=1,g=(_t.isTouch&&$.visualViewport?$.visualViewport.scale*$.visualViewport.width:$.outerWidth)/$.innerWidth,D=0,v=ne(r)?function(){return r(u)}:function(){return r||2.8},x,y,C=gl(l,t.type,!0,n),w=function(){return y=!1},S=ei,b=ei,E=function(){a=ii(l,kt),b=mn(Bi?1:0,a),i&&(S=mn(0,ii(l,ee))),x=or},F=function(){f._gsap.y=_n(parseFloat(f._gsap.y)+c.offset)+"px",f.style.transform="matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, "+parseFloat(f._gsap.y)+", 0, 1)",c.offset=c.cacheID=0},B=function(){if(y){requestAnimationFrame(w);var O=_n(u.deltaY/2),z=b(c.v-O);if(f&&z!==c.v+c.offset){c.offset=z-c.v;var m=_n((parseFloat(f&&f._gsap.y)||0)-c.offset);f.style.transform="matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, "+m+", 0, 1)",f._gsap.y=m+"px",c.cacheID=j.cache,Di()}return!0}c.offset&&F(),y=!0},A,R,I,P,k=function(){E(),A.isActive()&&A.vars.scrollY>a&&(c()>a?A.progress(1)&&c(a):A.resetTo("scrollY",a))};return f&&N.set(f,{y:"+=0"}),t.ignoreCheck=function(M){return Bi&&M.type==="touchmove"&&B(M)||p>1.05&&M.type!=="touchstart"||u.isGesturing||M.touches&&M.touches.length>1},t.onPress=function(){y=!1;var M=p;p=_n(($.visualViewport&&$.visualViewport.scale||1)/g),A.pause(),M!==p&&Io(l,p>1.01?!0:i?!1:"x"),R=_(),I=c(),E(),x=or},t.onRelease=t.onGestureStart=function(M,O){if(c.offset&&F(),!O)P.restart(!0);else{j.cache++;var z=v(),m,Y;i&&(m=_(),Y=m+z*.05*-M.velocityX/.227,z*=$a(_,m,Y,ii(l,ee)),A.vars.scrollX=S(Y)),m=c(),Y=m+z*.05*-M.velocityY/.227,z*=$a(c,m,Y,ii(l,kt)),A.vars.scrollY=b(Y),A.invalidate().duration(z).play(.01),(Bi&&A.vars.scrollY>=a||m>=a-1)&&N.to({},{onUpdate:k,duration:z})}s&&s(M)},t.onWheel=function(){A._ts&&A.pause(),re()-D>1e3&&(x=0,D=re())},t.onChange=function(M,O,z,m,Y){if(or!==x&&E(),O&&i&&_(S(m[2]===O?R+(M.startX-M.x):_()+O-m[1])),z){c.offset&&F();var H=Y[2]===z,J=H?I+M.startY-M.y:c()+z-Y[1],nt=b(J);H&&J!==nt&&(I+=nt-J),c(nt)}(z||O)&&Di()},t.onEnable=function(){Io(l,i?!1:"x"),K.addEventListener("refresh",k),Wt($,"resize",k),c.smooth&&(c.target.style.scrollBehavior="auto",c.smooth=_.smooth=!1),C.enable()},t.onDisable=function(){Io(l,!0),Yt($,"resize",k),K.removeEventListener("refresh",k),C.kill()},t.lockAxis=t.lockAxis!==!1,u=new _t(t),u.iOS=Bi,Bi&&!c()&&c(1),Bi&&N.ticker.add(ei),P=u._dc,A=N.to(u,{ease:"power4",paused:!0,inherit:!1,scrollX:i?"+=0.1":"+=0",scrollY:"+=0.1",modifiers:{scrollY:_l(c,c(),function(){return A.pause()})},onUpdate:Di,onComplete:P.vars.onComplete}),u};K.sort=function(o){if(ne(o))return Q.sort(o);var t=$.pageYOffset||0;return K.getAll().forEach(function(e){return e._sortY=e.trigger?t+e.trigger.getBoundingClientRect().top:e.start+$.innerHeight}),Q.sort(o||function(e,i){return(e.vars.refreshPriority||0)*-1e6+(e.vars.containerAnimation?1e6:e._sortY)-((i.vars.containerAnimation?1e6:i._sortY)+(i.vars.refreshPriority||0)*-1e6)})};K.observe=function(o){return new _t(o)};K.normalizeScroll=function(o){if(typeof o>"u")return he;if(o===!0&&he)return he.enable();if(o===!1){he&&he.kill(),he=o;return}var t=o instanceof _t?o:gc(o);return he&&he.target===t.target&&he.kill(),ur(t.target)&&(he=t),t};K.core={_getVelocityProp:os,_inputObserver:gl,_scrollers:j,_proxies:qe,bridge:{ss:function(){Ne||lr("scrollStart"),Ne=re()},ref:function(){return ie}}};sl()&&N.registerPlugin(K);var bn,zr,iu,Dc=()=>iu||su.register(window.gsap),Dl=typeof Intl<"u"?new Intl.Segmenter:0,Ts=o=>typeof o=="string"?Ts(document.querySelectorAll(o)):"length"in o?Array.from(o):[o],ml=o=>Ts(o).filter(t=>t instanceof HTMLElement),ru=[],eu=function(){},mc=/\s+/g,yl=new RegExp("\\p{RI}\\p{RI}|\\p{Emoji}(\\p{EMod}|\\u{FE0F}\\u{20E3}?|[\\u{E0020}-\\u{E007E}]+\\u{E007F})?(\\u{200D}\\p{Emoji}(\\p{EMod}|\\u{FE0F}\\u{20E3}?|[\\u{E0020}-\\u{E007E}]+\\u{E007F})?)*|.","gu"),vl={left:0,top:0,width:0,height:0},xl=(o,t)=>{if(t){let e=new Set(o.join("").match(t)||ru),i=o.length,r,n,s,u;if(e.size)for(;--i>-1;){n=o[i];for(s of e)if(s.startsWith(n)&&s.length>n.length){for(r=0,u=n;s.startsWith(u+=o[i+ ++r])&&u.length<s.length;);if(r&&u.length===s.length){o[i]=s,o.splice(i+1,r);break}}}}return o},Cl=o=>window.getComputedStyle(o).display==="inline"&&(o.style.display="inline-block"),Nr=(o,t,e)=>t.insertBefore(typeof o=="string"?document.createTextNode(o):o,e),nu=(o,t,e)=>{let i=t[o+"sClass"]||"",{tag:r="div",aria:n="auto",propIndex:s=!1}=t,u=o==="line"?"block":"inline-block",a=i.indexOf("++")>-1,l=h=>{let d=document.createElement(r),f=e.length+1;return i&&(d.className=i+(a?" "+i+f:"")),s&&d.style.setProperty("--"+o,f+""),n!=="none"&&d.setAttribute("aria-hidden","true"),r!=="span"&&(d.style.position="relative",d.style.display=u),d.textContent=h,e.push(d),d};return a&&(i=i.replace("++","")),l.collection=e,l},yc=(o,t,e,i)=>{let r=nu("line",e,i),n=window.getComputedStyle(o).textAlign||"left";return(s,u)=>{let a=r("");for(a.style.textAlign=n,o.insertBefore(a,t[s]);s<u;s++)a.appendChild(t[s]);a.normalize()}},wl=(o,t,e,i,r,n,s,u,a,l)=>{var h;let d=Array.from(o.childNodes),f=0,{wordDelimiter:c,reduceWhiteSpace:_=!0,prepareText:p}=t,g=o.getBoundingClientRect(),D=g,v=!_&&window.getComputedStyle(o).whiteSpace.substring(0,3)==="pre",x=0,y=e.collection,C,w,S,b,E,F,B,A,R,I,P,k,M,O,z,m,Y,H;for(typeof c=="object"?(S=c.delimiter||c,w=c.replaceWith||""):w=c===""?"":c||" ",C=w!==" ";f<d.length;f++)if(b=d[f],b.nodeType===3){for(z=b.textContent||"",_?z=z.replace(mc," "):v&&(z=z.replace(/\n/g,w+`
-`)),p&&(z=p(z,o)),b.textContent=z,E=w||S?z.split(S||w):z.match(u)||ru,Y=E[E.length-1],A=C?Y.slice(-1)===" ":!Y,Y||E.pop(),D=g,B=C?E[0].charAt(0)===" ":!E[0],B&&Nr(" ",o,b),E[0]||E.shift(),xl(E,a),n&&l||(b.textContent=""),R=1;R<=E.length;R++)if(m=E[R-1],!_&&v&&m.charAt(0)===`
-`&&((h=b.previousSibling)==null||h.remove(),Nr(document.createElement("br"),o,b),m=m.slice(1)),!_&&m==="")Nr(w,o,b);else if(m===" ")o.insertBefore(document.createTextNode(" "),b);else{if(C&&m.charAt(0)===" "&&Nr(" ",o,b),x&&R===1&&!B&&y.indexOf(x.parentNode)>-1?(F=y[y.length-1],F.appendChild(document.createTextNode(i?"":m))):(F=e(i?"":m),Nr(F,o,b),x&&R===1&&!B&&F.insertBefore(x,F.firstChild)),i)for(P=Dl?xl([...Dl.segment(m)].map(J=>J.segment),a):m.match(u)||ru,H=0;H<P.length;H++)F.appendChild(P[H]===" "?document.createTextNode(" "):i(P[H]));if(n&&l){if(z=b.textContent=z.substring(m.length+1,z.length),I=F.getBoundingClientRect(),I.top>D.top&&I.left<=D.left){for(k=o.cloneNode(),M=o.childNodes[0];M&&M!==F;)O=M,M=M.nextSibling,k.appendChild(O);o.parentNode.insertBefore(k,o),r&&Cl(k)}D=I}(R<E.length||A)&&Nr(R>=E.length?" ":C&&m.slice(-1)===" "?" "+w:w,o,b)}o.removeChild(b),x=0}else b.nodeType===1&&(s&&s.indexOf(b)>-1?(y.indexOf(b.previousSibling)>-1&&y[y.length-1].appendChild(b),x=b):(wl(b,t,e,i,r,n,s,u,a,!0),x=0),r&&Cl(b))},Sl=class El{constructor(t,e){this.isSplit=!1,Dc(),this.elements=ml(t),this.chars=[],this.words=[],this.lines=[],this.masks=[],this.vars=e,this._split=()=>this.isSplit&&this.split(this.vars);let i=[],r,n=()=>{let s=i.length,u;for(;s--;){u=i[s];let a=u.element.offsetWidth;if(a!==u.width){u.width=a,this._split();return}}};this._data={orig:i,obs:typeof ResizeObserver<"u"&&new ResizeObserver(()=>{clearTimeout(r),r=setTimeout(n,200)})},eu(this),this.split(e)}split(t){this.isSplit&&this.revert(),this.vars=t=t||this.vars||{};let{type:e="chars,words,lines",aria:i="auto",deepSlice:r=!0,smartWrap:n,onSplit:s,autoSplit:u=!1,specialChars:a,mask:l}=this.vars,h=e.indexOf("lines")>-1,d=e.indexOf("chars")>-1,f=e.indexOf("words")>-1,c=d&&!f&&!h,_=a&&("push"in a?new RegExp("(?:"+a.join("|")+")","gu"):a),p=_?new RegExp(_.source+"|"+yl.source,"gu"):yl,g=!!t.ignore&&ml(t.ignore),{orig:D,animTime:v,obs:x}=this._data,y;return(d||f||h)&&(this.elements.forEach((C,w)=>{D[w]={element:C,html:C.innerHTML,ariaL:C.getAttribute("aria-label"),ariaH:C.getAttribute("aria-hidden")},i==="auto"?C.setAttribute("aria-label",(C.textContent||"").trim()):i==="hidden"&&C.setAttribute("aria-hidden","true");let S=[],b=[],E=[],F=d?nu("char",t,S):null,B=nu("word",t,b),A,R,I,P;if(wl(C,t,B,F,c,r&&(h||c),g,p,_,!1),h){let k=Ts(C.childNodes),M=yc(C,k,t,E),O,z=[],m=0,Y=k.map(J=>J.nodeType===1?J.getBoundingClientRect():vl),H=vl;for(A=0;A<k.length;A++)O=k[A],O.nodeType===1&&(O.nodeName==="BR"?(z.push(O),M(m,A+1),m=A+1,H=Y[m]):(A&&Y[A].top>H.top&&Y[A].left<=H.left&&(M(m,A),m=A),H=Y[A]));m<A&&M(m,A),z.forEach(J=>{var nt;return(nt=J.parentNode)==null?void 0:nt.removeChild(J)})}if(!f){for(A=0;A<b.length;A++)if(R=b[A],d||!R.nextSibling||R.nextSibling.nodeType!==3)if(n&&!h){for(I=document.createElement("span"),I.style.whiteSpace="nowrap";R.firstChild;)I.appendChild(R.firstChild);R.replaceWith(I)}else R.replaceWith(...R.childNodes);else P=R.nextSibling,P&&P.nodeType===3&&(P.textContent=(R.textContent||"")+(P.textContent||""),R.remove());b.length=0,C.normalize()}this.lines.push(...E),this.words.push(...b),this.chars.push(...S)}),l&&this[l]&&this.masks.push(...this[l].map(C=>{let w=C.cloneNode();return C.replaceWith(w),w.appendChild(C),C.className&&(w.className=C.className.replace(/(\b\w+\b)/g,"$1-mask")),w.style.overflow="clip",w}))),this.isSplit=!0,zr&&(u?zr.addEventListener("loadingdone",this._split):zr.status==="loading"&&console.warn("SplitText called before fonts loaded")),(y=s&&s(this))&&y.totalTime&&(this._data.anim=v?y.totalTime(v):y),h&&u&&this.elements.forEach((C,w)=>{D[w].width=C.offsetWidth,x&&x.observe(C)}),this}revert(){var t,e;let{orig:i,anim:r,obs:n}=this._data;return n&&n.disconnect(),i.forEach(({element:s,html:u,ariaL:a,ariaH:l})=>{s.innerHTML=u,a?s.setAttribute("aria-label",a):s.removeAttribute("aria-label"),l?s.setAttribute("aria-hidden",l):s.removeAttribute("aria-hidden")}),this.chars.length=this.words.length=this.lines.length=i.length=this.masks.length=0,this.isSplit=!1,zr?.removeEventListener("loadingdone",this._split),r&&(this._data.animTime=r.totalTime(),r.revert()),(e=(t=this.vars).onRevert)==null||e.call(t,this),this}static create(t,e){return new El(t,e)}static register(t){bn=bn||t||window.gsap,bn&&(Ts=bn.utils.toArray,eu=bn.core.context||eu),!iu&&window.innerWidth>0&&(zr=document.fonts,iu=!0)}};Sl.version="3.13.0";var su=Sl;var vc=/[achlmqstvz]|(-?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/ig,xc=/(?:(-)?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/ig,Cc=/[\+\-]?\d*\.?\d+e[\+\-]?\d+/ig,wc=/(^[#\.][a-z]|[a-y][a-z])/i,Sc=Math.PI/180,wd=180/Math.PI,Fs=Math.sin,As=Math.cos,Fn=Math.abs,Tn=Math.sqrt;var bl=function(t){return typeof t=="string"},Fl=function(t){return typeof t=="number"};var Tl=1e5;var zi=function(t){return Math.round(t*Tl)/Tl||0};function Al(o){o=bl(o)&&wc.test(o)&&document.querySelector(o)||o;var t=o.getAttribute?o:0,e;return t&&(o=o.getAttribute("d"))?(t._gsPath||(t._gsPath={}),e=t._gsPath[o],e&&!e._dirty?e:t._gsPath[o]=Ue(o)):o?bl(o)?Ue(o):Fl(o[0])?[o]:o:console.warn("Expecting a <path> element or an SVG path data string")}function Ir(o){var t=0,e;for(o.reverse();t<o.length;t+=2)e=o[t],o[t]=o[t+1],o[t+1]=e;o.reversed=!o.reversed}var Ec=function(t,e){var i=document.createElementNS("http://www.w3.org/2000/svg","path"),r=[].slice.call(t.attributes),n=r.length,s;for(e=","+e+",";--n>-1;)s=r[n].nodeName.toLowerCase(),e.indexOf(","+s+",")<0&&i.setAttributeNS(null,s,r[n].nodeValue);return i},bc={rect:"rx,ry,x,y,width,height",circle:"r,cx,cy",ellipse:"rx,ry,cx,cy",line:"x1,x2,y1,y2"},Tc=function(t,e){for(var i=e?e.split(","):[],r={},n=i.length;--n>-1;)r[i[n]]=+t.getAttribute(i[n])||0;return r};function ou(o,t){var e=o.tagName.toLowerCase(),i=.552284749831,r,n,s,u,a,l,h,d,f,c,_,p,g,D,v,x,y,C,w,S,b,E;return e==="path"||!o.getBBox?o:(l=Ec(o,"x,y,width,height,cx,cy,rx,ry,r,x1,x2,y1,y2,points"),E=Tc(o,bc[e]),e==="rect"?(u=E.rx,a=E.ry||u,n=E.x,s=E.y,c=E.width-u*2,_=E.height-a*2,u||a?(p=n+u*(1-i),g=n+u,D=g+c,v=D+u*i,x=D+u,y=s+a*(1-i),C=s+a,w=C+_,S=w+a*i,b=w+a,r="M"+x+","+C+" V"+w+" C"+[x,S,v,b,D,b,D-(D-g)/3,b,g+(D-g)/3,b,g,b,p,b,n,S,n,w,n,w-(w-C)/3,n,C+(w-C)/3,n,C,n,y,p,s,g,s,g+(D-g)/3,s,D-(D-g)/3,s,D,s,v,s,x,y,x,C].join(",")+"z"):r="M"+(n+c)+","+s+" v"+_+" h"+-c+" v"+-_+" h"+c+"z"):e==="circle"||e==="ellipse"?(e==="circle"?(u=a=E.r,d=u*i):(u=E.rx,a=E.ry,d=a*i),n=E.cx,s=E.cy,h=u*i,r="M"+(n+u)+","+s+" C"+[n+u,s+d,n+h,s+a,n,s+a,n-h,s+a,n-u,s+d,n-u,s,n-u,s-d,n-h,s-a,n,s-a,n+h,s-a,n+u,s-d,n+u,s].join(",")+"z"):e==="line"?r="M"+E.x1+","+E.y1+" L"+E.x2+","+E.y2:(e==="polyline"||e==="polygon")&&(f=(o.getAttribute("points")+"").match(xc)||[],n=f.shift(),s=f.shift(),r="M"+n+","+s+" L"+f.join(","),e==="polygon"&&(r+=","+n+","+s+"z")),l.setAttribute("d",mi(l._gsRawPath=Ue(r))),t&&o.parentNode&&(o.parentNode.insertBefore(l,o),o.parentNode.removeChild(o)),l)}function Pl(o,t,e,i,r,n,s){for(var u=o.length,a,l,h,d,f;--u>-1;)for(a=o[u],l=a.length,h=0;h<l;h+=2)d=a[h],f=a[h+1],a[h]=d*t+f*i+n,a[h+1]=d*e+f*r+s;return o._dirty=1,o}function Fc(o,t,e,i,r,n,s,u,a){if(!(o===u&&t===a)){e=Fn(e),i=Fn(i);var l=r%360*Sc,h=As(l),d=Fs(l),f=Math.PI,c=f*2,_=(o-u)/2,p=(t-a)/2,g=h*_+d*p,D=-d*_+h*p,v=g*g,x=D*D,y=v/(e*e)+x/(i*i);y>1&&(e=Tn(y)*e,i=Tn(y)*i);var C=e*e,w=i*i,S=(C*w-C*x-w*v)/(C*x+w*v);S<0&&(S=0);var b=(n===s?-1:1)*Tn(S),E=b*(e*D/i),F=b*-(i*g/e),B=(o+u)/2,A=(t+a)/2,R=B+(h*E-d*F),I=A+(d*E+h*F),P=(g-E)/e,k=(D-F)/i,M=(-g-E)/e,O=(-D-F)/i,z=P*P+k*k,m=(k<0?-1:1)*Math.acos(P/Tn(z)),Y=(P*O-k*M<0?-1:1)*Math.acos((P*M+k*O)/Tn(z*(M*M+O*O)));isNaN(Y)&&(Y=f),!s&&Y>0?Y-=c:s&&Y<0&&(Y+=c),m%=c,Y%=c;var H=Math.ceil(Fn(Y)/(c/4)),J=[],nt=Y/H,ft=4/3*Fs(nt/2)/(1+As(nt/2)),St=h*e,ct=d*e,Rt=d*-i,At=h*i,gt;for(gt=0;gt<H;gt++)r=m+gt*nt,g=As(r),D=Fs(r),P=As(r+=nt),k=Fs(r),J.push(g-ft*D,D+ft*g,P+ft*k,k-ft*P,P,k);for(gt=0;gt<J.length;gt+=2)g=J[gt],D=J[gt+1],J[gt]=g*St+D*Rt+R,J[gt+1]=g*ct+D*At+I;return J[gt-2]=u,J[gt-1]=a,J}}function Ue(o){var t=(o+"").replace(Cc,function(E){var F=+E;return F<1e-4&&F>-1e-4?0:F}).match(vc)||[],e=[],i=0,r=0,n=2/3,s=t.length,u=0,a="ERROR: malformed path: "+o,l,h,d,f,c,_,p,g,D,v,x,y,C,w,S,b=function(F,B,A,R){v=(A-F)/3,x=(R-B)/3,p.push(F+v,B+x,A-v,R-x,A,R)};if(!o||!isNaN(t[0])||isNaN(t[1]))return console.log(a),e;for(l=0;l<s;l++)if(C=c,isNaN(t[l])?(c=t[l].toUpperCase(),_=c!==t[l]):l--,d=+t[l+1],f=+t[l+2],_&&(d+=i,f+=r),l||(g=d,D=f),c==="M")p&&(p.length<8?e.length-=1:u+=p.length),i=g=d,r=D=f,p=[d,f],e.push(p),l+=2,c="L";else if(c==="C")p||(p=[0,0]),_||(i=r=0),p.push(d,f,i+t[l+3]*1,r+t[l+4]*1,i+=t[l+5]*1,r+=t[l+6]*1),l+=6;else if(c==="S")v=i,x=r,(C==="C"||C==="S")&&(v+=i-p[p.length-4],x+=r-p[p.length-3]),_||(i=r=0),p.push(v,x,d,f,i+=t[l+3]*1,r+=t[l+4]*1),l+=4;else if(c==="Q")v=i+(d-i)*n,x=r+(f-r)*n,_||(i=r=0),i+=t[l+3]*1,r+=t[l+4]*1,p.push(v,x,i+(d-i)*n,r+(f-r)*n,i,r),l+=4;else if(c==="T")v=i-p[p.length-4],x=r-p[p.length-3],p.push(i+v,r+x,d+(i+v*1.5-d)*n,f+(r+x*1.5-f)*n,i=d,r=f),l+=2;else if(c==="H")b(i,r,i=d,r),l+=1;else if(c==="V")b(i,r,i,r=d+(_?r-i:0)),l+=1;else if(c==="L"||c==="Z")c==="Z"&&(d=g,f=D,p.closed=!0),(c==="L"||Fn(i-d)>.5||Fn(r-f)>.5)&&(b(i,r,d,f),c==="L"&&(l+=2)),i=d,r=f;else if(c==="A"){if(w=t[l+4],S=t[l+5],v=t[l+6],x=t[l+7],h=7,w.length>1&&(w.length<3?(x=v,v=S,h--):(x=S,v=w.substr(2),h-=2),S=w.charAt(1),w=w.charAt(0)),y=Fc(i,r,+t[l+1],+t[l+2],+t[l+3],+w,+S,(_?i:0)+v*1,(_?r:0)+x*1),l+=h,y)for(h=0;h<y.length;h++)p.push(y[h]);i=p[p.length-2],r=p[p.length-1]}else console.log(a);return l=p.length,l<6?(e.pop(),l=0):p[0]===p[l-2]&&p[1]===p[l-1]&&(p.closed=!0),e.totalPoints=u+l,e}function mi(o){Fl(o[0])&&(o=[o]);var t="",e=o.length,i,r,n,s;for(r=0;r<e;r++){for(s=o[r],t+="M"+zi(s[0])+","+zi(s[1])+" C",i=s.length,n=2;n<i;n++)t+=zi(s[n++])+","+zi(s[n++])+" "+zi(s[n++])+","+zi(s[n++])+" "+zi(s[n++])+","+zi(s[n])+" ";s.closed&&(t+="z")}return t}var ye,kl,Ol=function(){return ye||typeof window<"u"&&(ye=window.gsap)&&ye.registerPlugin&&ye},Ml=function(){ye=Ol(),ye?(ye.registerEase("_CE",hr.create),kl=1):console.warn("Please gsap.registerPlugin(CustomEase)")},Ac=1e20,Ps=function(t){return~~(t*1e3+(t<0?-.5:.5))/1e3},Pc=1,Mc=/[-+=.]*\d+[.e\-+]*\d*[e\-+]*\d*/gi,kc=/[cLlsSaAhHvVtTqQ]/g,Oc=function(t){var e=t.length,i=Ac,r;for(r=1;r<e;r+=6)+t[r]<i&&(i=+t[r]);return i},Rc=function(t,e,i){!i&&i!==0&&(i=Math.max(+t[t.length-1],+t[1]));var r=+t[0]*-1,n=-i,s=t.length,u=1/(+t[s-2]+r),a=-e||(Math.abs(+t[s-1]-+t[1])<.01*(+t[s-2]-+t[0])?Oc(t)+n:+t[s-1]+n),l;for(a?a=1/a:a=-u,l=0;l<s;l+=2)t[l]=(+t[l]+r)*u,t[l+1]=(+t[l+1]+n)*a},Lc=function o(t,e,i,r,n,s,u,a,l,h,d){var f=(t+i)/2,c=(e+r)/2,_=(i+n)/2,p=(r+s)/2,g=(n+u)/2,D=(s+a)/2,v=(f+_)/2,x=(c+p)/2,y=(_+g)/2,C=(p+D)/2,w=(v+y)/2,S=(x+C)/2,b=u-t,E=a-e,F=Math.abs((i-u)*E-(r-a)*b),B=Math.abs((n-u)*E-(s-a)*b),A;return h||(h=[{x:t,y:e},{x:u,y:a}],d=1),h.splice(d||h.length-1,0,{x:w,y:S}),(F+B)*(F+B)>l*(b*b+E*E)&&(A=h.length,o(t,e,f,c,v,x,w,S,l,h,d),o(w,S,y,C,g,D,u,a,l,h,d+1+(h.length-A))),h},hr=function(){function o(e,i,r){kl||Ml(),this.id=e,Pc&&this.setData(i,r)}var t=o.prototype;return t.setData=function(i,r){r=r||{},i=i||"0,0,1,1";var n=i.match(Mc),s=1,u=[],a=[],l=r.precision||1,h=l<=1,d,f,c,_,p,g,D,v,x;if(this.data=i,(kc.test(i)||~i.indexOf("M")&&i.indexOf("C")<0)&&(n=Ue(i)[0]),d=n.length,d===4)n.unshift(0,0),n.push(1,1),d=8;else if((d-2)%6)throw"Invalid CustomEase";for((+n[0]!=0||+n[d-2]!=1)&&Rc(n,r.height,r.originY),this.segment=n,_=2;_<d;_+=6)f={x:+n[_-2],y:+n[_-1]},c={x:+n[_+4],y:+n[_+5]},u.push(f,c),Lc(f.x,f.y,+n[_],+n[_+1],+n[_+2],+n[_+3],c.x,c.y,1/(l*2e5),u,u.length-1);for(d=u.length,_=0;_<d;_++)D=u[_],v=u[_-1]||D,(D.x>v.x||v.y!==D.y&&v.x===D.x||D===v)&&D.x<=1?(v.cx=D.x-v.x,v.cy=D.y-v.y,v.n=D,v.nx=D.x,h&&_>1&&Math.abs(v.cy/v.cx-u[_-2].cy/u[_-2].cx)>2&&(h=0),v.cx<s&&(v.cx?s=v.cx:(v.cx=.001,_===d-1&&(v.x-=.001,s=Math.min(s,.001),h=0)))):(u.splice(_--,1),d--);if(d=1/s+1|0,p=1/d,g=0,D=u[0],h){for(_=0;_<d;_++)x=_*p,D.nx<x&&(D=u[++g]),f=D.y+(x-D.x)/D.cx*D.cy,a[_]={x,cx:p,y:f,cy:0,nx:9},_&&(a[_-1].cy=f-a[_-1].y);g=u[u.length-1],a[d-1].cy=g.y-f,a[d-1].cx=g.x-a[a.length-1].x}else{for(_=0;_<d;_++)D.nx<_*p&&(D=u[++g]),a[_]=D;g<u.length-1&&(a[_-1]=u[u.length-2])}return this.ease=function(y){var C=a[y*d|0]||a[d-1];return C.nx<y&&(C=C.n),C.y+(y-C.x)/C.cx*C.cy},this.ease.custom=this,this.id&&ye&&ye.registerEase(this.id,this.ease),this},t.getSVGData=function(i){return o.getSVGData(this,i)},o.create=function(i,r,n){return new o(i,r,n).ease},o.register=function(i){ye=i,Ml()},o.get=function(i){return ye.parseEase(i)},o.getSVGData=function(i,r){r=r||{};var n=r.width||100,s=r.height||100,u=r.x||0,a=(r.y||0)+s,l=ye.utils.toArray(r.path)[0],h,d,f,c,_,p,g,D,v,x;if(r.invert&&(s=-s,a=0),typeof i=="string"&&(i=ye.parseEase(i)),i.custom&&(i=i.custom),i instanceof o)h=mi(Pl([i.segment],n,0,0,-s,u,a));else{for(h=[u,a],g=Math.max(5,(r.precision||1)*200),c=1/g,g+=2,D=5/g,v=Ps(u+c*n),x=Ps(a+i(c)*-s),d=(x-a)/(v-u),f=2;f<g;f++)_=Ps(u+f*c*n),p=Ps(a+i(f*c)*-s),(Math.abs((p-x)/(_-v)-d)>D||f===g-1)&&(h.push(v,x),d=(p-x)/(_-v)),v=_,x=p;h="M"+h.join(",")}return l&&l.setAttribute("d",h),h},o}();hr.version="3.13.0";hr.headless=!0;Ol()&&ye.registerPlugin(hr);var Bc=/(?:^\s+|\s+$)/g,zc=/([\uD800-\uDBFF][\uDC00-\uDFFF](?:[\u200D\uFE0F][\uD800-\uDBFF][\uDC00-\uDFFF]){2,}|\uD83D\uDC69(?:\u200D(?:(?:\uD83D\uDC69\u200D)?\uD83D\uDC67|(?:\uD83D\uDC69\u200D)?\uD83D\uDC66)|\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC69\u200D(?:\uD83D\uDC69\u200D)?\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC69\u200D(?:\uD83D\uDC69\u200D)?\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C\uDFF3\uFE0F\u200D\uD83C\uDF08|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2642\u2640]\uFE0F|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDD27\uDCBC\uDD2C\uDE80\uDE92])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC6F\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3C-\uDD3E\uDDD6-\uDDDF])\u200D[\u2640\u2642]\uFE0F|\uD83C\uDDFD\uD83C\uDDF0|\uD83C\uDDF6\uD83C\uDDE6|\uD83C\uDDF4\uD83C\uDDF2|\uD83C\uDDE9(?:\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF])|\uD83C\uDDF7(?:\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC])|\uD83C\uDDE8(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF5\uDDF7\uDDFA-\uDDFF])|(?:\u26F9|\uD83C[\uDFCC\uDFCB]|\uD83D\uDD75)(?:\uFE0F\u200D[\u2640\u2642]|(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642])\uFE0F|(?:\uD83D\uDC41\uFE0F\u200D\uD83D\uDDE8|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2695\u2696\u2708]|\uD83D\uDC69\u200D[\u2695\u2696\u2708]|\uD83D\uDC68(?:(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708]))\uFE0F|\uD83C\uDDF2(?:\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF])|\uD83D\uDC69\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69]))|\uD83C\uDDF1(?:\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE])|\uD83C\uDDEF(?:\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5])|\uD83C\uDDED(?:\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA])|\uD83C\uDDEB(?:\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7])|[#\*0-9]\uFE0F\u20E3|\uD83C\uDDE7(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF])|\uD83C\uDDE6(?:\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF])|\uD83C\uDDFF(?:\uD83C[\uDDE6\uDDF2\uDDFC])|\uD83C\uDDF5(?:\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE])|\uD83C\uDDFB(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA])|\uD83C\uDDF3(?:\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF])|\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62(?:\uDB40\uDC77\uDB40\uDC6C\uDB40\uDC73|\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74|\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67)\uDB40\uDC7F|\uD83D\uDC68(?:\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83D\uDC68|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC66\u200D\uD83D\uDC66|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92])|(?:\uD83C[\uDFFB-\uDFFF])\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]))|\uD83C\uDDF8(?:\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF])|\uD83C\uDDF0(?:\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF])|\uD83C\uDDFE(?:\uD83C[\uDDEA\uDDF9])|\uD83C\uDDEE(?:\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9])|\uD83C\uDDF9(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF])|\uD83C\uDDEC(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE])|\uD83C\uDDFA(?:\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF])|\uD83C\uDDEA(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA])|\uD83C\uDDFC(?:\uD83C[\uDDEB\uDDF8])|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uD83C[\uDFFB-\uDFFF])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u270A-\u270D]|\uD83C[\uDF85\uDFC2\uDFC7]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC70\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDCAA\uDD74\uDD7A\uDD90\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD30-\uDD36\uDDD1-\uDDD5])(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC68(?:\u200D(?:(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC67|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC66)|\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u26F9\u270A-\u270D]|\uD83C[\uDF85\uDFC2-\uDFC4\uDFC7\uDFCA-\uDFCC]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66-\uDC69\uDC6E\uDC70-\uDC78\uDC7C\uDC81-\uDC83\uDC85-\uDC87\uDCAA\uDD74\uDD75\uDD7A\uDD90\uDD95\uDD96\uDE45-\uDE47\uDE4B-\uDE4F\uDEA3\uDEB4-\uDEB6\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD26\uDD30-\uDD39\uDD3D\uDD3E\uDDD1-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])?|(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDEEB\uDEEC\uDEF4-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])|(?:[#\*0-9\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u2660\u2663\u2665\u2666\u2668\u267B\u267F\u2692-\u2697\u2699\u269B\u269C\u26A0\u26A1\u26AA\u26AB\u26B0\u26B1\u26BD\u26BE\u26C4\u26C5\u26C8\u26CE\u26CF\u26D1\u26D3\u26D4\u26E9\u26EA\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757\u2763\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]|\uD83C[\uDC04\uDCCF\uDD70\uDD71\uDD7E\uDD7F\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE02\uDE1A\uDE2F\uDE32-\uDE3A\uDE50\uDE51\uDF00-\uDF21\uDF24-\uDF93\uDF96\uDF97\uDF99-\uDF9B\uDF9E-\uDFF0\uDFF3-\uDFF5\uDFF7-\uDFFF]|\uD83D[\uDC00-\uDCFD\uDCFF-\uDD3D\uDD49-\uDD4E\uDD50-\uDD67\uDD6F\uDD70\uDD73-\uDD7A\uDD87\uDD8A-\uDD8D\uDD90\uDD95\uDD96\uDDA4\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA-\uDE4F\uDE80-\uDEC5\uDECB-\uDED2\uDEE0-\uDEE5\uDEE9\uDEEB\uDEEC\uDEF0\uDEF3-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])\uFE0F)/;function Yr(o){var t=o.nodeType,e="";if(t===1||t===9||t===11){if(typeof o.textContent=="string")return o.textContent;for(o=o.firstChild;o;o=o.nextSibling)e+=Yr(o)}else if(t===3||t===4)return o.nodeValue;return e}function Ms(o,t,e,i,r){for(var n=o.firstChild,s=[],u;n;)n.nodeType===3?(u=(n.nodeValue+"").replace(/^\n+/g,""),i||(u=u.replace(/\s+/g," ")),s.push.apply(s,ve(u,t,e,i,r))):(n.nodeName+"").toLowerCase()==="br"?s[s.length-1]+="<br>":s.push(n.outerHTML),n=n.nextSibling;if(!r)for(u=s.length;u--;)s[u]==="&"&&s.splice(u,1,"&amp;");return s}function ve(o,t,e,i,r){if(o+="",e&&(o=o.trim?o.trim():o.replace(Bc,"")),t&&t!=="")return o.replace(/>/g,"&gt;").replace(/</g,"&lt;").split(t);for(var n=[],s=o.length,u=0,a,l;u<s;u++)l=o.charAt(u),(l.charCodeAt(0)>=55296&&l.charCodeAt(0)<=56319||o.charCodeAt(u+1)>=65024&&o.charCodeAt(u+1)<=65039)&&(a=((o.substr(u,12).split(zc)||[])[1]||"").length||2,l=o.substr(u,a),n.emoji=1,u+=a-1),n.push(r?l:l===">"?"&gt;":l==="<"?"&lt;":i&&l===" "&&(o.charAt(u-1)===" "||o.charAt(u+1)===" ")?"&nbsp;":l);return n}var An,ks,Nc=function(){return An||typeof window<"u"&&(An=window.gsap)&&An.registerPlugin&&An},Wr={version:"3.13.0",name:"text",init:function(t,e,i){typeof e!="object"&&(e={value:e});var r=t.nodeName.toUpperCase(),n=this,s=e,u=s.newClass,a=s.oldClass,l=s.preserveSpaces,h=s.rtl,d=n.delimiter=e.delimiter||"",f=n.fillChar=e.fillChar||(e.padSpace?"&nbsp;":""),c,_,p,g,D,v,x,y;if(n.svg=t.getBBox&&(r==="TEXT"||r==="TSPAN"),!("innerHTML"in t)&&!n.svg)return!1;if(n.target=t,!("value"in e)){n.text=n.original=[""];return}for(p=Ms(t,d,!1,l,n.svg),ks||(ks=document.createElement("div")),ks.innerHTML=e.value,_=Ms(ks,d,!1,l,n.svg),n.from=i._from,(n.from||h)&&!(h&&n.from)&&(r=p,p=_,_=r),n.hasClass=!!(u||a),n.newClass=h?a:u,n.oldClass=h?u:a,r=p.length-_.length,c=r<0?p:_,r<0&&(r=-r);--r>-1;)c.push(f);if(e.type==="diff"){for(g=0,D=[],v=[],x="",r=0;r<_.length;r++)y=_[r],y===p[r]?x+=y:(D[g]=x+y,v[g++]=x+p[r],x="");_=D,p=v,x&&(_.push(x),p.push(x))}e.speed&&i.duration(Math.min(.05/e.speed*c.length,e.maxDuration||9999)),n.rtl=h,n.original=p,n.text=_,n._props.push("text")},render:function(t,e){t>1?t=1:t<0&&(t=0),e.from&&(t=1-t);var i=e.text,r=e.hasClass,n=e.newClass,s=e.oldClass,u=e.delimiter,a=e.target,l=e.fillChar,h=e.original,d=e.rtl,f=i.length,c=(d?1-t:t)*f+.5|0,_,p,g;r&&t?(_=n&&c,p=s&&c!==f,g=(_?"<span class='"+n+"'>":"")+i.slice(0,c).join(u)+(_?"</span>":"")+(p?"<span class='"+s+"'>":"")+u+h.slice(c).join(u)+(p?"</span>":"")):g=i.slice(0,c).join(u)+u+h.slice(c).join(u),e.svg?a.textContent=g:a.innerHTML=l==="&nbsp;"&&~g.indexOf("  ")?g.split("  ").join("&nbsp;&nbsp;"):g}};Wr.splitInnerHTML=Ms;Wr.emojiSafeSplit=ve;Wr.getText=Yr;Nc()&&An.registerPlugin(Wr);var Os=function(){function o(e){this.chars=ve(e),this.sets=[],this.length=50;for(var i=0;i<20;i++)this.sets[i]=Ll(80,this.chars)}var t=o.prototype;return t.grow=function(i){for(var r=0;r<20;r++)this.sets[r]+=Ll(i-this.length,this.chars);this.length=i},o}(),fr,Nl,Il=function(){return fr||typeof window<"u"&&(fr=window.gsap)&&fr.registerPlugin&&fr},Ic=1,Rl=/\s+/g,Ll=function(t,e){for(var i=e.length,r="";--t>-1;)r+=e[~~(Math.random()*i)];return r},uu="ABCDEFGHIJKLMNOPQRSTUVWXYZ",Bl=uu.toLowerCase(),Yc={upperCase:new Os(uu),lowerCase:new Os(Bl),upperAndLowerCase:new Os(uu+Bl)},zl=function(){Nl=fr=Il()},Pn={version:"3.13.0",name:"scrambleText",register:function(t,e,i){fr=t,zl()},init:function(t,e,i,r,n){if(Nl||zl(),this.prop="innerHTML"in t?"innerHTML":"textContent"in t?"textContent":0,!!this.prop){this.target=t,typeof e!="object"&&(e={text:e});var s=e.text||e.value||"",u=e.trim!==!1,a=this,l,h,d,f;return a.delimiter=l=e.delimiter||"",a.original=ve(Yr(t).replace(Rl," ").split("&nbsp;").join(""),l,u),(s==="{original}"||s===!0||s==null)&&(s=a.original.join(l)),a.text=ve((s||"").replace(Rl," "),l,u),a.hasClass=!!(e.newClass||e.oldClass),a.newClass=e.newClass,a.oldClass=e.oldClass,f=l==="",a.textHasEmoji=f&&!!a.text.emoji,a.charsHaveEmoji=!!e.chars&&!!ve(e.chars).emoji,a.length=f?a.original.length:a.original.join(l).length,a.lengthDif=(f?a.text.length:a.text.join(l).length)-a.length,a.fillChar=e.fillChar||e.chars&&~e.chars.indexOf(" ")?"&nbsp;":"",a.charSet=d=Yc[e.chars||"upperCase"]||new Os(e.chars),a.speed=.05/(e.speed||1),a.prevScrambleTime=0,a.setIndex=Math.random()*20|0,h=a.length+Math.max(a.lengthDif,0),h>d.length&&d.grow(h),a.chars=d.sets[a.setIndex],a.revealDelay=e.revealDelay||0,a.tweenLength=e.tweenLength!==!1,a.tween=i,a.rightToLeft=!!e.rightToLeft,a._props.push("scrambleText","text"),Ic}},render:function(t,e){var i=e.target,r=e.prop,n=e.text,s=e.delimiter,u=e.tween,a=e.prevScrambleTime,l=e.revealDelay,h=e.setIndex,d=e.chars,f=e.charSet,c=e.length,_=e.textHasEmoji,p=e.charsHaveEmoji,g=e.lengthDif,D=e.tweenLength,v=e.oldClass,x=e.newClass,y=e.rightToLeft,C=e.fillChar,w=e.speed,S=e.original,b=e.hasClass,E=n.length,F=u._time,B=F-a,A,R,I,P,k,M,O,z,m,Y,H;l&&(u._from&&(F=u._dur-F),t=F===0?0:F<l?1e-6:F===u._dur?1:u._ease((F-l)/(u._dur-l))),t<0?t=0:t>1&&(t=1),y&&(t=1-t),A=~~(t*E+.5),t?((B>w||B<-w)&&(e.setIndex=h=(h+(Math.random()*19|0))%20,e.chars=f.sets[h],e.prevScrambleTime+=B),P=d):P=S.join(s),H=u._from?t:1-t,Y=c+(D?u._from?H*H*H:1-H*H*H:1)*g,y?t===1&&(u._from||u.data==="isFromStart")?(I="",P=S.join(s)):(O=n.slice(A).join(s),p?I=ve(P).slice(0,Y-(_?ve(O):O).length+.5|0).join(""):I=P.substr(0,Y-(_?ve(O):O).length+.5|0),P=O):(I=n.slice(0,A).join(s),R=(_?ve(I):I).length,p?P=ve(P).slice(R,Y+.5|0).join(""):P=P.substr(R,Y-R+.5|0)),b?(z=y?v:x,m=y?x:v,k=z&&A!==0,M=m&&A!==E,O=(k?"<span class='"+z+"'>":"")+I+(k?"</span>":"")+(M?"<span class='"+m+"'>":"")+s+P+(M?"</span>":"")):O=I+s+P,i[r]=C==="&nbsp;"&&~O.indexOf("  ")?O.split("  ").join("&nbsp;&nbsp;"):O}};Pn.emojiSafeSplit=ve;Pn.getText=Yr;Il()&&fr.registerPlugin(Pn);var Ge,du,Mn,Wc,Zl,kn,Jl=function(){return Ge||typeof window<"u"&&(Ge=window.gsap)&&Ge.registerPlugin&&Ge},au=function(t){return typeof t=="function"},cr=Math.atan2,Yl=Math.cos,Wl=Math.sin,yi=Math.sqrt,Rs=Math.PI,Xl=Rs*2,Xc=Rs*.3,Vc=Rs*.7,th=1e20,Rn=/[-+=\.]*\d+[\.e\-\+]*\d*[e\-\+]*\d*/gi,Hc=/(^[#\.][a-z]|[a-y][a-z])/i,qc=/[achlmqstvz]/i,Ni=function(t){return console&&console.warn(t)},Uc=1,Vl=function(t){var e=t.length,i=0,r=0,n;for(n=0;n<e;n++)i+=t[n++],r+=t[n];return[i/(e/2),r/(e/2)]},Xr=function(t){var e=t.length,i=t[0],r=i,n=t[1],s=n,u,a,l;for(l=6;l<e;l+=6)u=t[l],a=t[l+1],u>i?i=u:u<r&&(r=u),a>n?n=a:a<s&&(s=a);return t.centerX=(i+r)/2,t.centerY=(n+s)/2,t.size=(i-r)*(n-s)},On=function(t,e){e===void 0&&(e=3);for(var i=t.length,r=t[0][0],n=r,s=t[0][1],u=s,a=1/e,l,h,d,f,c,_,p,g,D,v,x,y,C,w,S,b;--i>-1;)for(c=t[i],l=c.length,f=6;f<l;f+=6)for(D=c[f],v=c[f+1],x=c[f+2]-D,w=c[f+3]-v,y=c[f+4]-D,S=c[f+5]-v,C=c[f+6]-D,b=c[f+7]-v,_=e;--_>-1;)p=a*_,g=1-p,h=(p*p*C+3*g*(p*y+g*x))*p+D,d=(p*p*b+3*g*(p*S+g*w))*p+v,h>r?r=h:h<n&&(n=h),d>s?s=d:d<u&&(u=d);return t.centerX=(r+n)/2,t.centerY=(s+u)/2,t.left=n,t.width=r-n,t.top=u,t.height=s-u,t.size=(r-n)*(s-u)},Gc=function(t,e){return e.length-t.length},Hl=function(t,e){var i=t.size||Xr(t),r=e.size||Xr(e);return Math.abs(r-i)<(i+r)/20?e.centerX-t.centerX||e.centerY-t.centerY:r-i},ql=function(t,e){var i=t.slice(0),r=t.length,n=r-2,s,u;for(e=e|0,s=0;s<r;s++)u=(s+e)%n,t[s++]=i[u],t[s]=i[u+1]},lu=function(t,e,i,r,n){var s=t.length,u=0,a=s-2,l,h,d,f;for(i*=6,h=0;h<s;h+=6)l=(h+i)%a,f=t[l]-(e[h]-r),d=t[l+1]-(e[h+1]-n),u+=yi(d*d+f*f);return u},jc=function(t,e,i){var r=t.length,n=Vl(t),s=Vl(e),u=s[0]-n[0],a=s[1]-n[1],l=lu(t,e,0,u,a),h=0,d,f,c;for(c=6;c<r;c+=6)f=lu(t,e,c/6,u,a),f<l&&(l=f,h=c);if(i)for(d=t.slice(0),Ir(d),c=6;c<r;c+=6)f=lu(d,e,c/6,u,a),f<l&&(l=f,h=-c);return h/6},Qc=function(t,e,i){for(var r=t.length,n=th,s=0,u=0,a,l,h,d,f,c;--r>-1;)for(a=t[r],c=a.length,f=0;f<c;f+=6)l=a[f]-e,h=a[f+1]-i,d=yi(l*l+h*h),d<n&&(n=d,s=a[f],u=a[f+1]);return[s,u]},Kc=function(t,e,i,r,n,s){var u=e.length,a=0,l=Math.min(t.size||Xr(t),e[i].size||Xr(e[i]))*r,h=th,d=t.centerX+n,f=t.centerY+s,c,_,p,g,D;for(_=i;_<u&&(c=e[_].size||Xr(e[_]),!(c<l));_++)p=e[_].centerX-d,g=e[_].centerY-f,D=yi(p*p+g*g),D<h&&(a=_,h=D);return D=e[a],e.splice(a,1),D},hu=function(t,e){var i=0,r=.999999,n=t.length,s=e/((n-2)/6),u,a,l,h,d,f,c,_,p,g,D,v,x,y;for(x=2;x<n;x+=6)for(i+=s;i>r;)u=t[x-2],a=t[x-1],l=t[x],h=t[x+1],d=t[x+2],f=t[x+3],c=t[x+4],_=t[x+5],y=1/((Math.floor(i)||1)+1),p=u+(l-u)*y,D=l+(d-l)*y,p+=(D-p)*y,D+=(d+(c-d)*y-D)*y,g=a+(h-a)*y,v=h+(f-h)*y,g+=(v-g)*y,v+=(f+(_-f)*y-v)*y,t.splice(x,4,u+(l-u)*y,a+(h-a)*y,p,g,p+(D-p)*y,g+(v-g)*y,D,v,d+(c-d)*y,f+(_-f)*y),x+=6,n+=6,i--;return t},fu=function(t,e,i,r,n){var s=e.length-t.length,u=s>0?e:t,a=s>0?t:e,l=0,h=r==="complexity"?Gc:Hl,d=r==="position"?0:typeof r=="number"?r:.8,f=a.length,c=typeof i=="object"&&i.push?i.slice(0):[i],_=c[0]==="reverse"||c[0]<0,p=i==="log",g,D,v,x,y,C,w;if(a[0]){if(u.length>1&&(t.sort(h),e.sort(h),C=u.size||On(u),C=a.size||On(a),C=u.centerX-a.centerX,w=u.centerY-a.centerY,h===Hl))for(f=0;f<a.length;f++)u.splice(f,0,Kc(a[f],u,f,d,C,w));if(s)for(s<0&&(s=-s),u[0].length>a[0].length&&hu(a[0],(u[0].length-a[0].length)/6|0),f=a.length;l<s;)x=u[f].size||Xr(u[f]),v=Qc(a,u[f].centerX,u[f].centerY),x=v[0],y=v[1],a[f++]=[x,y,x,y,x,y,x,y],a.totalPoints+=8,l++;for(f=0;f<t.length;f++)g=e[f],D=t[f],s=g.length-D.length,s<0?hu(g,-s/6|0):s>0&&hu(D,s/6|0),_&&n!==!1&&!D.reversed&&Ir(D),i=c[f]||c[f]===0?c[f]:"auto",i&&(D.closed||Math.abs(D[0]-D[D.length-2])<.5&&Math.abs(D[1]-D[D.length-1])<.5?i==="auto"||i==="log"?(c[f]=i=jc(D,g,!f||n===!1),i<0&&(_=!0,Ir(D),i=-i),ql(D,i*6)):i!=="reverse"&&(f&&i<0&&Ir(D),ql(D,(i<0?-i:i)*6)):!_&&(i==="auto"&&Math.abs(g[0]-D[0])+Math.abs(g[1]-D[1])+Math.abs(g[g.length-2]-D[D.length-2])+Math.abs(g[g.length-1]-D[D.length-1])>Math.abs(g[0]-D[D.length-2])+Math.abs(g[1]-D[D.length-1])+Math.abs(g[g.length-2]-D[0])+Math.abs(g[g.length-1]-D[1])||i%2)?(Ir(D),c[f]=-1,_=!0):i==="auto"?c[f]=0:i==="reverse"&&(c[f]=-1),D.closed!==g.closed&&(D.closed=g.closed=!1));return p&&Ni("shapeIndex:["+c.join(",")+"]"),t.shapeIndex=c,c}},Ul=function(t,e,i,r,n){var s=Ue(t[0]),u=Ue(t[1]);fu(s,u,e||e===0?e:"auto",i,n)&&(t[0]=mi(s),t[1]=mi(u),(r==="log"||r===!0)&&Ni('precompile:["'+t[0]+'","'+t[1]+'"]'))},$c=function(t,e){if(!e)return t;var i=t.match(Rn)||[],r=i.length,n="",s,u,a;for(e==="reverse"?(u=r-1,s=-2):(u=((parseInt(e,10)||0)*2+1+r*100)%r,s=2),a=0;a<r;a+=2)n+=i[u-1]+","+i[u]+" ",u=(u+s)%r;return n},Gl=function(t,e){var i=0,r=parseFloat(t[0]),n=parseFloat(t[1]),s=r+","+n+" ",u=.999999,a,l,h,d,f,c,_;for(h=t.length,a=e*.5/(h*.5-1),l=0;l<h-2;l+=2){if(i+=a,c=parseFloat(t[l+2]),_=parseFloat(t[l+3]),i>u)for(f=1/(Math.floor(i)+1),d=1;i>u;)s+=(r+(c-r)*f*d).toFixed(2)+","+(n+(_-n)*f*d).toFixed(2)+" ",i--,d++;s+=c+","+_+" ",r=c,n=_}return s},cu=function(t){var e=t[0].match(Rn)||[],i=t[1].match(Rn)||[],r=i.length-e.length;r>0?t[0]=Gl(e,r):t[1]=Gl(i,-r)},Zc=function(t){return isNaN(t)?cu:function(e){cu(e),e[1]=$c(e[1],parseInt(t,10))}},Jc=function(t,e,i){var r=typeof t=="string",n,s;return(!r||Hc.test(t)||(t.match(Rn)||[]).length<3)&&(n=du(t)[0],n?(s=(n.nodeName+"").toUpperCase(),e&&s!=="PATH"&&(n=ou(n,!1),s="PATH"),t=n.getAttribute(s==="PATH"?"d":"points")||"",n===i&&(t=n.getAttributeNS(null,"data-original")||t)):(Ni("WARNING: invalid morph to: "+t),t=!1)),t},jl=function(t,e){for(var i=t.length,r=.2*(e||1),n,s,u,a,l,h,d,f,c,_,p,g;--i>-1;){for(s=t[i],p=s.isSmooth=s.isSmooth||[0,0,0,0],g=s.smoothData=s.smoothData||[0,0,0,0],p.length=4,f=s.length-2,d=6;d<f;d+=6)u=s[d]-s[d-2],a=s[d+1]-s[d-1],l=s[d+2]-s[d],h=s[d+3]-s[d+1],c=cr(a,u),_=cr(h,l),n=Math.abs(c-_)<r,n&&(g[d-2]=c,g[d+2]=_,g[d-1]=yi(u*u+a*a),g[d+3]=yi(l*l+h*h)),p.push(n,n,0,0,n,n);s[f]===s[0]&&s[f+1]===s[1]&&(u=s[0]-s[f-2],a=s[1]-s[f-1],l=s[2]-s[0],h=s[3]-s[1],c=cr(a,u),_=cr(h,l),Math.abs(c-_)<r&&(g[f-2]=c,g[2]=_,g[f-1]=yi(u*u+a*a),g[3]=yi(l*l+h*h),p[f-2]=p[f-1]=!0))}return t},Ql=function(t){var e=t.trim().split(" "),i=~t.indexOf("left")?0:~t.indexOf("right")?100:isNaN(parseFloat(e[0]))?50:parseFloat(e[0]),r=~t.indexOf("top")?0:~t.indexOf("bottom")?100:isNaN(parseFloat(e[1]))?50:parseFloat(e[1]);return{x:i/100,y:r/100}},td=function(t){return t!==t%Rs?t+(t<0?Xl:-Xl):t},Kl="Use MorphSVGPlugin.convertToPath() to convert to a path before morphing.",ed=function(t,e,i,r){var n=this._origin,s=this._eOrigin,u=t[i]-n.x,a=t[i+1]-n.y,l=yi(u*u+a*a),h=cr(a,u),d,f;return u=e[i]-s.x,a=e[i+1]-s.y,d=cr(a,u)-h,f=td(d),!r&&Mn&&Math.abs(f+Mn.ca)<Xc&&(r=Mn),this._anchorPT=Mn={_next:this._anchorPT,t,sa:h,ca:r&&f*r.ca<0&&Math.abs(f)>Vc?d:f,sl:l,cl:yi(u*u+a*a)-l,i}},$l=function(t){Ge=Jl(),kn=kn||Ge&&Ge.plugins.morphSVG,Ge&&kn?(du=Ge.utils.toArray,Wc=document,kn.prototype._tweenRotation=ed,Zl=1):t&&Ni("Please gsap.registerPlugin(MorphSVGPlugin)")},dr={version:"3.13.0",name:"morphSVG",rawVars:1,register:function(t,e){Ge=t,kn=e,$l()},init:function(t,e,i,r,n){if(Zl||$l(1),!e)return Ni("invalid shape"),!1;au(e)&&(e=e.call(i,r,t,n));var s,u,a,l,h,d,f,c,_,p,g,D,v,x,y,C,w,S,b,E,F,B;if(typeof e=="string"||e.getBBox||e[0])e={shape:e};else if(typeof e=="object"){s={};for(u in e)s[u]=au(e[u])&&u!=="render"?e[u].call(i,r,t,n):e[u];e=s}var A=t.nodeType?window.getComputedStyle(t):{},R=A.fill+"",I=!(R==="none"||(R.match(Rn)||[])[3]==="0"||A.fillRule==="evenodd"),P=(e.origin||"50 50").split(",");if(s=(t.nodeName+"").toUpperCase(),h=s==="POLYLINE"||s==="POLYGON",s!=="PATH"&&!h&&!e.prop)return Ni("Cannot morph a <"+s+"> element. "+Kl),!1;if(u=s==="PATH"?"d":"points",!e.prop&&!au(t.setAttribute))return!1;if(l=Jc(e.shape||e.d||e.points||"",u==="d",t),h&&qc.test(l))return Ni("A <"+s+"> cannot accept path data. "+Kl),!1;if(d=e.shapeIndex||e.shapeIndex===0?e.shapeIndex:"auto",f=e.map||dr.defaultMap,this._prop=e.prop,this._render=e.render||dr.defaultRender,this._apply="updateTarget"in e?e.updateTarget:dr.defaultUpdateTarget,this._rnd=Math.pow(10,isNaN(e.precision)?2:+e.precision),this._tween=i,l){if(this._target=t,w=typeof e.precompile=="object",p=this._prop?t[this._prop]:t.getAttribute(u),!this._prop&&!t.getAttributeNS(null,"data-original")&&t.setAttributeNS(null,"data-original",p),u==="d"||this._prop){if(p=Ue(w?e.precompile[0]:p),g=Ue(w?e.precompile[1]:l),!w&&!fu(p,g,d,f,I))return!1;for((e.precompile==="log"||e.precompile===!0)&&Ni('precompile:["'+mi(p)+'","'+mi(g)+'"]'),F=(e.type||dr.defaultType)!=="linear",F&&(p=jl(p,e.smoothTolerance),g=jl(g,e.smoothTolerance),p.size||On(p),g.size||On(g),E=Ql(P[0]),this._origin=p.origin={x:p.left+E.x*p.width,y:p.top+E.y*p.height},P[1]&&(E=Ql(P[1])),this._eOrigin={x:g.left+E.x*g.width,y:g.top+E.y*g.height}),this._rawPath=t._gsRawPath=p,v=p.length;--v>-1;)for(y=p[v],C=g[v],c=y.isSmooth||[],_=C.isSmooth||[],x=y.length,Mn=0,D=0;D<x;D+=2)(C[D]!==y[D]||C[D+1]!==y[D+1])&&(F?c[D]&&_[D]?(S=y.smoothData,b=C.smoothData,B=D+(D===x-4?7-x:5),this._controlPT={_next:this._controlPT,i:D,j:v,l1s:S[D+1],l1c:b[D+1]-S[D+1],l2s:S[B],l2c:b[B]-S[B]},a=this._tweenRotation(y,C,D+2),this._tweenRotation(y,C,D,a),this._tweenRotation(y,C,B-1,a),D+=4):this._tweenRotation(y,C,D):(a=this.add(y,D,y[D],C[D],0,0,0,0,0,1),a=this.add(y,D+1,y[D+1],C[D+1],0,0,0,0,0,1)||a))}else a=this.add(t,"setAttribute",t.getAttribute(u)+"",l+"",r,n,0,Zc(d),u);F&&(this.add(this._origin,"x",this._origin.x,this._eOrigin.x,0,0,0,0,0,1),a=this.add(this._origin,"y",this._origin.y,this._eOrigin.y,0,0,0,0,0,1)),a&&(this._props.push("morphSVG"),a.end=l,a.endProp=u)}return Uc},render:function(t,e){for(var i=e._rawPath,r=e._controlPT,n=e._anchorPT,s=e._rnd,u=e._target,a=e._pt,l,h,d,f,c,_,p,g,D,v,x,y,C;a;)a.r(t,a.d),a=a._next;if(t===1&&e._apply)for(a=e._pt;a;)a.end&&(e._prop?u[e._prop]=a.end:u.setAttribute(a.endProp,a.end)),a=a._next;else if(i){for(;n;)_=n.sa+t*n.ca,c=n.sl+t*n.cl,n.t[n.i]=e._origin.x+Yl(_)*c,n.t[n.i+1]=e._origin.y+Wl(_)*c,n=n._next;for(d=t<.5?2*t*t:(4-2*t)*t-1;r;)p=r.i,f=i[r.j],C=p+(p===f.length-4?7-f.length:5),_=cr(f[C]-f[p+1],f[C-1]-f[p]),x=Wl(_),y=Yl(_),D=f[p+2],v=f[p+3],c=r.l1s+d*r.l1c,f[p]=D-y*c,f[p+1]=v-x*c,c=r.l2s+d*r.l2c,f[C-1]=D+y*c,f[C]=v+x*c,r=r._next;if(u._gsRawPath=i,e._apply){for(l="",h=" ",g=0;g<i.length;g++)for(f=i[g],c=f.length,l+="M"+(f[0]*s|0)/s+h+(f[1]*s|0)/s+" C",p=2;p<c;p++)l+=(f[p]*s|0)/s+h;e._prop?u[e._prop]=l:u.setAttribute("d",l)}}e._render&&i&&e._render.call(e._tween,i,u)},kill:function(t){this._pt=this._rawPath=0},getRawPath:Al,stringToRawPath:Ue,rawPathToString:mi,normalizeStrings:function(t,e,i){var r=i.shapeIndex,n=i.map,s=[t,e];return Ul(s,r,n),s},pathFilter:Ul,pointsFilter:cu,getTotalSize:On,equalizeSegmentQuantity:fu,convertToPath:function(t,e){return du(t).map(function(i){return ou(i,e!==!1)})},defaultType:"linear",defaultUpdateTarget:!0,defaultMap:"size"};Jl()&&Ge.registerPlugin(dr);it.registerPlugin(_t,su,K,hr,Wr,Pn,dr);window.Webflow||(window.Webflow=[]);window.Webflow.push(()=>{console.log(it.version);let o;Webflow.env("editor")===void 0&&(o=new yu({lerp:.1,wheelMultiplier:1.2}),o.on("scroll",K.update),it.ticker.add(P=>{o.raf(P*1e3)}),it.ticker.lagSmoothing(0));let t=[{accent:"exchange",metrics:[{value:"700+",text:"Youtube influencers"},{value:"1.2K",text:"Twitter influencers"},{value:"7B+",text:"Impressions"}],numeration:"01"},{accent:"Project",metrics:[{value:"2B+",text:"users reached"},{value:"3K",text:"Influencers"},{value:"100K",text:"Paying customers"}],numeration:"02"},{accent:"Token",metrics:[{value:"5B+",text:"Under management"},{value:"300M",text:"Market cap"},{value:"5",text:"Successful exits"}],numeration:"03"}],e=document.querySelectorAll(".hero_pagination-dot"),i=document.querySelector(".hero_title-accent"),r=document.querySelectorAll(".hero_metric-value"),n=document.querySelectorAll(".hero_metric-text"),s=document.querySelector(".hero_numeration"),u=document.querySelector(".hero_pagination-indicator"),a=0,l=!1,h,d;async function f(P){if(l||P===a)return;l=!0;let k=t[P];e[a]?.classList.remove("is-active"),e[P]?.classList.add("is-active"),c(P);let M=it.timeline();i&&M.to(i,{duration:.6,scrambleText:{text:k.accent,chars:"lowerCase",speed:.3,revealDelay:0},ease:"none"}),s&&M.to(s,{duration:.5,scrambleText:{text:k.numeration,chars:"numbers",speed:.3,revealDelay:0},ease:"none"},"<"),M.add(()=>{k.metrics.forEach((O,z)=>{r[z]&&it.to(r[z],{duration:.5,scrambleText:{text:O.value,chars:"numbers",speed:.3,revealDelay:0},ease:"none"}),n[z]&&it.to(n[z],{duration:.7,scrambleText:{text:O.text,chars:"lowerCase",speed:.3,revealDelay:0},ease:"none"})})},"<0.2"),M.then(()=>{a=P,l=!1})}function c(P){if(!u)return;let k=["0rem","2.5rem","5rem"];it.to(u,{duration:.4,left:k[P],right:"auto",x:"0%",ease:"power2.out"})}function _(){p(),h=setInterval(()=>{let P=(a+1)%t.length;f(P)},3e3)}function p(){h&&(clearInterval(h),h=null)}function g(){p(),d&&clearTimeout(d),d=setTimeout(()=>{_()},3e3)}e.forEach((P,k)=>{P.addEventListener("click",()=>{g(),f(k)})}),e[0]&&e[0].classList.add("is-active"),setTimeout(_,1e3),document.fonts.ready.then(function(){let P=document.querySelector(".preloader_component")||"";if(P){let k=it.timeline();hr.create("preloaderEase",".5, 0, .25, 1"),k.set(".preloader_component .grid-item",{backdropFilter:"blur(1.75rem)"}).to(".preloader_component .grid-item",{backgroundColor:"rgba(236, 245, 255, 0.04)",duration:.4,ease:"power3.out",stagger:{from:"random",amount:1}},"1.0").to(".preloader_component .grid-item",{backdropFilter:"blur(0rem)",autoAlpha:0,duration:.4,ease:"power3.out",stagger:{from:"random",amount:1}},"<0.5").set(P,{autoAlpha:0}),document.querySelectorAll("a").forEach(function(M){M.addEventListener("click",function(O){if(this.hostname===window.location.host&&this.getAttribute("href").indexOf("#")===-1&&this.getAttribute("target")!=="_blank"){O.preventDefault();let z=this.getAttribute("href")}})})}window.onpageshow=function(k){k.persisted&&window.location.reload()}}),document.querySelectorAll(".growth_case-horizontal, .growth_case-vertical").forEach(P=>{let k=P.querySelector(".icon-1x1-medium"),M,O;if(!k)return;it.set(k,{scale:1});let z=it.timeline({paused:!0});z.to(".arrow-right",{duration:.2,morphSVG:".arrow-left",ease:"power2.Out"}),P.addEventListener("mouseenter",()=>{let m=k.getBoundingClientRect(),Y=P.getBoundingClientRect();M=m.left-Y.left,O=m.top-Y.top,it.to(k,{scale:2.5,duration:.3,ease:"power2.out"}),z.play()}),P.addEventListener("mousemove",m=>{let Y=P.getBoundingClientRect(),H=m.clientX-Y.left,J=m.clientY-Y.top,nt=H-M,ft=J-O,St=.15,ct=nt*St,Rt=ft*St,At=35,Xt=Math.min(ct,35),Qt=Math.min(Rt,At);it.to(k,{x:Xt,y:Qt,duration:.3,ease:"power2.out"})}),P.addEventListener("mouseleave",()=>{it.to(k,{x:0,y:0,scale:1,duration:.4,ease:"power2.out"}),z.reverse()})});let v=document.querySelectorAll(".button"),x=.125;v.forEach(P=>{let k=P.querySelector(".button-text"),M=P.querySelector(".button-corners-wrap"),O=getComputedStyle(M).backgroundColor,z=P.offsetWidth/parseFloat(getComputedStyle(document.documentElement).fontSize)+.125;it.set(P,{width:z+"rem"}),P.addEventListener("mouseenter",()=>{let m=k.textContent;it.to(k,{duration:.5,scrambleText:{text:m,chars:"lowerCase",speed:.8},ease:"none"}),it.to(M,{top:x+"rem",bottom:x+"rem",left:x+"rem",right:x+"rem",backgroundColor:"transparent",duration:.2,ease:"power2.out"})}),P.addEventListener("mouseleave",()=>{it.to(M,{top:0,bottom:0,left:0,right:0,backgroundColor:O,duration:.2,ease:"power2.out"})})});let y=document.querySelector(".button.is-nav"),C=y.querySelector(".button-text"),w=document.querySelector(".nav_menu"),S=document.querySelector(".nav_indicator"),b=document.querySelectorAll(".nav_link");function E(P){return P/parseFloat(getComputedStyle(document.documentElement).fontSize)+"rem"}let F=["0rem","2.75rem","5.5rem","8.25rem"];it.set(S,{autoAlpha:0});function B(){let P=document.querySelector(".nav_link.w--current"),k=P?Array.from(b).indexOf(P):0,M=P?.offsetWidth||b[0]?.offsetWidth||100,O=F[k],z=null;return b.forEach((m,Y)=>{m.removeEventListener("mouseenter",m._indicatorEnter),m.removeEventListener("mouseleave",m._indicatorLeave),m._indicatorEnter=()=>{let H=m.offsetWidth,J=F[Y];z=m,it.to(S,{top:J,width:E(H),duration:.3,ease:"power2.out"})},m._indicatorLeave=()=>{setTimeout(()=>{z===m&&(it.to(S,{top:O,width:E(M),duration:.3,ease:"power2.out"}),z=null)},50)},m.addEventListener("mouseenter",m._indicatorEnter),m.addEventListener("mouseleave",m._indicatorLeave)}),{currentPosition:O,currentLinkWidth:E(M)}}y.addEventListener("click",()=>{getComputedStyle(w).display==="flex"?(it.to(C,{duration:.5,scrambleText:{text:"Menu",chars:"lowerCase",speed:.8},ease:"none"}),it.timeline().to(S,{autoAlpha:0,duration:.1,ease:"power2.out"}).to(w,{scale:0,transformOrigin:"top right",duration:.2,ease:"power2.in",onComplete:()=>{w.style.display="none",w.style.opacity=1}},"<0.05").to(".nav_link",{autoAlpha:0,duration:.05,stagger:{each:.025,from:"end"},ease:"power2.out"},"<")):(w.style.display="flex",it.set(y,{width:"auto"}),it.to(C,{duration:.5,scrambleText:{text:"Close",chars:"lowerCase",speed:.8},ease:"none"}),it.timeline().fromTo(w,{scale:0,transformOrigin:"top right"},{scale:1,duration:.5,ease:"elastic.out(1,1)"}).fromTo(".nav_link",{autoAlpha:0},{autoAlpha:1,duration:.1,stagger:.05,ease:"power2.out",onComplete:()=>{let{currentPosition:M,currentLinkWidth:O}=B();it.set(S,{top:M,width:O}),it.to(S,{autoAlpha:1,duration:.1,ease:"power2.out"})}},"<0.15"))});let A=document.querySelectorAll(".logos_item");function R(){let k=Array.from(A).sort(()=>.5-Math.random()).slice(0,3),M=it.timeline();k.forEach((O,z)=>{let m=O.querySelectorAll(".logos_item-cell"),Y=O.querySelectorAll(".logos_image"),H=it.timeline();H.to(m,{autoAlpha:1,duration:0,stagger:{amount:.4,from:"random"}}).call(()=>{Y.forEach(J=>{J.classList.toggle("hide")})}).to(m,{autoAlpha:0,duration:0,stagger:{amount:.4,from:"random"}}),M.add(H,z*.1)}),M.call(()=>{setTimeout(R,1500)})}setTimeout(R,2500),document.querySelectorAll(".growth_case-vertical, .growth_case-horizontal").forEach(P=>{let k=P.querySelectorAll(".growth_cell"),M=P.querySelector(".font-family-accent");it.set(k,{autoAlpha:1}),it.to(k,{duration:0,autoAlpha:0,delay:.3,stagger:{amount:.4,from:"random"},scrollTrigger:{trigger:P,start:"top 100%"}}),it.to(M,{duration:.8,delay:.1,scrambleText:{text:"{original}",chars:"lowerCase",speed:.8},ease:"none",scrollTrigger:{trigger:M,start:"top 100%"}})})});})();
+(() => {
+  var __create = Object.create;
+  var __defProp = Object.defineProperty;
+  var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+  var __getOwnPropNames = Object.getOwnPropertyNames;
+  var __getProtoOf = Object.getPrototypeOf;
+  var __hasOwnProp = Object.prototype.hasOwnProperty;
+  var __esm = (fn, res) => function __init() {
+    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  };
+  var __commonJS = (cb, mod) => function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  };
+  var __copyProps = (to, from, except, desc) => {
+    if (from && typeof from === "object" || typeof from === "function") {
+      for (let key of __getOwnPropNames(from))
+        if (!__hasOwnProp.call(to, key) && key !== except)
+          __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+    }
+    return to;
+  };
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
+
+  // bin/live-reload.js
+  var init_live_reload = __esm({
+    "bin/live-reload.js"() {
+      new EventSource(`${"http://localhost:3000"}/esbuild`).addEventListener("change", () => location.reload());
+    }
+  });
+
+  // node_modules/.pnpm/pixelate@0.0.5/node_modules/pixelate/pixelate.js
+  var require_pixelate = __commonJS({
+    "node_modules/.pnpm/pixelate@0.0.5/node_modules/pixelate/pixelate.js"(exports, module) {
+      init_live_reload();
+      (function(root) {
+        window.URL = window.URL || window.webkitURL || window.mozURL;
+        function disableSmoothRendering(ctx) {
+          ctx.webkitImageSmoothingEnabled = false;
+          ctx.mozImageSmoothingEnabled = false;
+          ctx.msImageSmoothingEnabled = false;
+          ctx.imageSmoothingEnabled = false;
+          return ctx;
+        }
+        function Pixelate2(image, opts) {
+          opts = opts || {};
+          this.image = image;
+          this.setAmount(opts.amount);
+          var imageLoaded = function() {
+            this.imageUrl = image.src;
+            this.width = image.clientWidth;
+            this.height = image.clientHeight;
+            this.canvas = document.createElement("canvas");
+            this.canvas.style.display = "none";
+            this.canvas.width = this.width;
+            this.canvas.height = this.height;
+            this.canvas.style.cssText = "image-rendering: optimizeSpeed;image-rendering: -moz-crisp-edges;image-rendering: -o-crisp-edges;image-rendering: -webkit-crisp-edges;image-rendering: crisp-edges;image-rendering: -webkit-optimize-contrast;image-rendering: pixelated; -ms-interpolation-mode: nearest-neighbor;";
+            this.ctx = this.canvas.getContext("2d");
+            this.ctx = disableSmoothRendering(this.ctx);
+            this.image.parentNode.appendChild(this.canvas, this.image);
+            this.image.onload = null;
+            this.pixelImage = new Image();
+            this.pixelImage.onload = function() {
+              this.ready = true;
+              this.render();
+            }.bind(this);
+            this.pixelImage.src = this.imageUrl;
+          }.bind(this);
+          if (this.image.complete) {
+            imageLoaded();
+          }
+          this.image.onload = imageLoaded;
+          return this;
+        }
+        Pixelate2.prototype.setAmount = function(amount) {
+          this.amount = 1 - (amount || 0);
+          return this;
+        };
+        Pixelate2.prototype.setWidth = function(width) {
+          var height = this.height / this.width * width;
+          this.width = width;
+          this.height = height;
+          this.canvas.width = this.width;
+          this.canvas.height = this.height;
+          this.ctx = disableSmoothRendering(this.ctx);
+          return this;
+        };
+        Pixelate2.prototype.render = function() {
+          if (!this.ready)
+            return this;
+          var w = this.width * (this.amount <= 0 ? 0.01 : this.amount);
+          var h = this.height * (this.amount <= 0 ? 0.01 : this.amount);
+          this.ctx.drawImage(this.pixelImage, 0, 0, w, h);
+          this.ctx.drawImage(this.canvas, 0, 0, w, h, 0, 0, this.width, this.height);
+          this.image.src = this.canvas.toDataURL("image/png");
+          return this;
+        };
+        if (typeof exports !== "undefined") {
+          if (typeof module !== "undefined" && module.exports) {
+            exports = module.exports = Pixelate2;
+          }
+          exports.pixelate = Pixelate2;
+        } else if (typeof define === "function" && define.amd) {
+          define([], function() {
+            return Pixelate2;
+          });
+        } else {
+          root.Pixelate = Pixelate2;
+        }
+      })(exports);
+    }
+  });
+
+  // src/week7.js
+  init_live_reload();
+
+  // node_modules/.pnpm/lenis@1.3.4/node_modules/lenis/dist/lenis.mjs
+  init_live_reload();
+  var version = "1.3.4";
+  function clamp(min, input, max) {
+    return Math.max(min, Math.min(input, max));
+  }
+  function lerp(x, y, t) {
+    return (1 - t) * x + t * y;
+  }
+  function damp(x, y, lambda, deltaTime) {
+    return lerp(x, y, 1 - Math.exp(-lambda * deltaTime));
+  }
+  function modulo(n, d) {
+    return (n % d + d) % d;
+  }
+  var Animate = class {
+    isRunning = false;
+    value = 0;
+    from = 0;
+    to = 0;
+    currentTime = 0;
+    // These are instanciated in the fromTo method
+    lerp;
+    duration;
+    easing;
+    onUpdate;
+    /**
+     * Advance the animation by the given delta time
+     *
+     * @param deltaTime - The time in seconds to advance the animation
+     */
+    advance(deltaTime) {
+      if (!this.isRunning)
+        return;
+      let completed = false;
+      if (this.duration && this.easing) {
+        this.currentTime += deltaTime;
+        const linearProgress = clamp(0, this.currentTime / this.duration, 1);
+        completed = linearProgress >= 1;
+        const easedProgress = completed ? 1 : this.easing(linearProgress);
+        this.value = this.from + (this.to - this.from) * easedProgress;
+      } else if (this.lerp) {
+        this.value = damp(this.value, this.to, this.lerp * 60, deltaTime);
+        if (Math.round(this.value) === this.to) {
+          this.value = this.to;
+          completed = true;
+        }
+      } else {
+        this.value = this.to;
+        completed = true;
+      }
+      if (completed) {
+        this.stop();
+      }
+      this.onUpdate?.(this.value, completed);
+    }
+    /** Stop the animation */
+    stop() {
+      this.isRunning = false;
+    }
+    /**
+     * Set up the animation from a starting value to an ending value
+     * with optional parameters for lerping, duration, easing, and onUpdate callback
+     *
+     * @param from - The starting value
+     * @param to - The ending value
+     * @param options - Options for the animation
+     */
+    fromTo(from, to, { lerp: lerp2, duration, easing, onStart, onUpdate }) {
+      this.from = this.value = from;
+      this.to = to;
+      this.lerp = lerp2;
+      this.duration = duration;
+      this.easing = easing;
+      this.currentTime = 0;
+      this.isRunning = true;
+      onStart?.();
+      this.onUpdate = onUpdate;
+    }
+  };
+  function debounce(callback, delay) {
+    let timer;
+    return function(...args) {
+      let context3 = this;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        timer = void 0;
+        callback.apply(context3, args);
+      }, delay);
+    };
+  }
+  var Dimensions = class {
+    constructor(wrapper, content, { autoResize = true, debounce: debounceValue = 250 } = {}) {
+      this.wrapper = wrapper;
+      this.content = content;
+      if (autoResize) {
+        this.debouncedResize = debounce(this.resize, debounceValue);
+        if (this.wrapper instanceof Window) {
+          window.addEventListener("resize", this.debouncedResize, false);
+        } else {
+          this.wrapperResizeObserver = new ResizeObserver(this.debouncedResize);
+          this.wrapperResizeObserver.observe(this.wrapper);
+        }
+        this.contentResizeObserver = new ResizeObserver(this.debouncedResize);
+        this.contentResizeObserver.observe(this.content);
+      }
+      this.resize();
+    }
+    width = 0;
+    height = 0;
+    scrollHeight = 0;
+    scrollWidth = 0;
+    // These are instanciated in the constructor as they need information from the options
+    debouncedResize;
+    wrapperResizeObserver;
+    contentResizeObserver;
+    destroy() {
+      this.wrapperResizeObserver?.disconnect();
+      this.contentResizeObserver?.disconnect();
+      if (this.wrapper === window && this.debouncedResize) {
+        window.removeEventListener("resize", this.debouncedResize, false);
+      }
+    }
+    resize = () => {
+      this.onWrapperResize();
+      this.onContentResize();
+    };
+    onWrapperResize = () => {
+      if (this.wrapper instanceof Window) {
+        this.width = window.innerWidth;
+        this.height = window.innerHeight;
+      } else {
+        this.width = this.wrapper.clientWidth;
+        this.height = this.wrapper.clientHeight;
+      }
+    };
+    onContentResize = () => {
+      if (this.wrapper instanceof Window) {
+        this.scrollHeight = this.content.scrollHeight;
+        this.scrollWidth = this.content.scrollWidth;
+      } else {
+        this.scrollHeight = this.wrapper.scrollHeight;
+        this.scrollWidth = this.wrapper.scrollWidth;
+      }
+    };
+    get limit() {
+      return {
+        x: this.scrollWidth - this.width,
+        y: this.scrollHeight - this.height
+      };
+    }
+  };
+  var Emitter = class {
+    events = {};
+    /**
+     * Emit an event with the given data
+     * @param event Event name
+     * @param args Data to pass to the event handlers
+     */
+    emit(event, ...args) {
+      let callbacks = this.events[event] || [];
+      for (let i = 0, length = callbacks.length; i < length; i++) {
+        callbacks[i]?.(...args);
+      }
+    }
+    /**
+     * Add a callback to the event
+     * @param event Event name
+     * @param cb Callback function
+     * @returns Unsubscribe function
+     */
+    on(event, cb) {
+      this.events[event]?.push(cb) || (this.events[event] = [cb]);
+      return () => {
+        this.events[event] = this.events[event]?.filter((i) => cb !== i);
+      };
+    }
+    /**
+     * Remove a callback from the event
+     * @param event Event name
+     * @param callback Callback function
+     */
+    off(event, callback) {
+      this.events[event] = this.events[event]?.filter((i) => callback !== i);
+    }
+    /**
+     * Remove all event listeners and clean up
+     */
+    destroy() {
+      this.events = {};
+    }
+  };
+  var LINE_HEIGHT = 100 / 6;
+  var listenerOptions = { passive: false };
+  var VirtualScroll = class {
+    constructor(element, options = { wheelMultiplier: 1, touchMultiplier: 1 }) {
+      this.element = element;
+      this.options = options;
+      window.addEventListener("resize", this.onWindowResize, false);
+      this.onWindowResize();
+      this.element.addEventListener("wheel", this.onWheel, listenerOptions);
+      this.element.addEventListener(
+        "touchstart",
+        this.onTouchStart,
+        listenerOptions
+      );
+      this.element.addEventListener(
+        "touchmove",
+        this.onTouchMove,
+        listenerOptions
+      );
+      this.element.addEventListener("touchend", this.onTouchEnd, listenerOptions);
+    }
+    touchStart = {
+      x: 0,
+      y: 0
+    };
+    lastDelta = {
+      x: 0,
+      y: 0
+    };
+    window = {
+      width: 0,
+      height: 0
+    };
+    emitter = new Emitter();
+    /**
+     * Add an event listener for the given event and callback
+     *
+     * @param event Event name
+     * @param callback Callback function
+     */
+    on(event, callback) {
+      return this.emitter.on(event, callback);
+    }
+    /** Remove all event listeners and clean up */
+    destroy() {
+      this.emitter.destroy();
+      window.removeEventListener("resize", this.onWindowResize, false);
+      this.element.removeEventListener("wheel", this.onWheel, listenerOptions);
+      this.element.removeEventListener(
+        "touchstart",
+        this.onTouchStart,
+        listenerOptions
+      );
+      this.element.removeEventListener(
+        "touchmove",
+        this.onTouchMove,
+        listenerOptions
+      );
+      this.element.removeEventListener(
+        "touchend",
+        this.onTouchEnd,
+        listenerOptions
+      );
+    }
+    /**
+     * Event handler for 'touchstart' event
+     *
+     * @param event Touch event
+     */
+    onTouchStart = (event) => {
+      const { clientX, clientY } = event.targetTouches ? event.targetTouches[0] : event;
+      this.touchStart.x = clientX;
+      this.touchStart.y = clientY;
+      this.lastDelta = {
+        x: 0,
+        y: 0
+      };
+      this.emitter.emit("scroll", {
+        deltaX: 0,
+        deltaY: 0,
+        event
+      });
+    };
+    /** Event handler for 'touchmove' event */
+    onTouchMove = (event) => {
+      const { clientX, clientY } = event.targetTouches ? event.targetTouches[0] : event;
+      const deltaX = -(clientX - this.touchStart.x) * this.options.touchMultiplier;
+      const deltaY = -(clientY - this.touchStart.y) * this.options.touchMultiplier;
+      this.touchStart.x = clientX;
+      this.touchStart.y = clientY;
+      this.lastDelta = {
+        x: deltaX,
+        y: deltaY
+      };
+      this.emitter.emit("scroll", {
+        deltaX,
+        deltaY,
+        event
+      });
+    };
+    onTouchEnd = (event) => {
+      this.emitter.emit("scroll", {
+        deltaX: this.lastDelta.x,
+        deltaY: this.lastDelta.y,
+        event
+      });
+    };
+    /** Event handler for 'wheel' event */
+    onWheel = (event) => {
+      let { deltaX, deltaY, deltaMode } = event;
+      const multiplierX = deltaMode === 1 ? LINE_HEIGHT : deltaMode === 2 ? this.window.width : 1;
+      const multiplierY = deltaMode === 1 ? LINE_HEIGHT : deltaMode === 2 ? this.window.height : 1;
+      deltaX *= multiplierX;
+      deltaY *= multiplierY;
+      deltaX *= this.options.wheelMultiplier;
+      deltaY *= this.options.wheelMultiplier;
+      this.emitter.emit("scroll", { deltaX, deltaY, event });
+    };
+    onWindowResize = () => {
+      this.window = {
+        width: window.innerWidth,
+        height: window.innerHeight
+      };
+    };
+  };
+  var defaultEasing = (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t));
+  var Lenis = class {
+    _isScrolling = false;
+    // true when scroll is animating
+    _isStopped = false;
+    // true if user should not be able to scroll - enable/disable programmatically
+    _isLocked = false;
+    // same as isStopped but enabled/disabled when scroll reaches target
+    _preventNextNativeScrollEvent = false;
+    _resetVelocityTimeout = null;
+    __rafID = null;
+    /**
+     * Whether or not the user is touching the screen
+     */
+    isTouching;
+    /**
+     * The time in ms since the lenis instance was created
+     */
+    time = 0;
+    /**
+     * User data that will be forwarded through the scroll event
+     *
+     * @example
+     * lenis.scrollTo(100, {
+     *   userData: {
+     *     foo: 'bar'
+     *   }
+     * })
+     */
+    userData = {};
+    /**
+     * The last velocity of the scroll
+     */
+    lastVelocity = 0;
+    /**
+     * The current velocity of the scroll
+     */
+    velocity = 0;
+    /**
+     * The direction of the scroll
+     */
+    direction = 0;
+    /**
+     * The options passed to the lenis instance
+     */
+    options;
+    /**
+     * The target scroll value
+     */
+    targetScroll;
+    /**
+     * The animated scroll value
+     */
+    animatedScroll;
+    // These are instanciated here as they don't need information from the options
+    animate = new Animate();
+    emitter = new Emitter();
+    // These are instanciated in the constructor as they need information from the options
+    dimensions;
+    // This is not private because it's used in the Snap class
+    virtualScroll;
+    constructor({
+      wrapper = window,
+      content = document.documentElement,
+      eventsTarget = wrapper,
+      smoothWheel = true,
+      syncTouch = false,
+      syncTouchLerp = 0.075,
+      touchInertiaMultiplier = 35,
+      duration,
+      // in seconds
+      easing,
+      lerp: lerp2 = 0.1,
+      infinite = false,
+      orientation = "vertical",
+      // vertical, horizontal
+      gestureOrientation = "vertical",
+      // vertical, horizontal, both
+      touchMultiplier = 1,
+      wheelMultiplier = 1,
+      autoResize = true,
+      prevent,
+      virtualScroll,
+      overscroll = true,
+      autoRaf = false,
+      anchors = false,
+      autoToggle = false,
+      // https://caniuse.com/?search=transition-behavior
+      allowNestedScroll = false,
+      __experimental__naiveDimensions = false
+    } = {}) {
+      window.lenisVersion = version;
+      if (!wrapper || wrapper === document.documentElement) {
+        wrapper = window;
+      }
+      if (typeof duration === "number" && typeof easing !== "function") {
+        easing = defaultEasing;
+      } else if (typeof easing === "function" && typeof duration !== "number") {
+        duration = 1;
+      }
+      this.options = {
+        wrapper,
+        content,
+        eventsTarget,
+        smoothWheel,
+        syncTouch,
+        syncTouchLerp,
+        touchInertiaMultiplier,
+        duration,
+        easing,
+        lerp: lerp2,
+        infinite,
+        gestureOrientation,
+        orientation,
+        touchMultiplier,
+        wheelMultiplier,
+        autoResize,
+        prevent,
+        virtualScroll,
+        overscroll,
+        autoRaf,
+        anchors,
+        autoToggle,
+        allowNestedScroll,
+        __experimental__naiveDimensions
+      };
+      this.dimensions = new Dimensions(wrapper, content, { autoResize });
+      this.updateClassName();
+      this.targetScroll = this.animatedScroll = this.actualScroll;
+      this.options.wrapper.addEventListener("scroll", this.onNativeScroll, false);
+      this.options.wrapper.addEventListener("scrollend", this.onScrollEnd, {
+        capture: true
+      });
+      if (this.options.anchors && this.options.wrapper === window) {
+        this.options.wrapper.addEventListener(
+          "click",
+          this.onClick,
+          false
+        );
+      }
+      this.options.wrapper.addEventListener(
+        "pointerdown",
+        this.onPointerDown,
+        false
+      );
+      this.virtualScroll = new VirtualScroll(eventsTarget, {
+        touchMultiplier,
+        wheelMultiplier
+      });
+      this.virtualScroll.on("scroll", this.onVirtualScroll);
+      if (this.options.autoToggle) {
+        this.rootElement.addEventListener("transitionend", this.onTransitionEnd, {
+          passive: true
+        });
+      }
+      if (this.options.autoRaf) {
+        this.__rafID = requestAnimationFrame(this.raf);
+      }
+    }
+    /**
+     * Destroy the lenis instance, remove all event listeners and clean up the class name
+     */
+    destroy() {
+      this.emitter.destroy();
+      this.options.wrapper.removeEventListener(
+        "scroll",
+        this.onNativeScroll,
+        false
+      );
+      this.options.wrapper.removeEventListener("scrollend", this.onScrollEnd, {
+        capture: true
+      });
+      this.options.wrapper.removeEventListener(
+        "pointerdown",
+        this.onPointerDown,
+        false
+      );
+      if (this.options.anchors && this.options.wrapper === window) {
+        this.options.wrapper.removeEventListener(
+          "click",
+          this.onClick,
+          false
+        );
+      }
+      this.virtualScroll.destroy();
+      this.dimensions.destroy();
+      this.cleanUpClassName();
+      if (this.__rafID) {
+        cancelAnimationFrame(this.__rafID);
+      }
+    }
+    on(event, callback) {
+      return this.emitter.on(event, callback);
+    }
+    off(event, callback) {
+      return this.emitter.off(event, callback);
+    }
+    onScrollEnd = (e) => {
+      if (!(e instanceof CustomEvent)) {
+        if (this.isScrolling === "smooth" || this.isScrolling === false) {
+          e.stopPropagation();
+        }
+      }
+    };
+    dispatchScrollendEvent = () => {
+      this.options.wrapper.dispatchEvent(
+        new CustomEvent("scrollend", {
+          bubbles: this.options.wrapper === window,
+          // cancelable: false,
+          detail: {
+            lenisScrollEnd: true
+          }
+        })
+      );
+    };
+    onTransitionEnd = (event) => {
+      if (event.propertyName.includes("overflow")) {
+        const property = this.isHorizontal ? "overflow-x" : "overflow-y";
+        const overflow = getComputedStyle(this.rootElement)[property];
+        if (["hidden", "clip"].includes(overflow)) {
+          this.stop();
+        } else {
+          this.start();
+        }
+      }
+    };
+    setScroll(scroll) {
+      if (this.isHorizontal) {
+        this.options.wrapper.scrollTo({ left: scroll, behavior: "instant" });
+      } else {
+        this.options.wrapper.scrollTo({ top: scroll, behavior: "instant" });
+      }
+    }
+    onClick = (event) => {
+      const path = event.composedPath();
+      const anchor = path.find(
+        (node) => node instanceof HTMLAnchorElement && (node.getAttribute("href")?.startsWith("#") || node.getAttribute("href")?.startsWith("/#") || node.getAttribute("href")?.startsWith("./#"))
+      );
+      if (anchor) {
+        const id = anchor.getAttribute("href");
+        if (id) {
+          const options = typeof this.options.anchors === "object" && this.options.anchors ? this.options.anchors : void 0;
+          let target = `#${id.split("#")[1]}`;
+          if (["#", "/#", "./#", "#top", "/#top", "./#top"].includes(id)) {
+            target = 0;
+          }
+          this.scrollTo(target, options);
+        }
+      }
+    };
+    onPointerDown = (event) => {
+      if (event.button === 1) {
+        this.reset();
+      }
+    };
+    onVirtualScroll = (data) => {
+      if (typeof this.options.virtualScroll === "function" && this.options.virtualScroll(data) === false)
+        return;
+      const { deltaX, deltaY, event } = data;
+      this.emitter.emit("virtual-scroll", { deltaX, deltaY, event });
+      if (event.ctrlKey)
+        return;
+      if (event.lenisStopPropagation)
+        return;
+      const isTouch = event.type.includes("touch");
+      const isWheel = event.type.includes("wheel");
+      this.isTouching = event.type === "touchstart" || event.type === "touchmove";
+      const isClickOrTap = deltaX === 0 && deltaY === 0;
+      const isTapToStop = this.options.syncTouch && isTouch && event.type === "touchstart" && isClickOrTap && !this.isStopped && !this.isLocked;
+      if (isTapToStop) {
+        this.reset();
+        return;
+      }
+      const isUnknownGesture = this.options.gestureOrientation === "vertical" && deltaY === 0 || this.options.gestureOrientation === "horizontal" && deltaX === 0;
+      if (isClickOrTap || isUnknownGesture) {
+        return;
+      }
+      let composedPath = event.composedPath();
+      composedPath = composedPath.slice(0, composedPath.indexOf(this.rootElement));
+      const prevent = this.options.prevent;
+      if (!!composedPath.find(
+        (node) => node instanceof HTMLElement && (typeof prevent === "function" && prevent?.(node) || node.hasAttribute?.("data-lenis-prevent") || isTouch && node.hasAttribute?.("data-lenis-prevent-touch") || isWheel && node.hasAttribute?.("data-lenis-prevent-wheel") || this.options.allowNestedScroll && this.checkNestedScroll(node, { deltaX, deltaY }))
+      ))
+        return;
+      if (this.isStopped || this.isLocked) {
+        event.preventDefault();
+        return;
+      }
+      const isSmooth = this.options.syncTouch && isTouch || this.options.smoothWheel && isWheel;
+      if (!isSmooth) {
+        this.isScrolling = "native";
+        this.animate.stop();
+        event.lenisStopPropagation = true;
+        return;
+      }
+      let delta = deltaY;
+      if (this.options.gestureOrientation === "both") {
+        delta = Math.abs(deltaY) > Math.abs(deltaX) ? deltaY : deltaX;
+      } else if (this.options.gestureOrientation === "horizontal") {
+        delta = deltaX;
+      }
+      if (!this.options.overscroll || this.options.infinite || this.options.wrapper !== window && (this.animatedScroll > 0 && this.animatedScroll < this.limit || this.animatedScroll === 0 && deltaY > 0 || this.animatedScroll === this.limit && deltaY < 0)) {
+        event.lenisStopPropagation = true;
+      }
+      event.preventDefault();
+      const isSyncTouch = isTouch && this.options.syncTouch;
+      const isTouchEnd = isTouch && event.type === "touchend";
+      const hasTouchInertia = isTouchEnd && Math.abs(delta) > 5;
+      if (hasTouchInertia) {
+        delta = this.velocity * this.options.touchInertiaMultiplier;
+      }
+      this.scrollTo(this.targetScroll + delta, {
+        programmatic: false,
+        ...isSyncTouch ? {
+          lerp: hasTouchInertia ? this.options.syncTouchLerp : 1
+          // immediate: !hasTouchInertia,
+        } : {
+          lerp: this.options.lerp,
+          duration: this.options.duration,
+          easing: this.options.easing
+        }
+      });
+    };
+    /**
+     * Force lenis to recalculate the dimensions
+     */
+    resize() {
+      this.dimensions.resize();
+      this.animatedScroll = this.targetScroll = this.actualScroll;
+      this.emit();
+    }
+    emit() {
+      this.emitter.emit("scroll", this);
+    }
+    onNativeScroll = () => {
+      if (this._resetVelocityTimeout !== null) {
+        clearTimeout(this._resetVelocityTimeout);
+        this._resetVelocityTimeout = null;
+      }
+      if (this._preventNextNativeScrollEvent) {
+        this._preventNextNativeScrollEvent = false;
+        return;
+      }
+      if (this.isScrolling === false || this.isScrolling === "native") {
+        const lastScroll = this.animatedScroll;
+        this.animatedScroll = this.targetScroll = this.actualScroll;
+        this.lastVelocity = this.velocity;
+        this.velocity = this.animatedScroll - lastScroll;
+        this.direction = Math.sign(
+          this.animatedScroll - lastScroll
+        );
+        if (!this.isStopped) {
+          this.isScrolling = "native";
+        }
+        this.emit();
+        if (this.velocity !== 0) {
+          this._resetVelocityTimeout = setTimeout(() => {
+            this.lastVelocity = this.velocity;
+            this.velocity = 0;
+            this.isScrolling = false;
+            this.emit();
+          }, 400);
+        }
+      }
+    };
+    reset() {
+      this.isLocked = false;
+      this.isScrolling = false;
+      this.animatedScroll = this.targetScroll = this.actualScroll;
+      this.lastVelocity = this.velocity = 0;
+      this.animate.stop();
+    }
+    /**
+     * Start lenis scroll after it has been stopped
+     */
+    start() {
+      if (!this.isStopped)
+        return;
+      this.reset();
+      this.isStopped = false;
+      this.emit();
+    }
+    /**
+     * Stop lenis scroll
+     */
+    stop() {
+      if (this.isStopped)
+        return;
+      this.reset();
+      this.isStopped = true;
+      this.emit();
+    }
+    /**
+     * RequestAnimationFrame for lenis
+     *
+     * @param time The time in ms from an external clock like `requestAnimationFrame` or Tempus
+     */
+    raf = (time) => {
+      const deltaTime = time - (this.time || time);
+      this.time = time;
+      this.animate.advance(deltaTime * 1e-3);
+      if (this.options.autoRaf) {
+        this.__rafID = requestAnimationFrame(this.raf);
+      }
+    };
+    /**
+     * Scroll to a target value
+     *
+     * @param target The target value to scroll to
+     * @param options The options for the scroll
+     *
+     * @example
+     * lenis.scrollTo(100, {
+     *   offset: 100,
+     *   duration: 1,
+     *   easing: (t) => 1 - Math.cos((t * Math.PI) / 2),
+     *   lerp: 0.1,
+     *   onStart: () => {
+     *     console.log('onStart')
+     *   },
+     *   onComplete: () => {
+     *     console.log('onComplete')
+     *   },
+     * })
+     */
+    scrollTo(target, {
+      offset = 0,
+      immediate = false,
+      lock = false,
+      duration = this.options.duration,
+      easing = this.options.easing,
+      lerp: lerp2 = this.options.lerp,
+      onStart,
+      onComplete,
+      force = false,
+      // scroll even if stopped
+      programmatic = true,
+      // called from outside of the class
+      userData
+    } = {}) {
+      if ((this.isStopped || this.isLocked) && !force)
+        return;
+      if (typeof target === "string" && ["top", "left", "start"].includes(target)) {
+        target = 0;
+      } else if (typeof target === "string" && ["bottom", "right", "end"].includes(target)) {
+        target = this.limit;
+      } else {
+        let node;
+        if (typeof target === "string") {
+          node = document.querySelector(target);
+        } else if (target instanceof HTMLElement && target?.nodeType) {
+          node = target;
+        }
+        if (node) {
+          if (this.options.wrapper !== window) {
+            const wrapperRect = this.rootElement.getBoundingClientRect();
+            offset -= this.isHorizontal ? wrapperRect.left : wrapperRect.top;
+          }
+          const rect = node.getBoundingClientRect();
+          target = (this.isHorizontal ? rect.left : rect.top) + this.animatedScroll;
+        }
+      }
+      if (typeof target !== "number")
+        return;
+      target += offset;
+      target = Math.round(target);
+      if (this.options.infinite) {
+        if (programmatic) {
+          this.targetScroll = this.animatedScroll = this.scroll;
+          const distance = target - this.animatedScroll;
+          if (distance > this.limit / 2) {
+            target = target - this.limit;
+          } else if (distance < -this.limit / 2) {
+            target = target + this.limit;
+          }
+        }
+      } else {
+        target = clamp(0, target, this.limit);
+      }
+      if (target === this.targetScroll) {
+        onStart?.(this);
+        onComplete?.(this);
+        return;
+      }
+      this.userData = userData ?? {};
+      if (immediate) {
+        this.animatedScroll = this.targetScroll = target;
+        this.setScroll(this.scroll);
+        this.reset();
+        this.preventNextNativeScrollEvent();
+        this.emit();
+        onComplete?.(this);
+        this.userData = {};
+        requestAnimationFrame(() => {
+          this.dispatchScrollendEvent();
+        });
+        return;
+      }
+      if (!programmatic) {
+        this.targetScroll = target;
+      }
+      if (typeof duration === "number" && typeof easing !== "function") {
+        easing = defaultEasing;
+      } else if (typeof easing === "function" && typeof duration !== "number") {
+        duration = 1;
+      }
+      this.animate.fromTo(this.animatedScroll, target, {
+        duration,
+        easing,
+        lerp: lerp2,
+        onStart: () => {
+          if (lock)
+            this.isLocked = true;
+          this.isScrolling = "smooth";
+          onStart?.(this);
+        },
+        onUpdate: (value, completed) => {
+          this.isScrolling = "smooth";
+          this.lastVelocity = this.velocity;
+          this.velocity = value - this.animatedScroll;
+          this.direction = Math.sign(this.velocity);
+          this.animatedScroll = value;
+          this.setScroll(this.scroll);
+          if (programmatic) {
+            this.targetScroll = value;
+          }
+          if (!completed)
+            this.emit();
+          if (completed) {
+            this.reset();
+            this.emit();
+            onComplete?.(this);
+            this.userData = {};
+            requestAnimationFrame(() => {
+              this.dispatchScrollendEvent();
+            });
+            this.preventNextNativeScrollEvent();
+          }
+        }
+      });
+    }
+    preventNextNativeScrollEvent() {
+      this._preventNextNativeScrollEvent = true;
+      requestAnimationFrame(() => {
+        this._preventNextNativeScrollEvent = false;
+      });
+    }
+    checkNestedScroll(node, { deltaX, deltaY }) {
+      const time = Date.now();
+      const cache = node._lenis ??= {};
+      let hasOverflowX, hasOverflowY, isScrollableX, isScrollableY, scrollWidth, scrollHeight, clientWidth, clientHeight;
+      const gestureOrientation = this.options.gestureOrientation;
+      if (time - (cache.time ?? 0) > 2e3) {
+        cache.time = Date.now();
+        const computedStyle = window.getComputedStyle(node);
+        cache.computedStyle = computedStyle;
+        const overflowXString = computedStyle.overflowX;
+        const overflowYString = computedStyle.overflowY;
+        hasOverflowX = ["auto", "overlay", "scroll"].includes(overflowXString);
+        hasOverflowY = ["auto", "overlay", "scroll"].includes(overflowYString);
+        cache.hasOverflowX = hasOverflowX;
+        cache.hasOverflowY = hasOverflowY;
+        if (!hasOverflowX && !hasOverflowY)
+          return false;
+        if (gestureOrientation === "vertical" && !hasOverflowY)
+          return false;
+        if (gestureOrientation === "horizontal" && !hasOverflowX)
+          return false;
+        scrollWidth = node.scrollWidth;
+        scrollHeight = node.scrollHeight;
+        clientWidth = node.clientWidth;
+        clientHeight = node.clientHeight;
+        isScrollableX = scrollWidth > clientWidth;
+        isScrollableY = scrollHeight > clientHeight;
+        cache.isScrollableX = isScrollableX;
+        cache.isScrollableY = isScrollableY;
+        cache.scrollWidth = scrollWidth;
+        cache.scrollHeight = scrollHeight;
+        cache.clientWidth = clientWidth;
+        cache.clientHeight = clientHeight;
+      } else {
+        isScrollableX = cache.isScrollableX;
+        isScrollableY = cache.isScrollableY;
+        hasOverflowX = cache.hasOverflowX;
+        hasOverflowY = cache.hasOverflowY;
+        scrollWidth = cache.scrollWidth;
+        scrollHeight = cache.scrollHeight;
+        clientWidth = cache.clientWidth;
+        clientHeight = cache.clientHeight;
+      }
+      if (!hasOverflowX && !hasOverflowY || !isScrollableX && !isScrollableY) {
+        return false;
+      }
+      if (gestureOrientation === "vertical" && (!hasOverflowY || !isScrollableY))
+        return false;
+      if (gestureOrientation === "horizontal" && (!hasOverflowX || !isScrollableX))
+        return false;
+      let orientation;
+      if (gestureOrientation === "horizontal") {
+        orientation = "x";
+      } else if (gestureOrientation === "vertical") {
+        orientation = "y";
+      } else {
+        const isScrollingX = deltaX !== 0;
+        const isScrollingY = deltaY !== 0;
+        if (isScrollingX && hasOverflowX && isScrollableX) {
+          orientation = "x";
+        }
+        if (isScrollingY && hasOverflowY && isScrollableY) {
+          orientation = "y";
+        }
+      }
+      if (!orientation)
+        return false;
+      let scroll, maxScroll, delta, hasOverflow, isScrollable;
+      if (orientation === "x") {
+        scroll = node.scrollLeft;
+        maxScroll = scrollWidth - clientWidth;
+        delta = deltaX;
+        hasOverflow = hasOverflowX;
+        isScrollable = isScrollableX;
+      } else if (orientation === "y") {
+        scroll = node.scrollTop;
+        maxScroll = scrollHeight - clientHeight;
+        delta = deltaY;
+        hasOverflow = hasOverflowY;
+        isScrollable = isScrollableY;
+      } else {
+        return false;
+      }
+      const willScroll = delta > 0 ? scroll < maxScroll : scroll > 0;
+      return willScroll && hasOverflow && isScrollable;
+    }
+    /**
+     * The root element on which lenis is instanced
+     */
+    get rootElement() {
+      return this.options.wrapper === window ? document.documentElement : this.options.wrapper;
+    }
+    /**
+     * The limit which is the maximum scroll value
+     */
+    get limit() {
+      if (this.options.__experimental__naiveDimensions) {
+        if (this.isHorizontal) {
+          return this.rootElement.scrollWidth - this.rootElement.clientWidth;
+        } else {
+          return this.rootElement.scrollHeight - this.rootElement.clientHeight;
+        }
+      } else {
+        return this.dimensions.limit[this.isHorizontal ? "x" : "y"];
+      }
+    }
+    /**
+     * Whether or not the scroll is horizontal
+     */
+    get isHorizontal() {
+      return this.options.orientation === "horizontal";
+    }
+    /**
+     * The actual scroll value
+     */
+    get actualScroll() {
+      const wrapper = this.options.wrapper;
+      return this.isHorizontal ? wrapper.scrollX ?? wrapper.scrollLeft : wrapper.scrollY ?? wrapper.scrollTop;
+    }
+    /**
+     * The current scroll value
+     */
+    get scroll() {
+      return this.options.infinite ? modulo(this.animatedScroll, this.limit) : this.animatedScroll;
+    }
+    /**
+     * The progress of the scroll relative to the limit
+     */
+    get progress() {
+      return this.limit === 0 ? 1 : this.scroll / this.limit;
+    }
+    /**
+     * Current scroll state
+     */
+    get isScrolling() {
+      return this._isScrolling;
+    }
+    set isScrolling(value) {
+      if (this._isScrolling !== value) {
+        this._isScrolling = value;
+        this.updateClassName();
+      }
+    }
+    /**
+     * Check if lenis is stopped
+     */
+    get isStopped() {
+      return this._isStopped;
+    }
+    set isStopped(value) {
+      if (this._isStopped !== value) {
+        this._isStopped = value;
+        this.updateClassName();
+      }
+    }
+    /**
+     * Check if lenis is locked
+     */
+    get isLocked() {
+      return this._isLocked;
+    }
+    set isLocked(value) {
+      if (this._isLocked !== value) {
+        this._isLocked = value;
+        this.updateClassName();
+      }
+    }
+    /**
+     * Check if lenis is smooth scrolling
+     */
+    get isSmooth() {
+      return this.isScrolling === "smooth";
+    }
+    /**
+     * The class name applied to the wrapper element
+     */
+    get className() {
+      let className = "lenis";
+      if (this.options.autoToggle)
+        className += " lenis-autoToggle";
+      if (this.isStopped)
+        className += " lenis-stopped";
+      if (this.isLocked)
+        className += " lenis-locked";
+      if (this.isScrolling)
+        className += " lenis-scrolling";
+      if (this.isScrolling === "smooth")
+        className += " lenis-smooth";
+      return className;
+    }
+    updateClassName() {
+      this.cleanUpClassName();
+      this.rootElement.className = `${this.rootElement.className} ${this.className}`.trim();
+    }
+    cleanUpClassName() {
+      this.rootElement.className = this.rootElement.className.replace(/lenis(-\w+)?/g, "").trim();
+    }
+  };
+
+  // src/week7.js
+  var import_pixelate = __toESM(require_pixelate(), 1);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/index.js
+  init_live_reload();
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/gsap-core.js
+  init_live_reload();
+  function _assertThisInitialized(self) {
+    if (self === void 0) {
+      throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+    }
+    return self;
+  }
+  function _inheritsLoose(subClass, superClass) {
+    subClass.prototype = Object.create(superClass.prototype);
+    subClass.prototype.constructor = subClass;
+    subClass.__proto__ = superClass;
+  }
+  var _config = {
+    autoSleep: 120,
+    force3D: "auto",
+    nullTargetWarn: 1,
+    units: {
+      lineHeight: ""
+    }
+  };
+  var _defaults = {
+    duration: 0.5,
+    overwrite: false,
+    delay: 0
+  };
+  var _suppressOverwrites;
+  var _reverting;
+  var _context;
+  var _bigNum = 1e8;
+  var _tinyNum = 1 / _bigNum;
+  var _2PI = Math.PI * 2;
+  var _HALF_PI = _2PI / 4;
+  var _gsID = 0;
+  var _sqrt = Math.sqrt;
+  var _cos = Math.cos;
+  var _sin = Math.sin;
+  var _isString = function _isString2(value) {
+    return typeof value === "string";
+  };
+  var _isFunction = function _isFunction2(value) {
+    return typeof value === "function";
+  };
+  var _isNumber = function _isNumber2(value) {
+    return typeof value === "number";
+  };
+  var _isUndefined = function _isUndefined2(value) {
+    return typeof value === "undefined";
+  };
+  var _isObject = function _isObject2(value) {
+    return typeof value === "object";
+  };
+  var _isNotFalse = function _isNotFalse2(value) {
+    return value !== false;
+  };
+  var _windowExists = function _windowExists2() {
+    return typeof window !== "undefined";
+  };
+  var _isFuncOrString = function _isFuncOrString2(value) {
+    return _isFunction(value) || _isString(value);
+  };
+  var _isTypedArray = typeof ArrayBuffer === "function" && ArrayBuffer.isView || function() {
+  };
+  var _isArray = Array.isArray;
+  var _strictNumExp = /(?:-?\.?\d|\.)+/gi;
+  var _numExp = /[-+=.]*\d+[.e\-+]*\d*[e\-+]*\d*/g;
+  var _numWithUnitExp = /[-+=.]*\d+[.e-]*\d*[a-z%]*/g;
+  var _complexStringNumExp = /[-+=.]*\d+\.?\d*(?:e-|e\+)?\d*/gi;
+  var _relExp = /[+-]=-?[.\d]+/;
+  var _delimitedValueExp = /[^,'"\[\]\s]+/gi;
+  var _unitExp = /^[+\-=e\s\d]*\d+[.\d]*([a-z]*|%)\s*$/i;
+  var _globalTimeline;
+  var _win;
+  var _coreInitted;
+  var _doc;
+  var _globals = {};
+  var _installScope = {};
+  var _coreReady;
+  var _install = function _install2(scope) {
+    return (_installScope = _merge(scope, _globals)) && gsap;
+  };
+  var _missingPlugin = function _missingPlugin2(property, value) {
+    return console.warn("Invalid property", property, "set to", value, "Missing plugin? gsap.registerPlugin()");
+  };
+  var _warn = function _warn2(message, suppress) {
+    return !suppress && console.warn(message);
+  };
+  var _addGlobal = function _addGlobal2(name, obj) {
+    return name && (_globals[name] = obj) && _installScope && (_installScope[name] = obj) || _globals;
+  };
+  var _emptyFunc = function _emptyFunc2() {
+    return 0;
+  };
+  var _startAtRevertConfig = {
+    suppressEvents: true,
+    isStart: true,
+    kill: false
+  };
+  var _revertConfigNoKill = {
+    suppressEvents: true,
+    kill: false
+  };
+  var _revertConfig = {
+    suppressEvents: true
+  };
+  var _reservedProps = {};
+  var _lazyTweens = [];
+  var _lazyLookup = {};
+  var _lastRenderedFrame;
+  var _plugins = {};
+  var _effects = {};
+  var _nextGCFrame = 30;
+  var _harnessPlugins = [];
+  var _callbackNames = "";
+  var _harness = function _harness2(targets) {
+    var target = targets[0], harnessPlugin, i;
+    _isObject(target) || _isFunction(target) || (targets = [targets]);
+    if (!(harnessPlugin = (target._gsap || {}).harness)) {
+      i = _harnessPlugins.length;
+      while (i-- && !_harnessPlugins[i].targetTest(target)) {
+      }
+      harnessPlugin = _harnessPlugins[i];
+    }
+    i = targets.length;
+    while (i--) {
+      targets[i] && (targets[i]._gsap || (targets[i]._gsap = new GSCache(targets[i], harnessPlugin))) || targets.splice(i, 1);
+    }
+    return targets;
+  };
+  var _getCache = function _getCache2(target) {
+    return target._gsap || _harness(toArray(target))[0]._gsap;
+  };
+  var _getProperty = function _getProperty2(target, property, v) {
+    return (v = target[property]) && _isFunction(v) ? target[property]() : _isUndefined(v) && target.getAttribute && target.getAttribute(property) || v;
+  };
+  var _forEachName = function _forEachName2(names, func) {
+    return (names = names.split(",")).forEach(func) || names;
+  };
+  var _round = function _round2(value) {
+    return Math.round(value * 1e5) / 1e5 || 0;
+  };
+  var _roundPrecise = function _roundPrecise2(value) {
+    return Math.round(value * 1e7) / 1e7 || 0;
+  };
+  var _parseRelative = function _parseRelative2(start, value) {
+    var operator = value.charAt(0), end = parseFloat(value.substr(2));
+    start = parseFloat(start);
+    return operator === "+" ? start + end : operator === "-" ? start - end : operator === "*" ? start * end : start / end;
+  };
+  var _arrayContainsAny = function _arrayContainsAny2(toSearch, toFind) {
+    var l = toFind.length, i = 0;
+    for (; toSearch.indexOf(toFind[i]) < 0 && ++i < l; ) {
+    }
+    return i < l;
+  };
+  var _lazyRender = function _lazyRender2() {
+    var l = _lazyTweens.length, a = _lazyTweens.slice(0), i, tween;
+    _lazyLookup = {};
+    _lazyTweens.length = 0;
+    for (i = 0; i < l; i++) {
+      tween = a[i];
+      tween && tween._lazy && (tween.render(tween._lazy[0], tween._lazy[1], true)._lazy = 0);
+    }
+  };
+  var _isRevertWorthy = function _isRevertWorthy2(animation) {
+    return !!(animation._initted || animation._startAt || animation.add);
+  };
+  var _lazySafeRender = function _lazySafeRender2(animation, time, suppressEvents, force) {
+    _lazyTweens.length && !_reverting && _lazyRender();
+    animation.render(time, suppressEvents, force || !!(_reverting && time < 0 && _isRevertWorthy(animation)));
+    _lazyTweens.length && !_reverting && _lazyRender();
+  };
+  var _numericIfPossible = function _numericIfPossible2(value) {
+    var n = parseFloat(value);
+    return (n || n === 0) && (value + "").match(_delimitedValueExp).length < 2 ? n : _isString(value) ? value.trim() : value;
+  };
+  var _passThrough = function _passThrough2(p) {
+    return p;
+  };
+  var _setDefaults = function _setDefaults2(obj, defaults2) {
+    for (var p in defaults2) {
+      p in obj || (obj[p] = defaults2[p]);
+    }
+    return obj;
+  };
+  var _setKeyframeDefaults = function _setKeyframeDefaults2(excludeDuration) {
+    return function(obj, defaults2) {
+      for (var p in defaults2) {
+        p in obj || p === "duration" && excludeDuration || p === "ease" || (obj[p] = defaults2[p]);
+      }
+    };
+  };
+  var _merge = function _merge2(base, toMerge) {
+    for (var p in toMerge) {
+      base[p] = toMerge[p];
+    }
+    return base;
+  };
+  var _mergeDeep = function _mergeDeep2(base, toMerge) {
+    for (var p in toMerge) {
+      p !== "__proto__" && p !== "constructor" && p !== "prototype" && (base[p] = _isObject(toMerge[p]) ? _mergeDeep2(base[p] || (base[p] = {}), toMerge[p]) : toMerge[p]);
+    }
+    return base;
+  };
+  var _copyExcluding = function _copyExcluding2(obj, excluding) {
+    var copy = {}, p;
+    for (p in obj) {
+      p in excluding || (copy[p] = obj[p]);
+    }
+    return copy;
+  };
+  var _inheritDefaults = function _inheritDefaults2(vars) {
+    var parent = vars.parent || _globalTimeline, func = vars.keyframes ? _setKeyframeDefaults(_isArray(vars.keyframes)) : _setDefaults;
+    if (_isNotFalse(vars.inherit)) {
+      while (parent) {
+        func(vars, parent.vars.defaults);
+        parent = parent.parent || parent._dp;
+      }
+    }
+    return vars;
+  };
+  var _arraysMatch = function _arraysMatch2(a1, a2) {
+    var i = a1.length, match = i === a2.length;
+    while (match && i-- && a1[i] === a2[i]) {
+    }
+    return i < 0;
+  };
+  var _addLinkedListItem = function _addLinkedListItem2(parent, child, firstProp, lastProp, sortBy) {
+    if (firstProp === void 0) {
+      firstProp = "_first";
+    }
+    if (lastProp === void 0) {
+      lastProp = "_last";
+    }
+    var prev = parent[lastProp], t;
+    if (sortBy) {
+      t = child[sortBy];
+      while (prev && prev[sortBy] > t) {
+        prev = prev._prev;
+      }
+    }
+    if (prev) {
+      child._next = prev._next;
+      prev._next = child;
+    } else {
+      child._next = parent[firstProp];
+      parent[firstProp] = child;
+    }
+    if (child._next) {
+      child._next._prev = child;
+    } else {
+      parent[lastProp] = child;
+    }
+    child._prev = prev;
+    child.parent = child._dp = parent;
+    return child;
+  };
+  var _removeLinkedListItem = function _removeLinkedListItem2(parent, child, firstProp, lastProp) {
+    if (firstProp === void 0) {
+      firstProp = "_first";
+    }
+    if (lastProp === void 0) {
+      lastProp = "_last";
+    }
+    var prev = child._prev, next = child._next;
+    if (prev) {
+      prev._next = next;
+    } else if (parent[firstProp] === child) {
+      parent[firstProp] = next;
+    }
+    if (next) {
+      next._prev = prev;
+    } else if (parent[lastProp] === child) {
+      parent[lastProp] = prev;
+    }
+    child._next = child._prev = child.parent = null;
+  };
+  var _removeFromParent = function _removeFromParent2(child, onlyIfParentHasAutoRemove) {
+    child.parent && (!onlyIfParentHasAutoRemove || child.parent.autoRemoveChildren) && child.parent.remove && child.parent.remove(child);
+    child._act = 0;
+  };
+  var _uncache = function _uncache2(animation, child) {
+    if (animation && (!child || child._end > animation._dur || child._start < 0)) {
+      var a = animation;
+      while (a) {
+        a._dirty = 1;
+        a = a.parent;
+      }
+    }
+    return animation;
+  };
+  var _recacheAncestors = function _recacheAncestors2(animation) {
+    var parent = animation.parent;
+    while (parent && parent.parent) {
+      parent._dirty = 1;
+      parent.totalDuration();
+      parent = parent.parent;
+    }
+    return animation;
+  };
+  var _rewindStartAt = function _rewindStartAt2(tween, totalTime, suppressEvents, force) {
+    return tween._startAt && (_reverting ? tween._startAt.revert(_revertConfigNoKill) : tween.vars.immediateRender && !tween.vars.autoRevert || tween._startAt.render(totalTime, true, force));
+  };
+  var _hasNoPausedAncestors = function _hasNoPausedAncestors2(animation) {
+    return !animation || animation._ts && _hasNoPausedAncestors2(animation.parent);
+  };
+  var _elapsedCycleDuration = function _elapsedCycleDuration2(animation) {
+    return animation._repeat ? _animationCycle(animation._tTime, animation = animation.duration() + animation._rDelay) * animation : 0;
+  };
+  var _animationCycle = function _animationCycle2(tTime, cycleDuration) {
+    var whole = Math.floor(tTime = _roundPrecise(tTime / cycleDuration));
+    return tTime && whole === tTime ? whole - 1 : whole;
+  };
+  var _parentToChildTotalTime = function _parentToChildTotalTime2(parentTime, child) {
+    return (parentTime - child._start) * child._ts + (child._ts >= 0 ? 0 : child._dirty ? child.totalDuration() : child._tDur);
+  };
+  var _setEnd = function _setEnd2(animation) {
+    return animation._end = _roundPrecise(animation._start + (animation._tDur / Math.abs(animation._ts || animation._rts || _tinyNum) || 0));
+  };
+  var _alignPlayhead = function _alignPlayhead2(animation, totalTime) {
+    var parent = animation._dp;
+    if (parent && parent.smoothChildTiming && animation._ts) {
+      animation._start = _roundPrecise(parent._time - (animation._ts > 0 ? totalTime / animation._ts : ((animation._dirty ? animation.totalDuration() : animation._tDur) - totalTime) / -animation._ts));
+      _setEnd(animation);
+      parent._dirty || _uncache(parent, animation);
+    }
+    return animation;
+  };
+  var _postAddChecks = function _postAddChecks2(timeline2, child) {
+    var t;
+    if (child._time || !child._dur && child._initted || child._start < timeline2._time && (child._dur || !child.add)) {
+      t = _parentToChildTotalTime(timeline2.rawTime(), child);
+      if (!child._dur || _clamp(0, child.totalDuration(), t) - child._tTime > _tinyNum) {
+        child.render(t, true);
+      }
+    }
+    if (_uncache(timeline2, child)._dp && timeline2._initted && timeline2._time >= timeline2._dur && timeline2._ts) {
+      if (timeline2._dur < timeline2.duration()) {
+        t = timeline2;
+        while (t._dp) {
+          t.rawTime() >= 0 && t.totalTime(t._tTime);
+          t = t._dp;
+        }
+      }
+      timeline2._zTime = -_tinyNum;
+    }
+  };
+  var _addToTimeline = function _addToTimeline2(timeline2, child, position, skipChecks) {
+    child.parent && _removeFromParent(child);
+    child._start = _roundPrecise((_isNumber(position) ? position : position || timeline2 !== _globalTimeline ? _parsePosition(timeline2, position, child) : timeline2._time) + child._delay);
+    child._end = _roundPrecise(child._start + (child.totalDuration() / Math.abs(child.timeScale()) || 0));
+    _addLinkedListItem(timeline2, child, "_first", "_last", timeline2._sort ? "_start" : 0);
+    _isFromOrFromStart(child) || (timeline2._recent = child);
+    skipChecks || _postAddChecks(timeline2, child);
+    timeline2._ts < 0 && _alignPlayhead(timeline2, timeline2._tTime);
+    return timeline2;
+  };
+  var _scrollTrigger = function _scrollTrigger2(animation, trigger) {
+    return (_globals.ScrollTrigger || _missingPlugin("scrollTrigger", trigger)) && _globals.ScrollTrigger.create(trigger, animation);
+  };
+  var _attemptInitTween = function _attemptInitTween2(tween, time, force, suppressEvents, tTime) {
+    _initTween(tween, time, tTime);
+    if (!tween._initted) {
+      return 1;
+    }
+    if (!force && tween._pt && !_reverting && (tween._dur && tween.vars.lazy !== false || !tween._dur && tween.vars.lazy) && _lastRenderedFrame !== _ticker.frame) {
+      _lazyTweens.push(tween);
+      tween._lazy = [tTime, suppressEvents];
+      return 1;
+    }
+  };
+  var _parentPlayheadIsBeforeStart = function _parentPlayheadIsBeforeStart2(_ref) {
+    var parent = _ref.parent;
+    return parent && parent._ts && parent._initted && !parent._lock && (parent.rawTime() < 0 || _parentPlayheadIsBeforeStart2(parent));
+  };
+  var _isFromOrFromStart = function _isFromOrFromStart2(_ref2) {
+    var data = _ref2.data;
+    return data === "isFromStart" || data === "isStart";
+  };
+  var _renderZeroDurationTween = function _renderZeroDurationTween2(tween, totalTime, suppressEvents, force) {
+    var prevRatio = tween.ratio, ratio = totalTime < 0 || !totalTime && (!tween._start && _parentPlayheadIsBeforeStart(tween) && !(!tween._initted && _isFromOrFromStart(tween)) || (tween._ts < 0 || tween._dp._ts < 0) && !_isFromOrFromStart(tween)) ? 0 : 1, repeatDelay = tween._rDelay, tTime = 0, pt, iteration, prevIteration;
+    if (repeatDelay && tween._repeat) {
+      tTime = _clamp(0, tween._tDur, totalTime);
+      iteration = _animationCycle(tTime, repeatDelay);
+      tween._yoyo && iteration & 1 && (ratio = 1 - ratio);
+      if (iteration !== _animationCycle(tween._tTime, repeatDelay)) {
+        prevRatio = 1 - ratio;
+        tween.vars.repeatRefresh && tween._initted && tween.invalidate();
+      }
+    }
+    if (ratio !== prevRatio || _reverting || force || tween._zTime === _tinyNum || !totalTime && tween._zTime) {
+      if (!tween._initted && _attemptInitTween(tween, totalTime, force, suppressEvents, tTime)) {
+        return;
+      }
+      prevIteration = tween._zTime;
+      tween._zTime = totalTime || (suppressEvents ? _tinyNum : 0);
+      suppressEvents || (suppressEvents = totalTime && !prevIteration);
+      tween.ratio = ratio;
+      tween._from && (ratio = 1 - ratio);
+      tween._time = 0;
+      tween._tTime = tTime;
+      pt = tween._pt;
+      while (pt) {
+        pt.r(ratio, pt.d);
+        pt = pt._next;
+      }
+      totalTime < 0 && _rewindStartAt(tween, totalTime, suppressEvents, true);
+      tween._onUpdate && !suppressEvents && _callback(tween, "onUpdate");
+      tTime && tween._repeat && !suppressEvents && tween.parent && _callback(tween, "onRepeat");
+      if ((totalTime >= tween._tDur || totalTime < 0) && tween.ratio === ratio) {
+        ratio && _removeFromParent(tween, 1);
+        if (!suppressEvents && !_reverting) {
+          _callback(tween, ratio ? "onComplete" : "onReverseComplete", true);
+          tween._prom && tween._prom();
+        }
+      }
+    } else if (!tween._zTime) {
+      tween._zTime = totalTime;
+    }
+  };
+  var _findNextPauseTween = function _findNextPauseTween2(animation, prevTime, time) {
+    var child;
+    if (time > prevTime) {
+      child = animation._first;
+      while (child && child._start <= time) {
+        if (child.data === "isPause" && child._start > prevTime) {
+          return child;
+        }
+        child = child._next;
+      }
+    } else {
+      child = animation._last;
+      while (child && child._start >= time) {
+        if (child.data === "isPause" && child._start < prevTime) {
+          return child;
+        }
+        child = child._prev;
+      }
+    }
+  };
+  var _setDuration = function _setDuration2(animation, duration, skipUncache, leavePlayhead) {
+    var repeat = animation._repeat, dur = _roundPrecise(duration) || 0, totalProgress = animation._tTime / animation._tDur;
+    totalProgress && !leavePlayhead && (animation._time *= dur / animation._dur);
+    animation._dur = dur;
+    animation._tDur = !repeat ? dur : repeat < 0 ? 1e10 : _roundPrecise(dur * (repeat + 1) + animation._rDelay * repeat);
+    totalProgress > 0 && !leavePlayhead && _alignPlayhead(animation, animation._tTime = animation._tDur * totalProgress);
+    animation.parent && _setEnd(animation);
+    skipUncache || _uncache(animation.parent, animation);
+    return animation;
+  };
+  var _onUpdateTotalDuration = function _onUpdateTotalDuration2(animation) {
+    return animation instanceof Timeline ? _uncache(animation) : _setDuration(animation, animation._dur);
+  };
+  var _zeroPosition = {
+    _start: 0,
+    endTime: _emptyFunc,
+    totalDuration: _emptyFunc
+  };
+  var _parsePosition = function _parsePosition2(animation, position, percentAnimation) {
+    var labels = animation.labels, recent = animation._recent || _zeroPosition, clippedDuration = animation.duration() >= _bigNum ? recent.endTime(false) : animation._dur, i, offset, isPercent;
+    if (_isString(position) && (isNaN(position) || position in labels)) {
+      offset = position.charAt(0);
+      isPercent = position.substr(-1) === "%";
+      i = position.indexOf("=");
+      if (offset === "<" || offset === ">") {
+        i >= 0 && (position = position.replace(/=/, ""));
+        return (offset === "<" ? recent._start : recent.endTime(recent._repeat >= 0)) + (parseFloat(position.substr(1)) || 0) * (isPercent ? (i < 0 ? recent : percentAnimation).totalDuration() / 100 : 1);
+      }
+      if (i < 0) {
+        position in labels || (labels[position] = clippedDuration);
+        return labels[position];
+      }
+      offset = parseFloat(position.charAt(i - 1) + position.substr(i + 1));
+      if (isPercent && percentAnimation) {
+        offset = offset / 100 * (_isArray(percentAnimation) ? percentAnimation[0] : percentAnimation).totalDuration();
+      }
+      return i > 1 ? _parsePosition2(animation, position.substr(0, i - 1), percentAnimation) + offset : clippedDuration + offset;
+    }
+    return position == null ? clippedDuration : +position;
+  };
+  var _createTweenType = function _createTweenType2(type, params, timeline2) {
+    var isLegacy = _isNumber(params[1]), varsIndex = (isLegacy ? 2 : 1) + (type < 2 ? 0 : 1), vars = params[varsIndex], irVars, parent;
+    isLegacy && (vars.duration = params[1]);
+    vars.parent = timeline2;
+    if (type) {
+      irVars = vars;
+      parent = timeline2;
+      while (parent && !("immediateRender" in irVars)) {
+        irVars = parent.vars.defaults || {};
+        parent = _isNotFalse(parent.vars.inherit) && parent.parent;
+      }
+      vars.immediateRender = _isNotFalse(irVars.immediateRender);
+      type < 2 ? vars.runBackwards = 1 : vars.startAt = params[varsIndex - 1];
+    }
+    return new Tween(params[0], vars, params[varsIndex + 1]);
+  };
+  var _conditionalReturn = function _conditionalReturn2(value, func) {
+    return value || value === 0 ? func(value) : func;
+  };
+  var _clamp = function _clamp2(min, max, value) {
+    return value < min ? min : value > max ? max : value;
+  };
+  var getUnit = function getUnit2(value, v) {
+    return !_isString(value) || !(v = _unitExp.exec(value)) ? "" : v[1];
+  };
+  var clamp2 = function clamp3(min, max, value) {
+    return _conditionalReturn(value, function(v) {
+      return _clamp(min, max, v);
+    });
+  };
+  var _slice = [].slice;
+  var _isArrayLike = function _isArrayLike2(value, nonEmpty) {
+    return value && _isObject(value) && "length" in value && (!nonEmpty && !value.length || value.length - 1 in value && _isObject(value[0])) && !value.nodeType && value !== _win;
+  };
+  var _flatten = function _flatten2(ar, leaveStrings, accumulator) {
+    if (accumulator === void 0) {
+      accumulator = [];
+    }
+    return ar.forEach(function(value) {
+      var _accumulator;
+      return _isString(value) && !leaveStrings || _isArrayLike(value, 1) ? (_accumulator = accumulator).push.apply(_accumulator, toArray(value)) : accumulator.push(value);
+    }) || accumulator;
+  };
+  var toArray = function toArray2(value, scope, leaveStrings) {
+    return _context && !scope && _context.selector ? _context.selector(value) : _isString(value) && !leaveStrings && (_coreInitted || !_wake()) ? _slice.call((scope || _doc).querySelectorAll(value), 0) : _isArray(value) ? _flatten(value, leaveStrings) : _isArrayLike(value) ? _slice.call(value, 0) : value ? [value] : [];
+  };
+  var selector = function selector2(value) {
+    value = toArray(value)[0] || _warn("Invalid scope") || {};
+    return function(v) {
+      var el = value.current || value.nativeElement || value;
+      return toArray(v, el.querySelectorAll ? el : el === value ? _warn("Invalid scope") || _doc.createElement("div") : value);
+    };
+  };
+  var shuffle = function shuffle2(a) {
+    return a.sort(function() {
+      return 0.5 - Math.random();
+    });
+  };
+  var distribute = function distribute2(v) {
+    if (_isFunction(v)) {
+      return v;
+    }
+    var vars = _isObject(v) ? v : {
+      each: v
+    }, ease = _parseEase(vars.ease), from = vars.from || 0, base = parseFloat(vars.base) || 0, cache = {}, isDecimal = from > 0 && from < 1, ratios = isNaN(from) || isDecimal, axis = vars.axis, ratioX = from, ratioY = from;
+    if (_isString(from)) {
+      ratioX = ratioY = {
+        center: 0.5,
+        edges: 0.5,
+        end: 1
+      }[from] || 0;
+    } else if (!isDecimal && ratios) {
+      ratioX = from[0];
+      ratioY = from[1];
+    }
+    return function(i, target, a) {
+      var l = (a || vars).length, distances = cache[l], originX, originY, x, y, d, j, max, min, wrapAt;
+      if (!distances) {
+        wrapAt = vars.grid === "auto" ? 0 : (vars.grid || [1, _bigNum])[1];
+        if (!wrapAt) {
+          max = -_bigNum;
+          while (max < (max = a[wrapAt++].getBoundingClientRect().left) && wrapAt < l) {
+          }
+          wrapAt < l && wrapAt--;
+        }
+        distances = cache[l] = [];
+        originX = ratios ? Math.min(wrapAt, l) * ratioX - 0.5 : from % wrapAt;
+        originY = wrapAt === _bigNum ? 0 : ratios ? l * ratioY / wrapAt - 0.5 : from / wrapAt | 0;
+        max = 0;
+        min = _bigNum;
+        for (j = 0; j < l; j++) {
+          x = j % wrapAt - originX;
+          y = originY - (j / wrapAt | 0);
+          distances[j] = d = !axis ? _sqrt(x * x + y * y) : Math.abs(axis === "y" ? y : x);
+          d > max && (max = d);
+          d < min && (min = d);
+        }
+        from === "random" && shuffle(distances);
+        distances.max = max - min;
+        distances.min = min;
+        distances.v = l = (parseFloat(vars.amount) || parseFloat(vars.each) * (wrapAt > l ? l - 1 : !axis ? Math.max(wrapAt, l / wrapAt) : axis === "y" ? l / wrapAt : wrapAt) || 0) * (from === "edges" ? -1 : 1);
+        distances.b = l < 0 ? base - l : base;
+        distances.u = getUnit(vars.amount || vars.each) || 0;
+        ease = ease && l < 0 ? _invertEase(ease) : ease;
+      }
+      l = (distances[i] - distances.min) / distances.max || 0;
+      return _roundPrecise(distances.b + (ease ? ease(l) : l) * distances.v) + distances.u;
+    };
+  };
+  var _roundModifier = function _roundModifier2(v) {
+    var p = Math.pow(10, ((v + "").split(".")[1] || "").length);
+    return function(raw) {
+      var n = _roundPrecise(Math.round(parseFloat(raw) / v) * v * p);
+      return (n - n % 1) / p + (_isNumber(raw) ? 0 : getUnit(raw));
+    };
+  };
+  var snap = function snap2(snapTo, value) {
+    var isArray = _isArray(snapTo), radius, is2D;
+    if (!isArray && _isObject(snapTo)) {
+      radius = isArray = snapTo.radius || _bigNum;
+      if (snapTo.values) {
+        snapTo = toArray(snapTo.values);
+        if (is2D = !_isNumber(snapTo[0])) {
+          radius *= radius;
+        }
+      } else {
+        snapTo = _roundModifier(snapTo.increment);
+      }
+    }
+    return _conditionalReturn(value, !isArray ? _roundModifier(snapTo) : _isFunction(snapTo) ? function(raw) {
+      is2D = snapTo(raw);
+      return Math.abs(is2D - raw) <= radius ? is2D : raw;
+    } : function(raw) {
+      var x = parseFloat(is2D ? raw.x : raw), y = parseFloat(is2D ? raw.y : 0), min = _bigNum, closest = 0, i = snapTo.length, dx, dy;
+      while (i--) {
+        if (is2D) {
+          dx = snapTo[i].x - x;
+          dy = snapTo[i].y - y;
+          dx = dx * dx + dy * dy;
+        } else {
+          dx = Math.abs(snapTo[i] - x);
+        }
+        if (dx < min) {
+          min = dx;
+          closest = i;
+        }
+      }
+      closest = !radius || min <= radius ? snapTo[closest] : raw;
+      return is2D || closest === raw || _isNumber(raw) ? closest : closest + getUnit(raw);
+    });
+  };
+  var random = function random2(min, max, roundingIncrement, returnFunction) {
+    return _conditionalReturn(_isArray(min) ? !max : roundingIncrement === true ? !!(roundingIncrement = 0) : !returnFunction, function() {
+      return _isArray(min) ? min[~~(Math.random() * min.length)] : (roundingIncrement = roundingIncrement || 1e-5) && (returnFunction = roundingIncrement < 1 ? Math.pow(10, (roundingIncrement + "").length - 2) : 1) && Math.floor(Math.round((min - roundingIncrement / 2 + Math.random() * (max - min + roundingIncrement * 0.99)) / roundingIncrement) * roundingIncrement * returnFunction) / returnFunction;
+    });
+  };
+  var pipe = function pipe2() {
+    for (var _len = arguments.length, functions = new Array(_len), _key = 0; _key < _len; _key++) {
+      functions[_key] = arguments[_key];
+    }
+    return function(value) {
+      return functions.reduce(function(v, f) {
+        return f(v);
+      }, value);
+    };
+  };
+  var unitize = function unitize2(func, unit) {
+    return function(value) {
+      return func(parseFloat(value)) + (unit || getUnit(value));
+    };
+  };
+  var normalize = function normalize2(min, max, value) {
+    return mapRange(min, max, 0, 1, value);
+  };
+  var _wrapArray = function _wrapArray2(a, wrapper, value) {
+    return _conditionalReturn(value, function(index) {
+      return a[~~wrapper(index)];
+    });
+  };
+  var wrap = function wrap2(min, max, value) {
+    var range = max - min;
+    return _isArray(min) ? _wrapArray(min, wrap2(0, min.length), max) : _conditionalReturn(value, function(value2) {
+      return (range + (value2 - min) % range) % range + min;
+    });
+  };
+  var wrapYoyo = function wrapYoyo2(min, max, value) {
+    var range = max - min, total = range * 2;
+    return _isArray(min) ? _wrapArray(min, wrapYoyo2(0, min.length - 1), max) : _conditionalReturn(value, function(value2) {
+      value2 = (total + (value2 - min) % total) % total || 0;
+      return min + (value2 > range ? total - value2 : value2);
+    });
+  };
+  var _replaceRandom = function _replaceRandom2(value) {
+    var prev = 0, s = "", i, nums, end, isArray;
+    while (~(i = value.indexOf("random(", prev))) {
+      end = value.indexOf(")", i);
+      isArray = value.charAt(i + 7) === "[";
+      nums = value.substr(i + 7, end - i - 7).match(isArray ? _delimitedValueExp : _strictNumExp);
+      s += value.substr(prev, i - prev) + random(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
+      prev = end + 1;
+    }
+    return s + value.substr(prev, value.length - prev);
+  };
+  var mapRange = function mapRange2(inMin, inMax, outMin, outMax, value) {
+    var inRange = inMax - inMin, outRange = outMax - outMin;
+    return _conditionalReturn(value, function(value2) {
+      return outMin + ((value2 - inMin) / inRange * outRange || 0);
+    });
+  };
+  var interpolate = function interpolate2(start, end, progress, mutate) {
+    var func = isNaN(start + end) ? 0 : function(p2) {
+      return (1 - p2) * start + p2 * end;
+    };
+    if (!func) {
+      var isString = _isString(start), master = {}, p, i, interpolators, l, il;
+      progress === true && (mutate = 1) && (progress = null);
+      if (isString) {
+        start = {
+          p: start
+        };
+        end = {
+          p: end
+        };
+      } else if (_isArray(start) && !_isArray(end)) {
+        interpolators = [];
+        l = start.length;
+        il = l - 2;
+        for (i = 1; i < l; i++) {
+          interpolators.push(interpolate2(start[i - 1], start[i]));
+        }
+        l--;
+        func = function func2(p2) {
+          p2 *= l;
+          var i2 = Math.min(il, ~~p2);
+          return interpolators[i2](p2 - i2);
+        };
+        progress = end;
+      } else if (!mutate) {
+        start = _merge(_isArray(start) ? [] : {}, start);
+      }
+      if (!interpolators) {
+        for (p in end) {
+          _addPropTween.call(master, start, p, "get", end[p]);
+        }
+        func = function func2(p2) {
+          return _renderPropTweens(p2, master) || (isString ? start.p : start);
+        };
+      }
+    }
+    return _conditionalReturn(progress, func);
+  };
+  var _getLabelInDirection = function _getLabelInDirection2(timeline2, fromTime, backward) {
+    var labels = timeline2.labels, min = _bigNum, p, distance, label;
+    for (p in labels) {
+      distance = labels[p] - fromTime;
+      if (distance < 0 === !!backward && distance && min > (distance = Math.abs(distance))) {
+        label = p;
+        min = distance;
+      }
+    }
+    return label;
+  };
+  var _callback = function _callback2(animation, type, executeLazyFirst) {
+    var v = animation.vars, callback = v[type], prevContext = _context, context3 = animation._ctx, params, scope, result;
+    if (!callback) {
+      return;
+    }
+    params = v[type + "Params"];
+    scope = v.callbackScope || animation;
+    executeLazyFirst && _lazyTweens.length && _lazyRender();
+    context3 && (_context = context3);
+    result = params ? callback.apply(scope, params) : callback.call(scope);
+    _context = prevContext;
+    return result;
+  };
+  var _interrupt = function _interrupt2(animation) {
+    _removeFromParent(animation);
+    animation.scrollTrigger && animation.scrollTrigger.kill(!!_reverting);
+    animation.progress() < 1 && _callback(animation, "onInterrupt");
+    return animation;
+  };
+  var _quickTween;
+  var _registerPluginQueue = [];
+  var _createPlugin = function _createPlugin2(config3) {
+    if (!config3)
+      return;
+    config3 = !config3.name && config3["default"] || config3;
+    if (_windowExists() || config3.headless) {
+      var name = config3.name, isFunc = _isFunction(config3), Plugin = name && !isFunc && config3.init ? function() {
+        this._props = [];
+      } : config3, instanceDefaults = {
+        init: _emptyFunc,
+        render: _renderPropTweens,
+        add: _addPropTween,
+        kill: _killPropTweensOf,
+        modifier: _addPluginModifier,
+        rawVars: 0
+      }, statics = {
+        targetTest: 0,
+        get: 0,
+        getSetter: _getSetter,
+        aliases: {},
+        register: 0
+      };
+      _wake();
+      if (config3 !== Plugin) {
+        if (_plugins[name]) {
+          return;
+        }
+        _setDefaults(Plugin, _setDefaults(_copyExcluding(config3, instanceDefaults), statics));
+        _merge(Plugin.prototype, _merge(instanceDefaults, _copyExcluding(config3, statics)));
+        _plugins[Plugin.prop = name] = Plugin;
+        if (config3.targetTest) {
+          _harnessPlugins.push(Plugin);
+          _reservedProps[name] = 1;
+        }
+        name = (name === "css" ? "CSS" : name.charAt(0).toUpperCase() + name.substr(1)) + "Plugin";
+      }
+      _addGlobal(name, Plugin);
+      config3.register && config3.register(gsap, Plugin, PropTween);
+    } else {
+      _registerPluginQueue.push(config3);
+    }
+  };
+  var _255 = 255;
+  var _colorLookup = {
+    aqua: [0, _255, _255],
+    lime: [0, _255, 0],
+    silver: [192, 192, 192],
+    black: [0, 0, 0],
+    maroon: [128, 0, 0],
+    teal: [0, 128, 128],
+    blue: [0, 0, _255],
+    navy: [0, 0, 128],
+    white: [_255, _255, _255],
+    olive: [128, 128, 0],
+    yellow: [_255, _255, 0],
+    orange: [_255, 165, 0],
+    gray: [128, 128, 128],
+    purple: [128, 0, 128],
+    green: [0, 128, 0],
+    red: [_255, 0, 0],
+    pink: [_255, 192, 203],
+    cyan: [0, _255, _255],
+    transparent: [_255, _255, _255, 0]
+  };
+  var _hue = function _hue2(h, m1, m2) {
+    h += h < 0 ? 1 : h > 1 ? -1 : 0;
+    return (h * 6 < 1 ? m1 + (m2 - m1) * h * 6 : h < 0.5 ? m2 : h * 3 < 2 ? m1 + (m2 - m1) * (2 / 3 - h) * 6 : m1) * _255 + 0.5 | 0;
+  };
+  var splitColor = function splitColor2(v, toHSL, forceAlpha) {
+    var a = !v ? _colorLookup.black : _isNumber(v) ? [v >> 16, v >> 8 & _255, v & _255] : 0, r, g, b, h, s, l, max, min, d, wasHSL;
+    if (!a) {
+      if (v.substr(-1) === ",") {
+        v = v.substr(0, v.length - 1);
+      }
+      if (_colorLookup[v]) {
+        a = _colorLookup[v];
+      } else if (v.charAt(0) === "#") {
+        if (v.length < 6) {
+          r = v.charAt(1);
+          g = v.charAt(2);
+          b = v.charAt(3);
+          v = "#" + r + r + g + g + b + b + (v.length === 5 ? v.charAt(4) + v.charAt(4) : "");
+        }
+        if (v.length === 9) {
+          a = parseInt(v.substr(1, 6), 16);
+          return [a >> 16, a >> 8 & _255, a & _255, parseInt(v.substr(7), 16) / 255];
+        }
+        v = parseInt(v.substr(1), 16);
+        a = [v >> 16, v >> 8 & _255, v & _255];
+      } else if (v.substr(0, 3) === "hsl") {
+        a = wasHSL = v.match(_strictNumExp);
+        if (!toHSL) {
+          h = +a[0] % 360 / 360;
+          s = +a[1] / 100;
+          l = +a[2] / 100;
+          g = l <= 0.5 ? l * (s + 1) : l + s - l * s;
+          r = l * 2 - g;
+          a.length > 3 && (a[3] *= 1);
+          a[0] = _hue(h + 1 / 3, r, g);
+          a[1] = _hue(h, r, g);
+          a[2] = _hue(h - 1 / 3, r, g);
+        } else if (~v.indexOf("=")) {
+          a = v.match(_numExp);
+          forceAlpha && a.length < 4 && (a[3] = 1);
+          return a;
+        }
+      } else {
+        a = v.match(_strictNumExp) || _colorLookup.transparent;
+      }
+      a = a.map(Number);
+    }
+    if (toHSL && !wasHSL) {
+      r = a[0] / _255;
+      g = a[1] / _255;
+      b = a[2] / _255;
+      max = Math.max(r, g, b);
+      min = Math.min(r, g, b);
+      l = (max + min) / 2;
+      if (max === min) {
+        h = s = 0;
+      } else {
+        d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        h = max === r ? (g - b) / d + (g < b ? 6 : 0) : max === g ? (b - r) / d + 2 : (r - g) / d + 4;
+        h *= 60;
+      }
+      a[0] = ~~(h + 0.5);
+      a[1] = ~~(s * 100 + 0.5);
+      a[2] = ~~(l * 100 + 0.5);
+    }
+    forceAlpha && a.length < 4 && (a[3] = 1);
+    return a;
+  };
+  var _colorOrderData = function _colorOrderData2(v) {
+    var values = [], c = [], i = -1;
+    v.split(_colorExp).forEach(function(v2) {
+      var a = v2.match(_numWithUnitExp) || [];
+      values.push.apply(values, a);
+      c.push(i += a.length + 1);
+    });
+    values.c = c;
+    return values;
+  };
+  var _formatColors = function _formatColors2(s, toHSL, orderMatchData) {
+    var result = "", colors = (s + result).match(_colorExp), type = toHSL ? "hsla(" : "rgba(", i = 0, c, shell, d, l;
+    if (!colors) {
+      return s;
+    }
+    colors = colors.map(function(color) {
+      return (color = splitColor(color, toHSL, 1)) && type + (toHSL ? color[0] + "," + color[1] + "%," + color[2] + "%," + color[3] : color.join(",")) + ")";
+    });
+    if (orderMatchData) {
+      d = _colorOrderData(s);
+      c = orderMatchData.c;
+      if (c.join(result) !== d.c.join(result)) {
+        shell = s.replace(_colorExp, "1").split(_numWithUnitExp);
+        l = shell.length - 1;
+        for (; i < l; i++) {
+          result += shell[i] + (~c.indexOf(i) ? colors.shift() || type + "0,0,0,0)" : (d.length ? d : colors.length ? colors : orderMatchData).shift());
+        }
+      }
+    }
+    if (!shell) {
+      shell = s.split(_colorExp);
+      l = shell.length - 1;
+      for (; i < l; i++) {
+        result += shell[i] + colors[i];
+      }
+    }
+    return result + shell[l];
+  };
+  var _colorExp = function() {
+    var s = "(?:\\b(?:(?:rgb|rgba|hsl|hsla)\\(.+?\\))|\\B#(?:[0-9a-f]{3,4}){1,2}\\b", p;
+    for (p in _colorLookup) {
+      s += "|" + p + "\\b";
+    }
+    return new RegExp(s + ")", "gi");
+  }();
+  var _hslExp = /hsl[a]?\(/;
+  var _colorStringFilter = function _colorStringFilter2(a) {
+    var combined = a.join(" "), toHSL;
+    _colorExp.lastIndex = 0;
+    if (_colorExp.test(combined)) {
+      toHSL = _hslExp.test(combined);
+      a[1] = _formatColors(a[1], toHSL);
+      a[0] = _formatColors(a[0], toHSL, _colorOrderData(a[1]));
+      return true;
+    }
+  };
+  var _tickerActive;
+  var _ticker = function() {
+    var _getTime3 = Date.now, _lagThreshold = 500, _adjustedLag = 33, _startTime = _getTime3(), _lastUpdate = _startTime, _gap = 1e3 / 240, _nextTime = _gap, _listeners3 = [], _id, _req, _raf, _self, _delta, _i2, _tick = function _tick2(v) {
+      var elapsed = _getTime3() - _lastUpdate, manual = v === true, overlap, dispatch, time, frame;
+      (elapsed > _lagThreshold || elapsed < 0) && (_startTime += elapsed - _adjustedLag);
+      _lastUpdate += elapsed;
+      time = _lastUpdate - _startTime;
+      overlap = time - _nextTime;
+      if (overlap > 0 || manual) {
+        frame = ++_self.frame;
+        _delta = time - _self.time * 1e3;
+        _self.time = time = time / 1e3;
+        _nextTime += overlap + (overlap >= _gap ? 4 : _gap - overlap);
+        dispatch = 1;
+      }
+      manual || (_id = _req(_tick2));
+      if (dispatch) {
+        for (_i2 = 0; _i2 < _listeners3.length; _i2++) {
+          _listeners3[_i2](time, _delta, frame, v);
+        }
+      }
+    };
+    _self = {
+      time: 0,
+      frame: 0,
+      tick: function tick() {
+        _tick(true);
+      },
+      deltaRatio: function deltaRatio(fps) {
+        return _delta / (1e3 / (fps || 60));
+      },
+      wake: function wake() {
+        if (_coreReady) {
+          if (!_coreInitted && _windowExists()) {
+            _win = _coreInitted = window;
+            _doc = _win.document || {};
+            _globals.gsap = gsap;
+            (_win.gsapVersions || (_win.gsapVersions = [])).push(gsap.version);
+            _install(_installScope || _win.GreenSockGlobals || !_win.gsap && _win || {});
+            _registerPluginQueue.forEach(_createPlugin);
+          }
+          _raf = typeof requestAnimationFrame !== "undefined" && requestAnimationFrame;
+          _id && _self.sleep();
+          _req = _raf || function(f) {
+            return setTimeout(f, _nextTime - _self.time * 1e3 + 1 | 0);
+          };
+          _tickerActive = 1;
+          _tick(2);
+        }
+      },
+      sleep: function sleep() {
+        (_raf ? cancelAnimationFrame : clearTimeout)(_id);
+        _tickerActive = 0;
+        _req = _emptyFunc;
+      },
+      lagSmoothing: function lagSmoothing(threshold, adjustedLag) {
+        _lagThreshold = threshold || Infinity;
+        _adjustedLag = Math.min(adjustedLag || 33, _lagThreshold);
+      },
+      fps: function fps(_fps) {
+        _gap = 1e3 / (_fps || 240);
+        _nextTime = _self.time * 1e3 + _gap;
+      },
+      add: function add(callback, once, prioritize) {
+        var func = once ? function(t, d, f, v) {
+          callback(t, d, f, v);
+          _self.remove(func);
+        } : callback;
+        _self.remove(callback);
+        _listeners3[prioritize ? "unshift" : "push"](func);
+        _wake();
+        return func;
+      },
+      remove: function remove(callback, i) {
+        ~(i = _listeners3.indexOf(callback)) && _listeners3.splice(i, 1) && _i2 >= i && _i2--;
+      },
+      _listeners: _listeners3
+    };
+    return _self;
+  }();
+  var _wake = function _wake2() {
+    return !_tickerActive && _ticker.wake();
+  };
+  var _easeMap = {};
+  var _customEaseExp = /^[\d.\-M][\d.\-,\s]/;
+  var _quotesExp = /["']/g;
+  var _parseObjectInString = function _parseObjectInString2(value) {
+    var obj = {}, split = value.substr(1, value.length - 3).split(":"), key = split[0], i = 1, l = split.length, index, val, parsedVal;
+    for (; i < l; i++) {
+      val = split[i];
+      index = i !== l - 1 ? val.lastIndexOf(",") : val.length;
+      parsedVal = val.substr(0, index);
+      obj[key] = isNaN(parsedVal) ? parsedVal.replace(_quotesExp, "").trim() : +parsedVal;
+      key = val.substr(index + 1).trim();
+    }
+    return obj;
+  };
+  var _valueInParentheses = function _valueInParentheses2(value) {
+    var open = value.indexOf("(") + 1, close = value.indexOf(")"), nested = value.indexOf("(", open);
+    return value.substring(open, ~nested && nested < close ? value.indexOf(")", close + 1) : close);
+  };
+  var _configEaseFromString = function _configEaseFromString2(name) {
+    var split = (name + "").split("("), ease = _easeMap[split[0]];
+    return ease && split.length > 1 && ease.config ? ease.config.apply(null, ~name.indexOf("{") ? [_parseObjectInString(split[1])] : _valueInParentheses(name).split(",").map(_numericIfPossible)) : _easeMap._CE && _customEaseExp.test(name) ? _easeMap._CE("", name) : ease;
+  };
+  var _invertEase = function _invertEase2(ease) {
+    return function(p) {
+      return 1 - ease(1 - p);
+    };
+  };
+  var _propagateYoyoEase = function _propagateYoyoEase2(timeline2, isYoyo) {
+    var child = timeline2._first, ease;
+    while (child) {
+      if (child instanceof Timeline) {
+        _propagateYoyoEase2(child, isYoyo);
+      } else if (child.vars.yoyoEase && (!child._yoyo || !child._repeat) && child._yoyo !== isYoyo) {
+        if (child.timeline) {
+          _propagateYoyoEase2(child.timeline, isYoyo);
+        } else {
+          ease = child._ease;
+          child._ease = child._yEase;
+          child._yEase = ease;
+          child._yoyo = isYoyo;
+        }
+      }
+      child = child._next;
+    }
+  };
+  var _parseEase = function _parseEase2(ease, defaultEase) {
+    return !ease ? defaultEase : (_isFunction(ease) ? ease : _easeMap[ease] || _configEaseFromString(ease)) || defaultEase;
+  };
+  var _insertEase = function _insertEase2(names, easeIn, easeOut, easeInOut) {
+    if (easeOut === void 0) {
+      easeOut = function easeOut2(p) {
+        return 1 - easeIn(1 - p);
+      };
+    }
+    if (easeInOut === void 0) {
+      easeInOut = function easeInOut2(p) {
+        return p < 0.5 ? easeIn(p * 2) / 2 : 1 - easeIn((1 - p) * 2) / 2;
+      };
+    }
+    var ease = {
+      easeIn,
+      easeOut,
+      easeInOut
+    }, lowercaseName;
+    _forEachName(names, function(name) {
+      _easeMap[name] = _globals[name] = ease;
+      _easeMap[lowercaseName = name.toLowerCase()] = easeOut;
+      for (var p in ease) {
+        _easeMap[lowercaseName + (p === "easeIn" ? ".in" : p === "easeOut" ? ".out" : ".inOut")] = _easeMap[name + "." + p] = ease[p];
+      }
+    });
+    return ease;
+  };
+  var _easeInOutFromOut = function _easeInOutFromOut2(easeOut) {
+    return function(p) {
+      return p < 0.5 ? (1 - easeOut(1 - p * 2)) / 2 : 0.5 + easeOut((p - 0.5) * 2) / 2;
+    };
+  };
+  var _configElastic = function _configElastic2(type, amplitude, period) {
+    var p1 = amplitude >= 1 ? amplitude : 1, p2 = (period || (type ? 0.3 : 0.45)) / (amplitude < 1 ? amplitude : 1), p3 = p2 / _2PI * (Math.asin(1 / p1) || 0), easeOut = function easeOut2(p) {
+      return p === 1 ? 1 : p1 * Math.pow(2, -10 * p) * _sin((p - p3) * p2) + 1;
+    }, ease = type === "out" ? easeOut : type === "in" ? function(p) {
+      return 1 - easeOut(1 - p);
+    } : _easeInOutFromOut(easeOut);
+    p2 = _2PI / p2;
+    ease.config = function(amplitude2, period2) {
+      return _configElastic2(type, amplitude2, period2);
+    };
+    return ease;
+  };
+  var _configBack = function _configBack2(type, overshoot) {
+    if (overshoot === void 0) {
+      overshoot = 1.70158;
+    }
+    var easeOut = function easeOut2(p) {
+      return p ? --p * p * ((overshoot + 1) * p + overshoot) + 1 : 0;
+    }, ease = type === "out" ? easeOut : type === "in" ? function(p) {
+      return 1 - easeOut(1 - p);
+    } : _easeInOutFromOut(easeOut);
+    ease.config = function(overshoot2) {
+      return _configBack2(type, overshoot2);
+    };
+    return ease;
+  };
+  _forEachName("Linear,Quad,Cubic,Quart,Quint,Strong", function(name, i) {
+    var power = i < 5 ? i + 1 : i;
+    _insertEase(name + ",Power" + (power - 1), i ? function(p) {
+      return Math.pow(p, power);
+    } : function(p) {
+      return p;
+    }, function(p) {
+      return 1 - Math.pow(1 - p, power);
+    }, function(p) {
+      return p < 0.5 ? Math.pow(p * 2, power) / 2 : 1 - Math.pow((1 - p) * 2, power) / 2;
+    });
+  });
+  _easeMap.Linear.easeNone = _easeMap.none = _easeMap.Linear.easeIn;
+  _insertEase("Elastic", _configElastic("in"), _configElastic("out"), _configElastic());
+  (function(n, c) {
+    var n1 = 1 / c, n2 = 2 * n1, n3 = 2.5 * n1, easeOut = function easeOut2(p) {
+      return p < n1 ? n * p * p : p < n2 ? n * Math.pow(p - 1.5 / c, 2) + 0.75 : p < n3 ? n * (p -= 2.25 / c) * p + 0.9375 : n * Math.pow(p - 2.625 / c, 2) + 0.984375;
+    };
+    _insertEase("Bounce", function(p) {
+      return 1 - easeOut(1 - p);
+    }, easeOut);
+  })(7.5625, 2.75);
+  _insertEase("Expo", function(p) {
+    return Math.pow(2, 10 * (p - 1)) * p + p * p * p * p * p * p * (1 - p);
+  });
+  _insertEase("Circ", function(p) {
+    return -(_sqrt(1 - p * p) - 1);
+  });
+  _insertEase("Sine", function(p) {
+    return p === 1 ? 1 : -_cos(p * _HALF_PI) + 1;
+  });
+  _insertEase("Back", _configBack("in"), _configBack("out"), _configBack());
+  _easeMap.SteppedEase = _easeMap.steps = _globals.SteppedEase = {
+    config: function config(steps, immediateStart) {
+      if (steps === void 0) {
+        steps = 1;
+      }
+      var p1 = 1 / steps, p2 = steps + (immediateStart ? 0 : 1), p3 = immediateStart ? 1 : 0, max = 1 - _tinyNum;
+      return function(p) {
+        return ((p2 * _clamp(0, max, p) | 0) + p3) * p1;
+      };
+    }
+  };
+  _defaults.ease = _easeMap["quad.out"];
+  _forEachName("onComplete,onUpdate,onStart,onRepeat,onReverseComplete,onInterrupt", function(name) {
+    return _callbackNames += name + "," + name + "Params,";
+  });
+  var GSCache = function GSCache2(target, harness) {
+    this.id = _gsID++;
+    target._gsap = this;
+    this.target = target;
+    this.harness = harness;
+    this.get = harness ? harness.get : _getProperty;
+    this.set = harness ? harness.getSetter : _getSetter;
+  };
+  var Animation = /* @__PURE__ */ function() {
+    function Animation2(vars) {
+      this.vars = vars;
+      this._delay = +vars.delay || 0;
+      if (this._repeat = vars.repeat === Infinity ? -2 : vars.repeat || 0) {
+        this._rDelay = vars.repeatDelay || 0;
+        this._yoyo = !!vars.yoyo || !!vars.yoyoEase;
+      }
+      this._ts = 1;
+      _setDuration(this, +vars.duration, 1, 1);
+      this.data = vars.data;
+      if (_context) {
+        this._ctx = _context;
+        _context.data.push(this);
+      }
+      _tickerActive || _ticker.wake();
+    }
+    var _proto = Animation2.prototype;
+    _proto.delay = function delay(value) {
+      if (value || value === 0) {
+        this.parent && this.parent.smoothChildTiming && this.startTime(this._start + value - this._delay);
+        this._delay = value;
+        return this;
+      }
+      return this._delay;
+    };
+    _proto.duration = function duration(value) {
+      return arguments.length ? this.totalDuration(this._repeat > 0 ? value + (value + this._rDelay) * this._repeat : value) : this.totalDuration() && this._dur;
+    };
+    _proto.totalDuration = function totalDuration(value) {
+      if (!arguments.length) {
+        return this._tDur;
+      }
+      this._dirty = 0;
+      return _setDuration(this, this._repeat < 0 ? value : (value - this._repeat * this._rDelay) / (this._repeat + 1));
+    };
+    _proto.totalTime = function totalTime(_totalTime, suppressEvents) {
+      _wake();
+      if (!arguments.length) {
+        return this._tTime;
+      }
+      var parent = this._dp;
+      if (parent && parent.smoothChildTiming && this._ts) {
+        _alignPlayhead(this, _totalTime);
+        !parent._dp || parent.parent || _postAddChecks(parent, this);
+        while (parent && parent.parent) {
+          if (parent.parent._time !== parent._start + (parent._ts >= 0 ? parent._tTime / parent._ts : (parent.totalDuration() - parent._tTime) / -parent._ts)) {
+            parent.totalTime(parent._tTime, true);
+          }
+          parent = parent.parent;
+        }
+        if (!this.parent && this._dp.autoRemoveChildren && (this._ts > 0 && _totalTime < this._tDur || this._ts < 0 && _totalTime > 0 || !this._tDur && !_totalTime)) {
+          _addToTimeline(this._dp, this, this._start - this._delay);
+        }
+      }
+      if (this._tTime !== _totalTime || !this._dur && !suppressEvents || this._initted && Math.abs(this._zTime) === _tinyNum || !_totalTime && !this._initted && (this.add || this._ptLookup)) {
+        this._ts || (this._pTime = _totalTime);
+        _lazySafeRender(this, _totalTime, suppressEvents);
+      }
+      return this;
+    };
+    _proto.time = function time(value, suppressEvents) {
+      return arguments.length ? this.totalTime(Math.min(this.totalDuration(), value + _elapsedCycleDuration(this)) % (this._dur + this._rDelay) || (value ? this._dur : 0), suppressEvents) : this._time;
+    };
+    _proto.totalProgress = function totalProgress(value, suppressEvents) {
+      return arguments.length ? this.totalTime(this.totalDuration() * value, suppressEvents) : this.totalDuration() ? Math.min(1, this._tTime / this._tDur) : this.rawTime() >= 0 && this._initted ? 1 : 0;
+    };
+    _proto.progress = function progress(value, suppressEvents) {
+      return arguments.length ? this.totalTime(this.duration() * (this._yoyo && !(this.iteration() & 1) ? 1 - value : value) + _elapsedCycleDuration(this), suppressEvents) : this.duration() ? Math.min(1, this._time / this._dur) : this.rawTime() > 0 ? 1 : 0;
+    };
+    _proto.iteration = function iteration(value, suppressEvents) {
+      var cycleDuration = this.duration() + this._rDelay;
+      return arguments.length ? this.totalTime(this._time + (value - 1) * cycleDuration, suppressEvents) : this._repeat ? _animationCycle(this._tTime, cycleDuration) + 1 : 1;
+    };
+    _proto.timeScale = function timeScale(value, suppressEvents) {
+      if (!arguments.length) {
+        return this._rts === -_tinyNum ? 0 : this._rts;
+      }
+      if (this._rts === value) {
+        return this;
+      }
+      var tTime = this.parent && this._ts ? _parentToChildTotalTime(this.parent._time, this) : this._tTime;
+      this._rts = +value || 0;
+      this._ts = this._ps || value === -_tinyNum ? 0 : this._rts;
+      this.totalTime(_clamp(-Math.abs(this._delay), this.totalDuration(), tTime), suppressEvents !== false);
+      _setEnd(this);
+      return _recacheAncestors(this);
+    };
+    _proto.paused = function paused(value) {
+      if (!arguments.length) {
+        return this._ps;
+      }
+      if (this._ps !== value) {
+        this._ps = value;
+        if (value) {
+          this._pTime = this._tTime || Math.max(-this._delay, this.rawTime());
+          this._ts = this._act = 0;
+        } else {
+          _wake();
+          this._ts = this._rts;
+          this.totalTime(this.parent && !this.parent.smoothChildTiming ? this.rawTime() : this._tTime || this._pTime, this.progress() === 1 && Math.abs(this._zTime) !== _tinyNum && (this._tTime -= _tinyNum));
+        }
+      }
+      return this;
+    };
+    _proto.startTime = function startTime(value) {
+      if (arguments.length) {
+        this._start = value;
+        var parent = this.parent || this._dp;
+        parent && (parent._sort || !this.parent) && _addToTimeline(parent, this, value - this._delay);
+        return this;
+      }
+      return this._start;
+    };
+    _proto.endTime = function endTime(includeRepeats) {
+      return this._start + (_isNotFalse(includeRepeats) ? this.totalDuration() : this.duration()) / Math.abs(this._ts || 1);
+    };
+    _proto.rawTime = function rawTime(wrapRepeats) {
+      var parent = this.parent || this._dp;
+      return !parent ? this._tTime : wrapRepeats && (!this._ts || this._repeat && this._time && this.totalProgress() < 1) ? this._tTime % (this._dur + this._rDelay) : !this._ts ? this._tTime : _parentToChildTotalTime(parent.rawTime(wrapRepeats), this);
+    };
+    _proto.revert = function revert(config3) {
+      if (config3 === void 0) {
+        config3 = _revertConfig;
+      }
+      var prevIsReverting = _reverting;
+      _reverting = config3;
+      if (_isRevertWorthy(this)) {
+        this.timeline && this.timeline.revert(config3);
+        this.totalTime(-0.01, config3.suppressEvents);
+      }
+      this.data !== "nested" && config3.kill !== false && this.kill();
+      _reverting = prevIsReverting;
+      return this;
+    };
+    _proto.globalTime = function globalTime(rawTime) {
+      var animation = this, time = arguments.length ? rawTime : animation.rawTime();
+      while (animation) {
+        time = animation._start + time / (Math.abs(animation._ts) || 1);
+        animation = animation._dp;
+      }
+      return !this.parent && this._sat ? this._sat.globalTime(rawTime) : time;
+    };
+    _proto.repeat = function repeat(value) {
+      if (arguments.length) {
+        this._repeat = value === Infinity ? -2 : value;
+        return _onUpdateTotalDuration(this);
+      }
+      return this._repeat === -2 ? Infinity : this._repeat;
+    };
+    _proto.repeatDelay = function repeatDelay(value) {
+      if (arguments.length) {
+        var time = this._time;
+        this._rDelay = value;
+        _onUpdateTotalDuration(this);
+        return time ? this.time(time) : this;
+      }
+      return this._rDelay;
+    };
+    _proto.yoyo = function yoyo(value) {
+      if (arguments.length) {
+        this._yoyo = value;
+        return this;
+      }
+      return this._yoyo;
+    };
+    _proto.seek = function seek(position, suppressEvents) {
+      return this.totalTime(_parsePosition(this, position), _isNotFalse(suppressEvents));
+    };
+    _proto.restart = function restart(includeDelay, suppressEvents) {
+      this.play().totalTime(includeDelay ? -this._delay : 0, _isNotFalse(suppressEvents));
+      this._dur || (this._zTime = -_tinyNum);
+      return this;
+    };
+    _proto.play = function play(from, suppressEvents) {
+      from != null && this.seek(from, suppressEvents);
+      return this.reversed(false).paused(false);
+    };
+    _proto.reverse = function reverse(from, suppressEvents) {
+      from != null && this.seek(from || this.totalDuration(), suppressEvents);
+      return this.reversed(true).paused(false);
+    };
+    _proto.pause = function pause(atTime, suppressEvents) {
+      atTime != null && this.seek(atTime, suppressEvents);
+      return this.paused(true);
+    };
+    _proto.resume = function resume() {
+      return this.paused(false);
+    };
+    _proto.reversed = function reversed(value) {
+      if (arguments.length) {
+        !!value !== this.reversed() && this.timeScale(-this._rts || (value ? -_tinyNum : 0));
+        return this;
+      }
+      return this._rts < 0;
+    };
+    _proto.invalidate = function invalidate() {
+      this._initted = this._act = 0;
+      this._zTime = -_tinyNum;
+      return this;
+    };
+    _proto.isActive = function isActive() {
+      var parent = this.parent || this._dp, start = this._start, rawTime;
+      return !!(!parent || this._ts && this._initted && parent.isActive() && (rawTime = parent.rawTime(true)) >= start && rawTime < this.endTime(true) - _tinyNum);
+    };
+    _proto.eventCallback = function eventCallback(type, callback, params) {
+      var vars = this.vars;
+      if (arguments.length > 1) {
+        if (!callback) {
+          delete vars[type];
+        } else {
+          vars[type] = callback;
+          params && (vars[type + "Params"] = params);
+          type === "onUpdate" && (this._onUpdate = callback);
+        }
+        return this;
+      }
+      return vars[type];
+    };
+    _proto.then = function then(onFulfilled) {
+      var self = this;
+      return new Promise(function(resolve) {
+        var f = _isFunction(onFulfilled) ? onFulfilled : _passThrough, _resolve = function _resolve2() {
+          var _then = self.then;
+          self.then = null;
+          _isFunction(f) && (f = f(self)) && (f.then || f === self) && (self.then = _then);
+          resolve(f);
+          self.then = _then;
+        };
+        if (self._initted && self.totalProgress() === 1 && self._ts >= 0 || !self._tTime && self._ts < 0) {
+          _resolve();
+        } else {
+          self._prom = _resolve;
+        }
+      });
+    };
+    _proto.kill = function kill2() {
+      _interrupt(this);
+    };
+    return Animation2;
+  }();
+  _setDefaults(Animation.prototype, {
+    _time: 0,
+    _start: 0,
+    _end: 0,
+    _tTime: 0,
+    _tDur: 0,
+    _dirty: 0,
+    _repeat: 0,
+    _yoyo: false,
+    parent: null,
+    _initted: false,
+    _rDelay: 0,
+    _ts: 1,
+    _dp: 0,
+    ratio: 0,
+    _zTime: -_tinyNum,
+    _prom: 0,
+    _ps: false,
+    _rts: 1
+  });
+  var Timeline = /* @__PURE__ */ function(_Animation) {
+    _inheritsLoose(Timeline2, _Animation);
+    function Timeline2(vars, position) {
+      var _this;
+      if (vars === void 0) {
+        vars = {};
+      }
+      _this = _Animation.call(this, vars) || this;
+      _this.labels = {};
+      _this.smoothChildTiming = !!vars.smoothChildTiming;
+      _this.autoRemoveChildren = !!vars.autoRemoveChildren;
+      _this._sort = _isNotFalse(vars.sortChildren);
+      _globalTimeline && _addToTimeline(vars.parent || _globalTimeline, _assertThisInitialized(_this), position);
+      vars.reversed && _this.reverse();
+      vars.paused && _this.paused(true);
+      vars.scrollTrigger && _scrollTrigger(_assertThisInitialized(_this), vars.scrollTrigger);
+      return _this;
+    }
+    var _proto2 = Timeline2.prototype;
+    _proto2.to = function to(targets, vars, position) {
+      _createTweenType(0, arguments, this);
+      return this;
+    };
+    _proto2.from = function from(targets, vars, position) {
+      _createTweenType(1, arguments, this);
+      return this;
+    };
+    _proto2.fromTo = function fromTo(targets, fromVars, toVars, position) {
+      _createTweenType(2, arguments, this);
+      return this;
+    };
+    _proto2.set = function set(targets, vars, position) {
+      vars.duration = 0;
+      vars.parent = this;
+      _inheritDefaults(vars).repeatDelay || (vars.repeat = 0);
+      vars.immediateRender = !!vars.immediateRender;
+      new Tween(targets, vars, _parsePosition(this, position), 1);
+      return this;
+    };
+    _proto2.call = function call(callback, params, position) {
+      return _addToTimeline(this, Tween.delayedCall(0, callback, params), position);
+    };
+    _proto2.staggerTo = function staggerTo(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams) {
+      vars.duration = duration;
+      vars.stagger = vars.stagger || stagger;
+      vars.onComplete = onCompleteAll;
+      vars.onCompleteParams = onCompleteAllParams;
+      vars.parent = this;
+      new Tween(targets, vars, _parsePosition(this, position));
+      return this;
+    };
+    _proto2.staggerFrom = function staggerFrom(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams) {
+      vars.runBackwards = 1;
+      _inheritDefaults(vars).immediateRender = _isNotFalse(vars.immediateRender);
+      return this.staggerTo(targets, duration, vars, stagger, position, onCompleteAll, onCompleteAllParams);
+    };
+    _proto2.staggerFromTo = function staggerFromTo(targets, duration, fromVars, toVars, stagger, position, onCompleteAll, onCompleteAllParams) {
+      toVars.startAt = fromVars;
+      _inheritDefaults(toVars).immediateRender = _isNotFalse(toVars.immediateRender);
+      return this.staggerTo(targets, duration, toVars, stagger, position, onCompleteAll, onCompleteAllParams);
+    };
+    _proto2.render = function render6(totalTime, suppressEvents, force) {
+      var prevTime = this._time, tDur = this._dirty ? this.totalDuration() : this._tDur, dur = this._dur, tTime = totalTime <= 0 ? 0 : _roundPrecise(totalTime), crossingStart = this._zTime < 0 !== totalTime < 0 && (this._initted || !dur), time, child, next, iteration, cycleDuration, prevPaused, pauseTween, timeScale, prevStart, prevIteration, yoyo, isYoyo;
+      this !== _globalTimeline && tTime > tDur && totalTime >= 0 && (tTime = tDur);
+      if (tTime !== this._tTime || force || crossingStart) {
+        if (prevTime !== this._time && dur) {
+          tTime += this._time - prevTime;
+          totalTime += this._time - prevTime;
+        }
+        time = tTime;
+        prevStart = this._start;
+        timeScale = this._ts;
+        prevPaused = !timeScale;
+        if (crossingStart) {
+          dur || (prevTime = this._zTime);
+          (totalTime || !suppressEvents) && (this._zTime = totalTime);
+        }
+        if (this._repeat) {
+          yoyo = this._yoyo;
+          cycleDuration = dur + this._rDelay;
+          if (this._repeat < -1 && totalTime < 0) {
+            return this.totalTime(cycleDuration * 100 + totalTime, suppressEvents, force);
+          }
+          time = _roundPrecise(tTime % cycleDuration);
+          if (tTime === tDur) {
+            iteration = this._repeat;
+            time = dur;
+          } else {
+            prevIteration = _roundPrecise(tTime / cycleDuration);
+            iteration = ~~prevIteration;
+            if (iteration && iteration === prevIteration) {
+              time = dur;
+              iteration--;
+            }
+            time > dur && (time = dur);
+          }
+          prevIteration = _animationCycle(this._tTime, cycleDuration);
+          !prevTime && this._tTime && prevIteration !== iteration && this._tTime - prevIteration * cycleDuration - this._dur <= 0 && (prevIteration = iteration);
+          if (yoyo && iteration & 1) {
+            time = dur - time;
+            isYoyo = 1;
+          }
+          if (iteration !== prevIteration && !this._lock) {
+            var rewinding = yoyo && prevIteration & 1, doesWrap = rewinding === (yoyo && iteration & 1);
+            iteration < prevIteration && (rewinding = !rewinding);
+            prevTime = rewinding ? 0 : tTime % dur ? dur : tTime;
+            this._lock = 1;
+            this.render(prevTime || (isYoyo ? 0 : _roundPrecise(iteration * cycleDuration)), suppressEvents, !dur)._lock = 0;
+            this._tTime = tTime;
+            !suppressEvents && this.parent && _callback(this, "onRepeat");
+            this.vars.repeatRefresh && !isYoyo && (this.invalidate()._lock = 1);
+            if (prevTime && prevTime !== this._time || prevPaused !== !this._ts || this.vars.onRepeat && !this.parent && !this._act) {
+              return this;
+            }
+            dur = this._dur;
+            tDur = this._tDur;
+            if (doesWrap) {
+              this._lock = 2;
+              prevTime = rewinding ? dur : -1e-4;
+              this.render(prevTime, true);
+              this.vars.repeatRefresh && !isYoyo && this.invalidate();
+            }
+            this._lock = 0;
+            if (!this._ts && !prevPaused) {
+              return this;
+            }
+            _propagateYoyoEase(this, isYoyo);
+          }
+        }
+        if (this._hasPause && !this._forcing && this._lock < 2) {
+          pauseTween = _findNextPauseTween(this, _roundPrecise(prevTime), _roundPrecise(time));
+          if (pauseTween) {
+            tTime -= time - (time = pauseTween._start);
+          }
+        }
+        this._tTime = tTime;
+        this._time = time;
+        this._act = !timeScale;
+        if (!this._initted) {
+          this._onUpdate = this.vars.onUpdate;
+          this._initted = 1;
+          this._zTime = totalTime;
+          prevTime = 0;
+        }
+        if (!prevTime && tTime && !suppressEvents && !prevIteration) {
+          _callback(this, "onStart");
+          if (this._tTime !== tTime) {
+            return this;
+          }
+        }
+        if (time >= prevTime && totalTime >= 0) {
+          child = this._first;
+          while (child) {
+            next = child._next;
+            if ((child._act || time >= child._start) && child._ts && pauseTween !== child) {
+              if (child.parent !== this) {
+                return this.render(totalTime, suppressEvents, force);
+              }
+              child.render(child._ts > 0 ? (time - child._start) * child._ts : (child._dirty ? child.totalDuration() : child._tDur) + (time - child._start) * child._ts, suppressEvents, force);
+              if (time !== this._time || !this._ts && !prevPaused) {
+                pauseTween = 0;
+                next && (tTime += this._zTime = -_tinyNum);
+                break;
+              }
+            }
+            child = next;
+          }
+        } else {
+          child = this._last;
+          var adjustedTime = totalTime < 0 ? totalTime : time;
+          while (child) {
+            next = child._prev;
+            if ((child._act || adjustedTime <= child._end) && child._ts && pauseTween !== child) {
+              if (child.parent !== this) {
+                return this.render(totalTime, suppressEvents, force);
+              }
+              child.render(child._ts > 0 ? (adjustedTime - child._start) * child._ts : (child._dirty ? child.totalDuration() : child._tDur) + (adjustedTime - child._start) * child._ts, suppressEvents, force || _reverting && _isRevertWorthy(child));
+              if (time !== this._time || !this._ts && !prevPaused) {
+                pauseTween = 0;
+                next && (tTime += this._zTime = adjustedTime ? -_tinyNum : _tinyNum);
+                break;
+              }
+            }
+            child = next;
+          }
+        }
+        if (pauseTween && !suppressEvents) {
+          this.pause();
+          pauseTween.render(time >= prevTime ? 0 : -_tinyNum)._zTime = time >= prevTime ? 1 : -1;
+          if (this._ts) {
+            this._start = prevStart;
+            _setEnd(this);
+            return this.render(totalTime, suppressEvents, force);
+          }
+        }
+        this._onUpdate && !suppressEvents && _callback(this, "onUpdate", true);
+        if (tTime === tDur && this._tTime >= this.totalDuration() || !tTime && prevTime) {
+          if (prevStart === this._start || Math.abs(timeScale) !== Math.abs(this._ts)) {
+            if (!this._lock) {
+              (totalTime || !dur) && (tTime === tDur && this._ts > 0 || !tTime && this._ts < 0) && _removeFromParent(this, 1);
+              if (!suppressEvents && !(totalTime < 0 && !prevTime) && (tTime || prevTime || !tDur)) {
+                _callback(this, tTime === tDur && totalTime >= 0 ? "onComplete" : "onReverseComplete", true);
+                this._prom && !(tTime < tDur && this.timeScale() > 0) && this._prom();
+              }
+            }
+          }
+        }
+      }
+      return this;
+    };
+    _proto2.add = function add(child, position) {
+      var _this2 = this;
+      _isNumber(position) || (position = _parsePosition(this, position, child));
+      if (!(child instanceof Animation)) {
+        if (_isArray(child)) {
+          child.forEach(function(obj) {
+            return _this2.add(obj, position);
+          });
+          return this;
+        }
+        if (_isString(child)) {
+          return this.addLabel(child, position);
+        }
+        if (_isFunction(child)) {
+          child = Tween.delayedCall(0, child);
+        } else {
+          return this;
+        }
+      }
+      return this !== child ? _addToTimeline(this, child, position) : this;
+    };
+    _proto2.getChildren = function getChildren(nested, tweens, timelines, ignoreBeforeTime) {
+      if (nested === void 0) {
+        nested = true;
+      }
+      if (tweens === void 0) {
+        tweens = true;
+      }
+      if (timelines === void 0) {
+        timelines = true;
+      }
+      if (ignoreBeforeTime === void 0) {
+        ignoreBeforeTime = -_bigNum;
+      }
+      var a = [], child = this._first;
+      while (child) {
+        if (child._start >= ignoreBeforeTime) {
+          if (child instanceof Tween) {
+            tweens && a.push(child);
+          } else {
+            timelines && a.push(child);
+            nested && a.push.apply(a, child.getChildren(true, tweens, timelines));
+          }
+        }
+        child = child._next;
+      }
+      return a;
+    };
+    _proto2.getById = function getById2(id) {
+      var animations = this.getChildren(1, 1, 1), i = animations.length;
+      while (i--) {
+        if (animations[i].vars.id === id) {
+          return animations[i];
+        }
+      }
+    };
+    _proto2.remove = function remove(child) {
+      if (_isString(child)) {
+        return this.removeLabel(child);
+      }
+      if (_isFunction(child)) {
+        return this.killTweensOf(child);
+      }
+      child.parent === this && _removeLinkedListItem(this, child);
+      if (child === this._recent) {
+        this._recent = this._last;
+      }
+      return _uncache(this);
+    };
+    _proto2.totalTime = function totalTime(_totalTime2, suppressEvents) {
+      if (!arguments.length) {
+        return this._tTime;
+      }
+      this._forcing = 1;
+      if (!this._dp && this._ts) {
+        this._start = _roundPrecise(_ticker.time - (this._ts > 0 ? _totalTime2 / this._ts : (this.totalDuration() - _totalTime2) / -this._ts));
+      }
+      _Animation.prototype.totalTime.call(this, _totalTime2, suppressEvents);
+      this._forcing = 0;
+      return this;
+    };
+    _proto2.addLabel = function addLabel(label, position) {
+      this.labels[label] = _parsePosition(this, position);
+      return this;
+    };
+    _proto2.removeLabel = function removeLabel(label) {
+      delete this.labels[label];
+      return this;
+    };
+    _proto2.addPause = function addPause(position, callback, params) {
+      var t = Tween.delayedCall(0, callback || _emptyFunc, params);
+      t.data = "isPause";
+      this._hasPause = 1;
+      return _addToTimeline(this, t, _parsePosition(this, position));
+    };
+    _proto2.removePause = function removePause(position) {
+      var child = this._first;
+      position = _parsePosition(this, position);
+      while (child) {
+        if (child._start === position && child.data === "isPause") {
+          _removeFromParent(child);
+        }
+        child = child._next;
+      }
+    };
+    _proto2.killTweensOf = function killTweensOf(targets, props, onlyActive) {
+      var tweens = this.getTweensOf(targets, onlyActive), i = tweens.length;
+      while (i--) {
+        _overwritingTween !== tweens[i] && tweens[i].kill(targets, props);
+      }
+      return this;
+    };
+    _proto2.getTweensOf = function getTweensOf2(targets, onlyActive) {
+      var a = [], parsedTargets = toArray(targets), child = this._first, isGlobalTime = _isNumber(onlyActive), children;
+      while (child) {
+        if (child instanceof Tween) {
+          if (_arrayContainsAny(child._targets, parsedTargets) && (isGlobalTime ? (!_overwritingTween || child._initted && child._ts) && child.globalTime(0) <= onlyActive && child.globalTime(child.totalDuration()) > onlyActive : !onlyActive || child.isActive())) {
+            a.push(child);
+          }
+        } else if ((children = child.getTweensOf(parsedTargets, onlyActive)).length) {
+          a.push.apply(a, children);
+        }
+        child = child._next;
+      }
+      return a;
+    };
+    _proto2.tweenTo = function tweenTo(position, vars) {
+      vars = vars || {};
+      var tl = this, endTime = _parsePosition(tl, position), _vars = vars, startAt = _vars.startAt, _onStart = _vars.onStart, onStartParams = _vars.onStartParams, immediateRender = _vars.immediateRender, initted, tween = Tween.to(tl, _setDefaults({
+        ease: vars.ease || "none",
+        lazy: false,
+        immediateRender: false,
+        time: endTime,
+        overwrite: "auto",
+        duration: vars.duration || Math.abs((endTime - (startAt && "time" in startAt ? startAt.time : tl._time)) / tl.timeScale()) || _tinyNum,
+        onStart: function onStart() {
+          tl.pause();
+          if (!initted) {
+            var duration = vars.duration || Math.abs((endTime - (startAt && "time" in startAt ? startAt.time : tl._time)) / tl.timeScale());
+            tween._dur !== duration && _setDuration(tween, duration, 0, 1).render(tween._time, true, true);
+            initted = 1;
+          }
+          _onStart && _onStart.apply(tween, onStartParams || []);
+        }
+      }, vars));
+      return immediateRender ? tween.render(0) : tween;
+    };
+    _proto2.tweenFromTo = function tweenFromTo(fromPosition, toPosition, vars) {
+      return this.tweenTo(toPosition, _setDefaults({
+        startAt: {
+          time: _parsePosition(this, fromPosition)
+        }
+      }, vars));
+    };
+    _proto2.recent = function recent() {
+      return this._recent;
+    };
+    _proto2.nextLabel = function nextLabel(afterTime) {
+      if (afterTime === void 0) {
+        afterTime = this._time;
+      }
+      return _getLabelInDirection(this, _parsePosition(this, afterTime));
+    };
+    _proto2.previousLabel = function previousLabel(beforeTime) {
+      if (beforeTime === void 0) {
+        beforeTime = this._time;
+      }
+      return _getLabelInDirection(this, _parsePosition(this, beforeTime), 1);
+    };
+    _proto2.currentLabel = function currentLabel(value) {
+      return arguments.length ? this.seek(value, true) : this.previousLabel(this._time + _tinyNum);
+    };
+    _proto2.shiftChildren = function shiftChildren(amount, adjustLabels, ignoreBeforeTime) {
+      if (ignoreBeforeTime === void 0) {
+        ignoreBeforeTime = 0;
+      }
+      var child = this._first, labels = this.labels, p;
+      while (child) {
+        if (child._start >= ignoreBeforeTime) {
+          child._start += amount;
+          child._end += amount;
+        }
+        child = child._next;
+      }
+      if (adjustLabels) {
+        for (p in labels) {
+          if (labels[p] >= ignoreBeforeTime) {
+            labels[p] += amount;
+          }
+        }
+      }
+      return _uncache(this);
+    };
+    _proto2.invalidate = function invalidate(soft) {
+      var child = this._first;
+      this._lock = 0;
+      while (child) {
+        child.invalidate(soft);
+        child = child._next;
+      }
+      return _Animation.prototype.invalidate.call(this, soft);
+    };
+    _proto2.clear = function clear(includeLabels) {
+      if (includeLabels === void 0) {
+        includeLabels = true;
+      }
+      var child = this._first, next;
+      while (child) {
+        next = child._next;
+        this.remove(child);
+        child = next;
+      }
+      this._dp && (this._time = this._tTime = this._pTime = 0);
+      includeLabels && (this.labels = {});
+      return _uncache(this);
+    };
+    _proto2.totalDuration = function totalDuration(value) {
+      var max = 0, self = this, child = self._last, prevStart = _bigNum, prev, start, parent;
+      if (arguments.length) {
+        return self.timeScale((self._repeat < 0 ? self.duration() : self.totalDuration()) / (self.reversed() ? -value : value));
+      }
+      if (self._dirty) {
+        parent = self.parent;
+        while (child) {
+          prev = child._prev;
+          child._dirty && child.totalDuration();
+          start = child._start;
+          if (start > prevStart && self._sort && child._ts && !self._lock) {
+            self._lock = 1;
+            _addToTimeline(self, child, start - child._delay, 1)._lock = 0;
+          } else {
+            prevStart = start;
+          }
+          if (start < 0 && child._ts) {
+            max -= start;
+            if (!parent && !self._dp || parent && parent.smoothChildTiming) {
+              self._start += start / self._ts;
+              self._time -= start;
+              self._tTime -= start;
+            }
+            self.shiftChildren(-start, false, -Infinity);
+            prevStart = 0;
+          }
+          child._end > max && child._ts && (max = child._end);
+          child = prev;
+        }
+        _setDuration(self, self === _globalTimeline && self._time > max ? self._time : max, 1, 1);
+        self._dirty = 0;
+      }
+      return self._tDur;
+    };
+    Timeline2.updateRoot = function updateRoot(time) {
+      if (_globalTimeline._ts) {
+        _lazySafeRender(_globalTimeline, _parentToChildTotalTime(time, _globalTimeline));
+        _lastRenderedFrame = _ticker.frame;
+      }
+      if (_ticker.frame >= _nextGCFrame) {
+        _nextGCFrame += _config.autoSleep || 120;
+        var child = _globalTimeline._first;
+        if (!child || !child._ts) {
+          if (_config.autoSleep && _ticker._listeners.length < 2) {
+            while (child && !child._ts) {
+              child = child._next;
+            }
+            child || _ticker.sleep();
+          }
+        }
+      }
+    };
+    return Timeline2;
+  }(Animation);
+  _setDefaults(Timeline.prototype, {
+    _lock: 0,
+    _hasPause: 0,
+    _forcing: 0
+  });
+  var _addComplexStringPropTween = function _addComplexStringPropTween2(target, prop, start, end, setter, stringFilter, funcParam) {
+    var pt = new PropTween(this._pt, target, prop, 0, 1, _renderComplexString, null, setter), index = 0, matchIndex = 0, result, startNums, color, endNum, chunk, startNum, hasRandom, a;
+    pt.b = start;
+    pt.e = end;
+    start += "";
+    end += "";
+    if (hasRandom = ~end.indexOf("random(")) {
+      end = _replaceRandom(end);
+    }
+    if (stringFilter) {
+      a = [start, end];
+      stringFilter(a, target, prop);
+      start = a[0];
+      end = a[1];
+    }
+    startNums = start.match(_complexStringNumExp) || [];
+    while (result = _complexStringNumExp.exec(end)) {
+      endNum = result[0];
+      chunk = end.substring(index, result.index);
+      if (color) {
+        color = (color + 1) % 5;
+      } else if (chunk.substr(-5) === "rgba(") {
+        color = 1;
+      }
+      if (endNum !== startNums[matchIndex++]) {
+        startNum = parseFloat(startNums[matchIndex - 1]) || 0;
+        pt._pt = {
+          _next: pt._pt,
+          p: chunk || matchIndex === 1 ? chunk : ",",
+          //note: SVG spec allows omission of comma/space when a negative sign is wedged between two numbers, like 2.5-5.3 instead of 2.5,-5.3 but when tweening, the negative value may switch to positive, so we insert the comma just in case.
+          s: startNum,
+          c: endNum.charAt(1) === "=" ? _parseRelative(startNum, endNum) - startNum : parseFloat(endNum) - startNum,
+          m: color && color < 4 ? Math.round : 0
+        };
+        index = _complexStringNumExp.lastIndex;
+      }
+    }
+    pt.c = index < end.length ? end.substring(index, end.length) : "";
+    pt.fp = funcParam;
+    if (_relExp.test(end) || hasRandom) {
+      pt.e = 0;
+    }
+    this._pt = pt;
+    return pt;
+  };
+  var _addPropTween = function _addPropTween2(target, prop, start, end, index, targets, modifier, stringFilter, funcParam, optional) {
+    _isFunction(end) && (end = end(index || 0, target, targets));
+    var currentValue = target[prop], parsedStart = start !== "get" ? start : !_isFunction(currentValue) ? currentValue : funcParam ? target[prop.indexOf("set") || !_isFunction(target["get" + prop.substr(3)]) ? prop : "get" + prop.substr(3)](funcParam) : target[prop](), setter = !_isFunction(currentValue) ? _setterPlain : funcParam ? _setterFuncWithParam : _setterFunc, pt;
+    if (_isString(end)) {
+      if (~end.indexOf("random(")) {
+        end = _replaceRandom(end);
+      }
+      if (end.charAt(1) === "=") {
+        pt = _parseRelative(parsedStart, end) + (getUnit(parsedStart) || 0);
+        if (pt || pt === 0) {
+          end = pt;
+        }
+      }
+    }
+    if (!optional || parsedStart !== end || _forceAllPropTweens) {
+      if (!isNaN(parsedStart * end) && end !== "") {
+        pt = new PropTween(this._pt, target, prop, +parsedStart || 0, end - (parsedStart || 0), typeof currentValue === "boolean" ? _renderBoolean : _renderPlain, 0, setter);
+        funcParam && (pt.fp = funcParam);
+        modifier && pt.modifier(modifier, this, target);
+        return this._pt = pt;
+      }
+      !currentValue && !(prop in target) && _missingPlugin(prop, end);
+      return _addComplexStringPropTween.call(this, target, prop, parsedStart, end, setter, stringFilter || _config.stringFilter, funcParam);
+    }
+  };
+  var _processVars = function _processVars2(vars, index, target, targets, tween) {
+    _isFunction(vars) && (vars = _parseFuncOrString(vars, tween, index, target, targets));
+    if (!_isObject(vars) || vars.style && vars.nodeType || _isArray(vars) || _isTypedArray(vars)) {
+      return _isString(vars) ? _parseFuncOrString(vars, tween, index, target, targets) : vars;
+    }
+    var copy = {}, p;
+    for (p in vars) {
+      copy[p] = _parseFuncOrString(vars[p], tween, index, target, targets);
+    }
+    return copy;
+  };
+  var _checkPlugin = function _checkPlugin2(property, vars, tween, index, target, targets) {
+    var plugin, pt, ptLookup, i;
+    if (_plugins[property] && (plugin = new _plugins[property]()).init(target, plugin.rawVars ? vars[property] : _processVars(vars[property], index, target, targets, tween), tween, index, targets) !== false) {
+      tween._pt = pt = new PropTween(tween._pt, target, property, 0, 1, plugin.render, plugin, 0, plugin.priority);
+      if (tween !== _quickTween) {
+        ptLookup = tween._ptLookup[tween._targets.indexOf(target)];
+        i = plugin._props.length;
+        while (i--) {
+          ptLookup[plugin._props[i]] = pt;
+        }
+      }
+    }
+    return plugin;
+  };
+  var _overwritingTween;
+  var _forceAllPropTweens;
+  var _initTween = function _initTween2(tween, time, tTime) {
+    var vars = tween.vars, ease = vars.ease, startAt = vars.startAt, immediateRender = vars.immediateRender, lazy = vars.lazy, onUpdate = vars.onUpdate, runBackwards = vars.runBackwards, yoyoEase = vars.yoyoEase, keyframes = vars.keyframes, autoRevert = vars.autoRevert, dur = tween._dur, prevStartAt = tween._startAt, targets = tween._targets, parent = tween.parent, fullTargets = parent && parent.data === "nested" ? parent.vars.targets : targets, autoOverwrite = tween._overwrite === "auto" && !_suppressOverwrites, tl = tween.timeline, cleanVars, i, p, pt, target, hasPriority, gsData, harness, plugin, ptLookup, index, harnessVars, overwritten;
+    tl && (!keyframes || !ease) && (ease = "none");
+    tween._ease = _parseEase(ease, _defaults.ease);
+    tween._yEase = yoyoEase ? _invertEase(_parseEase(yoyoEase === true ? ease : yoyoEase, _defaults.ease)) : 0;
+    if (yoyoEase && tween._yoyo && !tween._repeat) {
+      yoyoEase = tween._yEase;
+      tween._yEase = tween._ease;
+      tween._ease = yoyoEase;
+    }
+    tween._from = !tl && !!vars.runBackwards;
+    if (!tl || keyframes && !vars.stagger) {
+      harness = targets[0] ? _getCache(targets[0]).harness : 0;
+      harnessVars = harness && vars[harness.prop];
+      cleanVars = _copyExcluding(vars, _reservedProps);
+      if (prevStartAt) {
+        prevStartAt._zTime < 0 && prevStartAt.progress(1);
+        time < 0 && runBackwards && immediateRender && !autoRevert ? prevStartAt.render(-1, true) : prevStartAt.revert(runBackwards && dur ? _revertConfigNoKill : _startAtRevertConfig);
+        prevStartAt._lazy = 0;
+      }
+      if (startAt) {
+        _removeFromParent(tween._startAt = Tween.set(targets, _setDefaults({
+          data: "isStart",
+          overwrite: false,
+          parent,
+          immediateRender: true,
+          lazy: !prevStartAt && _isNotFalse(lazy),
+          startAt: null,
+          delay: 0,
+          onUpdate: onUpdate && function() {
+            return _callback(tween, "onUpdate");
+          },
+          stagger: 0
+        }, startAt)));
+        tween._startAt._dp = 0;
+        tween._startAt._sat = tween;
+        time < 0 && (_reverting || !immediateRender && !autoRevert) && tween._startAt.revert(_revertConfigNoKill);
+        if (immediateRender) {
+          if (dur && time <= 0 && tTime <= 0) {
+            time && (tween._zTime = time);
+            return;
+          }
+        }
+      } else if (runBackwards && dur) {
+        if (!prevStartAt) {
+          time && (immediateRender = false);
+          p = _setDefaults({
+            overwrite: false,
+            data: "isFromStart",
+            //we tag the tween with as "isFromStart" so that if [inside a plugin] we need to only do something at the very END of a tween, we have a way of identifying this tween as merely the one that's setting the beginning values for a "from()" tween. For example, clearProps in CSSPlugin should only get applied at the very END of a tween and without this tag, from(...{height:100, clearProps:"height", delay:1}) would wipe the height at the beginning of the tween and after 1 second, it'd kick back in.
+            lazy: immediateRender && !prevStartAt && _isNotFalse(lazy),
+            immediateRender,
+            //zero-duration tweens render immediately by default, but if we're not specifically instructed to render this tween immediately, we should skip this and merely _init() to record the starting values (rendering them immediately would push them to completion which is wasteful in that case - we'd have to render(-1) immediately after)
+            stagger: 0,
+            parent
+            //ensures that nested tweens that had a stagger are handled properly, like gsap.from(".class", {y: gsap.utils.wrap([-100,100]), stagger: 0.5})
+          }, cleanVars);
+          harnessVars && (p[harness.prop] = harnessVars);
+          _removeFromParent(tween._startAt = Tween.set(targets, p));
+          tween._startAt._dp = 0;
+          tween._startAt._sat = tween;
+          time < 0 && (_reverting ? tween._startAt.revert(_revertConfigNoKill) : tween._startAt.render(-1, true));
+          tween._zTime = time;
+          if (!immediateRender) {
+            _initTween2(tween._startAt, _tinyNum, _tinyNum);
+          } else if (!time) {
+            return;
+          }
+        }
+      }
+      tween._pt = tween._ptCache = 0;
+      lazy = dur && _isNotFalse(lazy) || lazy && !dur;
+      for (i = 0; i < targets.length; i++) {
+        target = targets[i];
+        gsData = target._gsap || _harness(targets)[i]._gsap;
+        tween._ptLookup[i] = ptLookup = {};
+        _lazyLookup[gsData.id] && _lazyTweens.length && _lazyRender();
+        index = fullTargets === targets ? i : fullTargets.indexOf(target);
+        if (harness && (plugin = new harness()).init(target, harnessVars || cleanVars, tween, index, fullTargets) !== false) {
+          tween._pt = pt = new PropTween(tween._pt, target, plugin.name, 0, 1, plugin.render, plugin, 0, plugin.priority);
+          plugin._props.forEach(function(name) {
+            ptLookup[name] = pt;
+          });
+          plugin.priority && (hasPriority = 1);
+        }
+        if (!harness || harnessVars) {
+          for (p in cleanVars) {
+            if (_plugins[p] && (plugin = _checkPlugin(p, cleanVars, tween, index, target, fullTargets))) {
+              plugin.priority && (hasPriority = 1);
+            } else {
+              ptLookup[p] = pt = _addPropTween.call(tween, target, p, "get", cleanVars[p], index, fullTargets, 0, vars.stringFilter);
+            }
+          }
+        }
+        tween._op && tween._op[i] && tween.kill(target, tween._op[i]);
+        if (autoOverwrite && tween._pt) {
+          _overwritingTween = tween;
+          _globalTimeline.killTweensOf(target, ptLookup, tween.globalTime(time));
+          overwritten = !tween.parent;
+          _overwritingTween = 0;
+        }
+        tween._pt && lazy && (_lazyLookup[gsData.id] = 1);
+      }
+      hasPriority && _sortPropTweensByPriority(tween);
+      tween._onInit && tween._onInit(tween);
+    }
+    tween._onUpdate = onUpdate;
+    tween._initted = (!tween._op || tween._pt) && !overwritten;
+    keyframes && time <= 0 && tl.render(_bigNum, true, true);
+  };
+  var _updatePropTweens = function _updatePropTweens2(tween, property, value, start, startIsRelative, ratio, time, skipRecursion) {
+    var ptCache = (tween._pt && tween._ptCache || (tween._ptCache = {}))[property], pt, rootPT, lookup, i;
+    if (!ptCache) {
+      ptCache = tween._ptCache[property] = [];
+      lookup = tween._ptLookup;
+      i = tween._targets.length;
+      while (i--) {
+        pt = lookup[i][property];
+        if (pt && pt.d && pt.d._pt) {
+          pt = pt.d._pt;
+          while (pt && pt.p !== property && pt.fp !== property) {
+            pt = pt._next;
+          }
+        }
+        if (!pt) {
+          _forceAllPropTweens = 1;
+          tween.vars[property] = "+=0";
+          _initTween(tween, time);
+          _forceAllPropTweens = 0;
+          return skipRecursion ? _warn(property + " not eligible for reset") : 1;
+        }
+        ptCache.push(pt);
+      }
+    }
+    i = ptCache.length;
+    while (i--) {
+      rootPT = ptCache[i];
+      pt = rootPT._pt || rootPT;
+      pt.s = (start || start === 0) && !startIsRelative ? start : pt.s + (start || 0) + ratio * pt.c;
+      pt.c = value - pt.s;
+      rootPT.e && (rootPT.e = _round(value) + getUnit(rootPT.e));
+      rootPT.b && (rootPT.b = pt.s + getUnit(rootPT.b));
+    }
+  };
+  var _addAliasesToVars = function _addAliasesToVars2(targets, vars) {
+    var harness = targets[0] ? _getCache(targets[0]).harness : 0, propertyAliases = harness && harness.aliases, copy, p, i, aliases;
+    if (!propertyAliases) {
+      return vars;
+    }
+    copy = _merge({}, vars);
+    for (p in propertyAliases) {
+      if (p in copy) {
+        aliases = propertyAliases[p].split(",");
+        i = aliases.length;
+        while (i--) {
+          copy[aliases[i]] = copy[p];
+        }
+      }
+    }
+    return copy;
+  };
+  var _parseKeyframe = function _parseKeyframe2(prop, obj, allProps, easeEach) {
+    var ease = obj.ease || easeEach || "power1.inOut", p, a;
+    if (_isArray(obj)) {
+      a = allProps[prop] || (allProps[prop] = []);
+      obj.forEach(function(value, i) {
+        return a.push({
+          t: i / (obj.length - 1) * 100,
+          v: value,
+          e: ease
+        });
+      });
+    } else {
+      for (p in obj) {
+        a = allProps[p] || (allProps[p] = []);
+        p === "ease" || a.push({
+          t: parseFloat(prop),
+          v: obj[p],
+          e: ease
+        });
+      }
+    }
+  };
+  var _parseFuncOrString = function _parseFuncOrString2(value, tween, i, target, targets) {
+    return _isFunction(value) ? value.call(tween, i, target, targets) : _isString(value) && ~value.indexOf("random(") ? _replaceRandom(value) : value;
+  };
+  var _staggerTweenProps = _callbackNames + "repeat,repeatDelay,yoyo,repeatRefresh,yoyoEase,autoRevert";
+  var _staggerPropsToSkip = {};
+  _forEachName(_staggerTweenProps + ",id,stagger,delay,duration,paused,scrollTrigger", function(name) {
+    return _staggerPropsToSkip[name] = 1;
+  });
+  var Tween = /* @__PURE__ */ function(_Animation2) {
+    _inheritsLoose(Tween2, _Animation2);
+    function Tween2(targets, vars, position, skipInherit) {
+      var _this3;
+      if (typeof vars === "number") {
+        position.duration = vars;
+        vars = position;
+        position = null;
+      }
+      _this3 = _Animation2.call(this, skipInherit ? vars : _inheritDefaults(vars)) || this;
+      var _this3$vars = _this3.vars, duration = _this3$vars.duration, delay = _this3$vars.delay, immediateRender = _this3$vars.immediateRender, stagger = _this3$vars.stagger, overwrite = _this3$vars.overwrite, keyframes = _this3$vars.keyframes, defaults2 = _this3$vars.defaults, scrollTrigger = _this3$vars.scrollTrigger, yoyoEase = _this3$vars.yoyoEase, parent = vars.parent || _globalTimeline, parsedTargets = (_isArray(targets) || _isTypedArray(targets) ? _isNumber(targets[0]) : "length" in vars) ? [targets] : toArray(targets), tl, i, copy, l, p, curTarget, staggerFunc, staggerVarsToMerge;
+      _this3._targets = parsedTargets.length ? _harness(parsedTargets) : _warn("GSAP target " + targets + " not found. https://gsap.com", !_config.nullTargetWarn) || [];
+      _this3._ptLookup = [];
+      _this3._overwrite = overwrite;
+      if (keyframes || stagger || _isFuncOrString(duration) || _isFuncOrString(delay)) {
+        vars = _this3.vars;
+        tl = _this3.timeline = new Timeline({
+          data: "nested",
+          defaults: defaults2 || {},
+          targets: parent && parent.data === "nested" ? parent.vars.targets : parsedTargets
+        });
+        tl.kill();
+        tl.parent = tl._dp = _assertThisInitialized(_this3);
+        tl._start = 0;
+        if (stagger || _isFuncOrString(duration) || _isFuncOrString(delay)) {
+          l = parsedTargets.length;
+          staggerFunc = stagger && distribute(stagger);
+          if (_isObject(stagger)) {
+            for (p in stagger) {
+              if (~_staggerTweenProps.indexOf(p)) {
+                staggerVarsToMerge || (staggerVarsToMerge = {});
+                staggerVarsToMerge[p] = stagger[p];
+              }
+            }
+          }
+          for (i = 0; i < l; i++) {
+            copy = _copyExcluding(vars, _staggerPropsToSkip);
+            copy.stagger = 0;
+            yoyoEase && (copy.yoyoEase = yoyoEase);
+            staggerVarsToMerge && _merge(copy, staggerVarsToMerge);
+            curTarget = parsedTargets[i];
+            copy.duration = +_parseFuncOrString(duration, _assertThisInitialized(_this3), i, curTarget, parsedTargets);
+            copy.delay = (+_parseFuncOrString(delay, _assertThisInitialized(_this3), i, curTarget, parsedTargets) || 0) - _this3._delay;
+            if (!stagger && l === 1 && copy.delay) {
+              _this3._delay = delay = copy.delay;
+              _this3._start += delay;
+              copy.delay = 0;
+            }
+            tl.to(curTarget, copy, staggerFunc ? staggerFunc(i, curTarget, parsedTargets) : 0);
+            tl._ease = _easeMap.none;
+          }
+          tl.duration() ? duration = delay = 0 : _this3.timeline = 0;
+        } else if (keyframes) {
+          _inheritDefaults(_setDefaults(tl.vars.defaults, {
+            ease: "none"
+          }));
+          tl._ease = _parseEase(keyframes.ease || vars.ease || "none");
+          var time = 0, a, kf, v;
+          if (_isArray(keyframes)) {
+            keyframes.forEach(function(frame) {
+              return tl.to(parsedTargets, frame, ">");
+            });
+            tl.duration();
+          } else {
+            copy = {};
+            for (p in keyframes) {
+              p === "ease" || p === "easeEach" || _parseKeyframe(p, keyframes[p], copy, keyframes.easeEach);
+            }
+            for (p in copy) {
+              a = copy[p].sort(function(a2, b) {
+                return a2.t - b.t;
+              });
+              time = 0;
+              for (i = 0; i < a.length; i++) {
+                kf = a[i];
+                v = {
+                  ease: kf.e,
+                  duration: (kf.t - (i ? a[i - 1].t : 0)) / 100 * duration
+                };
+                v[p] = kf.v;
+                tl.to(parsedTargets, v, time);
+                time += v.duration;
+              }
+            }
+            tl.duration() < duration && tl.to({}, {
+              duration: duration - tl.duration()
+            });
+          }
+        }
+        duration || _this3.duration(duration = tl.duration());
+      } else {
+        _this3.timeline = 0;
+      }
+      if (overwrite === true && !_suppressOverwrites) {
+        _overwritingTween = _assertThisInitialized(_this3);
+        _globalTimeline.killTweensOf(parsedTargets);
+        _overwritingTween = 0;
+      }
+      _addToTimeline(parent, _assertThisInitialized(_this3), position);
+      vars.reversed && _this3.reverse();
+      vars.paused && _this3.paused(true);
+      if (immediateRender || !duration && !keyframes && _this3._start === _roundPrecise(parent._time) && _isNotFalse(immediateRender) && _hasNoPausedAncestors(_assertThisInitialized(_this3)) && parent.data !== "nested") {
+        _this3._tTime = -_tinyNum;
+        _this3.render(Math.max(0, -delay) || 0);
+      }
+      scrollTrigger && _scrollTrigger(_assertThisInitialized(_this3), scrollTrigger);
+      return _this3;
+    }
+    var _proto3 = Tween2.prototype;
+    _proto3.render = function render6(totalTime, suppressEvents, force) {
+      var prevTime = this._time, tDur = this._tDur, dur = this._dur, isNegative = totalTime < 0, tTime = totalTime > tDur - _tinyNum && !isNegative ? tDur : totalTime < _tinyNum ? 0 : totalTime, time, pt, iteration, cycleDuration, prevIteration, isYoyo, ratio, timeline2, yoyoEase;
+      if (!dur) {
+        _renderZeroDurationTween(this, totalTime, suppressEvents, force);
+      } else if (tTime !== this._tTime || !totalTime || force || !this._initted && this._tTime || this._startAt && this._zTime < 0 !== isNegative || this._lazy) {
+        time = tTime;
+        timeline2 = this.timeline;
+        if (this._repeat) {
+          cycleDuration = dur + this._rDelay;
+          if (this._repeat < -1 && isNegative) {
+            return this.totalTime(cycleDuration * 100 + totalTime, suppressEvents, force);
+          }
+          time = _roundPrecise(tTime % cycleDuration);
+          if (tTime === tDur) {
+            iteration = this._repeat;
+            time = dur;
+          } else {
+            prevIteration = _roundPrecise(tTime / cycleDuration);
+            iteration = ~~prevIteration;
+            if (iteration && iteration === prevIteration) {
+              time = dur;
+              iteration--;
+            } else if (time > dur) {
+              time = dur;
+            }
+          }
+          isYoyo = this._yoyo && iteration & 1;
+          if (isYoyo) {
+            yoyoEase = this._yEase;
+            time = dur - time;
+          }
+          prevIteration = _animationCycle(this._tTime, cycleDuration);
+          if (time === prevTime && !force && this._initted && iteration === prevIteration) {
+            this._tTime = tTime;
+            return this;
+          }
+          if (iteration !== prevIteration) {
+            timeline2 && this._yEase && _propagateYoyoEase(timeline2, isYoyo);
+            if (this.vars.repeatRefresh && !isYoyo && !this._lock && time !== cycleDuration && this._initted) {
+              this._lock = force = 1;
+              this.render(_roundPrecise(cycleDuration * iteration), true).invalidate()._lock = 0;
+            }
+          }
+        }
+        if (!this._initted) {
+          if (_attemptInitTween(this, isNegative ? totalTime : time, force, suppressEvents, tTime)) {
+            this._tTime = 0;
+            return this;
+          }
+          if (prevTime !== this._time && !(force && this.vars.repeatRefresh && iteration !== prevIteration)) {
+            return this;
+          }
+          if (dur !== this._dur) {
+            return this.render(totalTime, suppressEvents, force);
+          }
+        }
+        this._tTime = tTime;
+        this._time = time;
+        if (!this._act && this._ts) {
+          this._act = 1;
+          this._lazy = 0;
+        }
+        this.ratio = ratio = (yoyoEase || this._ease)(time / dur);
+        if (this._from) {
+          this.ratio = ratio = 1 - ratio;
+        }
+        if (!prevTime && tTime && !suppressEvents && !prevIteration) {
+          _callback(this, "onStart");
+          if (this._tTime !== tTime) {
+            return this;
+          }
+        }
+        pt = this._pt;
+        while (pt) {
+          pt.r(ratio, pt.d);
+          pt = pt._next;
+        }
+        timeline2 && timeline2.render(totalTime < 0 ? totalTime : timeline2._dur * timeline2._ease(time / this._dur), suppressEvents, force) || this._startAt && (this._zTime = totalTime);
+        if (this._onUpdate && !suppressEvents) {
+          isNegative && _rewindStartAt(this, totalTime, suppressEvents, force);
+          _callback(this, "onUpdate");
+        }
+        this._repeat && iteration !== prevIteration && this.vars.onRepeat && !suppressEvents && this.parent && _callback(this, "onRepeat");
+        if ((tTime === this._tDur || !tTime) && this._tTime === tTime) {
+          isNegative && !this._onUpdate && _rewindStartAt(this, totalTime, true, true);
+          (totalTime || !dur) && (tTime === this._tDur && this._ts > 0 || !tTime && this._ts < 0) && _removeFromParent(this, 1);
+          if (!suppressEvents && !(isNegative && !prevTime) && (tTime || prevTime || isYoyo)) {
+            _callback(this, tTime === tDur ? "onComplete" : "onReverseComplete", true);
+            this._prom && !(tTime < tDur && this.timeScale() > 0) && this._prom();
+          }
+        }
+      }
+      return this;
+    };
+    _proto3.targets = function targets() {
+      return this._targets;
+    };
+    _proto3.invalidate = function invalidate(soft) {
+      (!soft || !this.vars.runBackwards) && (this._startAt = 0);
+      this._pt = this._op = this._onUpdate = this._lazy = this.ratio = 0;
+      this._ptLookup = [];
+      this.timeline && this.timeline.invalidate(soft);
+      return _Animation2.prototype.invalidate.call(this, soft);
+    };
+    _proto3.resetTo = function resetTo(property, value, start, startIsRelative, skipRecursion) {
+      _tickerActive || _ticker.wake();
+      this._ts || this.play();
+      var time = Math.min(this._dur, (this._dp._time - this._start) * this._ts), ratio;
+      this._initted || _initTween(this, time);
+      ratio = this._ease(time / this._dur);
+      if (_updatePropTweens(this, property, value, start, startIsRelative, ratio, time, skipRecursion)) {
+        return this.resetTo(property, value, start, startIsRelative, 1);
+      }
+      _alignPlayhead(this, 0);
+      this.parent || _addLinkedListItem(this._dp, this, "_first", "_last", this._dp._sort ? "_start" : 0);
+      return this.render(0);
+    };
+    _proto3.kill = function kill2(targets, vars) {
+      if (vars === void 0) {
+        vars = "all";
+      }
+      if (!targets && (!vars || vars === "all")) {
+        this._lazy = this._pt = 0;
+        this.parent ? _interrupt(this) : this.scrollTrigger && this.scrollTrigger.kill(!!_reverting);
+        return this;
+      }
+      if (this.timeline) {
+        var tDur = this.timeline.totalDuration();
+        this.timeline.killTweensOf(targets, vars, _overwritingTween && _overwritingTween.vars.overwrite !== true)._first || _interrupt(this);
+        this.parent && tDur !== this.timeline.totalDuration() && _setDuration(this, this._dur * this.timeline._tDur / tDur, 0, 1);
+        return this;
+      }
+      var parsedTargets = this._targets, killingTargets = targets ? toArray(targets) : parsedTargets, propTweenLookup = this._ptLookup, firstPT = this._pt, overwrittenProps, curLookup, curOverwriteProps, props, p, pt, i;
+      if ((!vars || vars === "all") && _arraysMatch(parsedTargets, killingTargets)) {
+        vars === "all" && (this._pt = 0);
+        return _interrupt(this);
+      }
+      overwrittenProps = this._op = this._op || [];
+      if (vars !== "all") {
+        if (_isString(vars)) {
+          p = {};
+          _forEachName(vars, function(name) {
+            return p[name] = 1;
+          });
+          vars = p;
+        }
+        vars = _addAliasesToVars(parsedTargets, vars);
+      }
+      i = parsedTargets.length;
+      while (i--) {
+        if (~killingTargets.indexOf(parsedTargets[i])) {
+          curLookup = propTweenLookup[i];
+          if (vars === "all") {
+            overwrittenProps[i] = vars;
+            props = curLookup;
+            curOverwriteProps = {};
+          } else {
+            curOverwriteProps = overwrittenProps[i] = overwrittenProps[i] || {};
+            props = vars;
+          }
+          for (p in props) {
+            pt = curLookup && curLookup[p];
+            if (pt) {
+              if (!("kill" in pt.d) || pt.d.kill(p) === true) {
+                _removeLinkedListItem(this, pt, "_pt");
+              }
+              delete curLookup[p];
+            }
+            if (curOverwriteProps !== "all") {
+              curOverwriteProps[p] = 1;
+            }
+          }
+        }
+      }
+      this._initted && !this._pt && firstPT && _interrupt(this);
+      return this;
+    };
+    Tween2.to = function to(targets, vars) {
+      return new Tween2(targets, vars, arguments[2]);
+    };
+    Tween2.from = function from(targets, vars) {
+      return _createTweenType(1, arguments);
+    };
+    Tween2.delayedCall = function delayedCall(delay, callback, params, scope) {
+      return new Tween2(callback, 0, {
+        immediateRender: false,
+        lazy: false,
+        overwrite: false,
+        delay,
+        onComplete: callback,
+        onReverseComplete: callback,
+        onCompleteParams: params,
+        onReverseCompleteParams: params,
+        callbackScope: scope
+      });
+    };
+    Tween2.fromTo = function fromTo(targets, fromVars, toVars) {
+      return _createTweenType(2, arguments);
+    };
+    Tween2.set = function set(targets, vars) {
+      vars.duration = 0;
+      vars.repeatDelay || (vars.repeat = 0);
+      return new Tween2(targets, vars);
+    };
+    Tween2.killTweensOf = function killTweensOf(targets, props, onlyActive) {
+      return _globalTimeline.killTweensOf(targets, props, onlyActive);
+    };
+    return Tween2;
+  }(Animation);
+  _setDefaults(Tween.prototype, {
+    _targets: [],
+    _lazy: 0,
+    _startAt: 0,
+    _op: 0,
+    _onInit: 0
+  });
+  _forEachName("staggerTo,staggerFrom,staggerFromTo", function(name) {
+    Tween[name] = function() {
+      var tl = new Timeline(), params = _slice.call(arguments, 0);
+      params.splice(name === "staggerFromTo" ? 5 : 4, 0, 0);
+      return tl[name].apply(tl, params);
+    };
+  });
+  var _setterPlain = function _setterPlain2(target, property, value) {
+    return target[property] = value;
+  };
+  var _setterFunc = function _setterFunc2(target, property, value) {
+    return target[property](value);
+  };
+  var _setterFuncWithParam = function _setterFuncWithParam2(target, property, value, data) {
+    return target[property](data.fp, value);
+  };
+  var _setterAttribute = function _setterAttribute2(target, property, value) {
+    return target.setAttribute(property, value);
+  };
+  var _getSetter = function _getSetter2(target, property) {
+    return _isFunction(target[property]) ? _setterFunc : _isUndefined(target[property]) && target.setAttribute ? _setterAttribute : _setterPlain;
+  };
+  var _renderPlain = function _renderPlain2(ratio, data) {
+    return data.set(data.t, data.p, Math.round((data.s + data.c * ratio) * 1e6) / 1e6, data);
+  };
+  var _renderBoolean = function _renderBoolean2(ratio, data) {
+    return data.set(data.t, data.p, !!(data.s + data.c * ratio), data);
+  };
+  var _renderComplexString = function _renderComplexString2(ratio, data) {
+    var pt = data._pt, s = "";
+    if (!ratio && data.b) {
+      s = data.b;
+    } else if (ratio === 1 && data.e) {
+      s = data.e;
+    } else {
+      while (pt) {
+        s = pt.p + (pt.m ? pt.m(pt.s + pt.c * ratio) : Math.round((pt.s + pt.c * ratio) * 1e4) / 1e4) + s;
+        pt = pt._next;
+      }
+      s += data.c;
+    }
+    data.set(data.t, data.p, s, data);
+  };
+  var _renderPropTweens = function _renderPropTweens2(ratio, data) {
+    var pt = data._pt;
+    while (pt) {
+      pt.r(ratio, pt.d);
+      pt = pt._next;
+    }
+  };
+  var _addPluginModifier = function _addPluginModifier2(modifier, tween, target, property) {
+    var pt = this._pt, next;
+    while (pt) {
+      next = pt._next;
+      pt.p === property && pt.modifier(modifier, tween, target);
+      pt = next;
+    }
+  };
+  var _killPropTweensOf = function _killPropTweensOf2(property) {
+    var pt = this._pt, hasNonDependentRemaining, next;
+    while (pt) {
+      next = pt._next;
+      if (pt.p === property && !pt.op || pt.op === property) {
+        _removeLinkedListItem(this, pt, "_pt");
+      } else if (!pt.dep) {
+        hasNonDependentRemaining = 1;
+      }
+      pt = next;
+    }
+    return !hasNonDependentRemaining;
+  };
+  var _setterWithModifier = function _setterWithModifier2(target, property, value, data) {
+    data.mSet(target, property, data.m.call(data.tween, value, data.mt), data);
+  };
+  var _sortPropTweensByPriority = function _sortPropTweensByPriority2(parent) {
+    var pt = parent._pt, next, pt2, first, last;
+    while (pt) {
+      next = pt._next;
+      pt2 = first;
+      while (pt2 && pt2.pr > pt.pr) {
+        pt2 = pt2._next;
+      }
+      if (pt._prev = pt2 ? pt2._prev : last) {
+        pt._prev._next = pt;
+      } else {
+        first = pt;
+      }
+      if (pt._next = pt2) {
+        pt2._prev = pt;
+      } else {
+        last = pt;
+      }
+      pt = next;
+    }
+    parent._pt = first;
+  };
+  var PropTween = /* @__PURE__ */ function() {
+    function PropTween2(next, target, prop, start, change, renderer, data, setter, priority) {
+      this.t = target;
+      this.s = start;
+      this.c = change;
+      this.p = prop;
+      this.r = renderer || _renderPlain;
+      this.d = data || this;
+      this.set = setter || _setterPlain;
+      this.pr = priority || 0;
+      this._next = next;
+      if (next) {
+        next._prev = this;
+      }
+    }
+    var _proto4 = PropTween2.prototype;
+    _proto4.modifier = function modifier(func, tween, target) {
+      this.mSet = this.mSet || this.set;
+      this.set = _setterWithModifier;
+      this.m = func;
+      this.mt = target;
+      this.tween = tween;
+    };
+    return PropTween2;
+  }();
+  _forEachName(_callbackNames + "parent,duration,ease,delay,overwrite,runBackwards,startAt,yoyo,immediateRender,repeat,repeatDelay,data,paused,reversed,lazy,callbackScope,stringFilter,id,yoyoEase,stagger,inherit,repeatRefresh,keyframes,autoRevert,scrollTrigger", function(name) {
+    return _reservedProps[name] = 1;
+  });
+  _globals.TweenMax = _globals.TweenLite = Tween;
+  _globals.TimelineLite = _globals.TimelineMax = Timeline;
+  _globalTimeline = new Timeline({
+    sortChildren: false,
+    defaults: _defaults,
+    autoRemoveChildren: true,
+    id: "root",
+    smoothChildTiming: true
+  });
+  _config.stringFilter = _colorStringFilter;
+  var _media = [];
+  var _listeners = {};
+  var _emptyArray = [];
+  var _lastMediaTime = 0;
+  var _contextID = 0;
+  var _dispatch = function _dispatch2(type) {
+    return (_listeners[type] || _emptyArray).map(function(f) {
+      return f();
+    });
+  };
+  var _onMediaChange = function _onMediaChange2() {
+    var time = Date.now(), matches = [];
+    if (time - _lastMediaTime > 2) {
+      _dispatch("matchMediaInit");
+      _media.forEach(function(c) {
+        var queries = c.queries, conditions = c.conditions, match, p, anyMatch, toggled;
+        for (p in queries) {
+          match = _win.matchMedia(queries[p]).matches;
+          match && (anyMatch = 1);
+          if (match !== conditions[p]) {
+            conditions[p] = match;
+            toggled = 1;
+          }
+        }
+        if (toggled) {
+          c.revert();
+          anyMatch && matches.push(c);
+        }
+      });
+      _dispatch("matchMediaRevert");
+      matches.forEach(function(c) {
+        return c.onMatch(c, function(func) {
+          return c.add(null, func);
+        });
+      });
+      _lastMediaTime = time;
+      _dispatch("matchMedia");
+    }
+  };
+  var Context = /* @__PURE__ */ function() {
+    function Context2(func, scope) {
+      this.selector = scope && selector(scope);
+      this.data = [];
+      this._r = [];
+      this.isReverted = false;
+      this.id = _contextID++;
+      func && this.add(func);
+    }
+    var _proto5 = Context2.prototype;
+    _proto5.add = function add(name, func, scope) {
+      if (_isFunction(name)) {
+        scope = func;
+        func = name;
+        name = _isFunction;
+      }
+      var self = this, f = function f2() {
+        var prev = _context, prevSelector = self.selector, result;
+        prev && prev !== self && prev.data.push(self);
+        scope && (self.selector = selector(scope));
+        _context = self;
+        result = func.apply(self, arguments);
+        _isFunction(result) && self._r.push(result);
+        _context = prev;
+        self.selector = prevSelector;
+        self.isReverted = false;
+        return result;
+      };
+      self.last = f;
+      return name === _isFunction ? f(self, function(func2) {
+        return self.add(null, func2);
+      }) : name ? self[name] = f : f;
+    };
+    _proto5.ignore = function ignore(func) {
+      var prev = _context;
+      _context = null;
+      func(this);
+      _context = prev;
+    };
+    _proto5.getTweens = function getTweens() {
+      var a = [];
+      this.data.forEach(function(e) {
+        return e instanceof Context2 ? a.push.apply(a, e.getTweens()) : e instanceof Tween && !(e.parent && e.parent.data === "nested") && a.push(e);
+      });
+      return a;
+    };
+    _proto5.clear = function clear() {
+      this._r.length = this.data.length = 0;
+    };
+    _proto5.kill = function kill2(revert, matchMedia2) {
+      var _this4 = this;
+      if (revert) {
+        (function() {
+          var tweens = _this4.getTweens(), i2 = _this4.data.length, t;
+          while (i2--) {
+            t = _this4.data[i2];
+            if (t.data === "isFlip") {
+              t.revert();
+              t.getChildren(true, true, false).forEach(function(tween) {
+                return tweens.splice(tweens.indexOf(tween), 1);
+              });
+            }
+          }
+          tweens.map(function(t2) {
+            return {
+              g: t2._dur || t2._delay || t2._sat && !t2._sat.vars.immediateRender ? t2.globalTime(0) : -Infinity,
+              t: t2
+            };
+          }).sort(function(a, b) {
+            return b.g - a.g || -Infinity;
+          }).forEach(function(o) {
+            return o.t.revert(revert);
+          });
+          i2 = _this4.data.length;
+          while (i2--) {
+            t = _this4.data[i2];
+            if (t instanceof Timeline) {
+              if (t.data !== "nested") {
+                t.scrollTrigger && t.scrollTrigger.revert();
+                t.kill();
+              }
+            } else {
+              !(t instanceof Tween) && t.revert && t.revert(revert);
+            }
+          }
+          _this4._r.forEach(function(f) {
+            return f(revert, _this4);
+          });
+          _this4.isReverted = true;
+        })();
+      } else {
+        this.data.forEach(function(e) {
+          return e.kill && e.kill();
+        });
+      }
+      this.clear();
+      if (matchMedia2) {
+        var i = _media.length;
+        while (i--) {
+          _media[i].id === this.id && _media.splice(i, 1);
+        }
+      }
+    };
+    _proto5.revert = function revert(config3) {
+      this.kill(config3 || {});
+    };
+    return Context2;
+  }();
+  var MatchMedia = /* @__PURE__ */ function() {
+    function MatchMedia2(scope) {
+      this.contexts = [];
+      this.scope = scope;
+      _context && _context.data.push(this);
+    }
+    var _proto6 = MatchMedia2.prototype;
+    _proto6.add = function add(conditions, func, scope) {
+      _isObject(conditions) || (conditions = {
+        matches: conditions
+      });
+      var context3 = new Context(0, scope || this.scope), cond = context3.conditions = {}, mq, p, active;
+      _context && !context3.selector && (context3.selector = _context.selector);
+      this.contexts.push(context3);
+      func = context3.add("onMatch", func);
+      context3.queries = conditions;
+      for (p in conditions) {
+        if (p === "all") {
+          active = 1;
+        } else {
+          mq = _win.matchMedia(conditions[p]);
+          if (mq) {
+            _media.indexOf(context3) < 0 && _media.push(context3);
+            (cond[p] = mq.matches) && (active = 1);
+            mq.addListener ? mq.addListener(_onMediaChange) : mq.addEventListener("change", _onMediaChange);
+          }
+        }
+      }
+      active && func(context3, function(f) {
+        return context3.add(null, f);
+      });
+      return this;
+    };
+    _proto6.revert = function revert(config3) {
+      this.kill(config3 || {});
+    };
+    _proto6.kill = function kill2(revert) {
+      this.contexts.forEach(function(c) {
+        return c.kill(revert, true);
+      });
+    };
+    return MatchMedia2;
+  }();
+  var _gsap = {
+    registerPlugin: function registerPlugin() {
+      for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        args[_key2] = arguments[_key2];
+      }
+      args.forEach(function(config3) {
+        return _createPlugin(config3);
+      });
+    },
+    timeline: function timeline(vars) {
+      return new Timeline(vars);
+    },
+    getTweensOf: function getTweensOf(targets, onlyActive) {
+      return _globalTimeline.getTweensOf(targets, onlyActive);
+    },
+    getProperty: function getProperty(target, property, unit, uncache) {
+      _isString(target) && (target = toArray(target)[0]);
+      var getter = _getCache(target || {}).get, format = unit ? _passThrough : _numericIfPossible;
+      unit === "native" && (unit = "");
+      return !target ? target : !property ? function(property2, unit2, uncache2) {
+        return format((_plugins[property2] && _plugins[property2].get || getter)(target, property2, unit2, uncache2));
+      } : format((_plugins[property] && _plugins[property].get || getter)(target, property, unit, uncache));
+    },
+    quickSetter: function quickSetter(target, property, unit) {
+      target = toArray(target);
+      if (target.length > 1) {
+        var setters = target.map(function(t) {
+          return gsap.quickSetter(t, property, unit);
+        }), l = setters.length;
+        return function(value) {
+          var i = l;
+          while (i--) {
+            setters[i](value);
+          }
+        };
+      }
+      target = target[0] || {};
+      var Plugin = _plugins[property], cache = _getCache(target), p = cache.harness && (cache.harness.aliases || {})[property] || property, setter = Plugin ? function(value) {
+        var p2 = new Plugin();
+        _quickTween._pt = 0;
+        p2.init(target, unit ? value + unit : value, _quickTween, 0, [target]);
+        p2.render(1, p2);
+        _quickTween._pt && _renderPropTweens(1, _quickTween);
+      } : cache.set(target, p);
+      return Plugin ? setter : function(value) {
+        return setter(target, p, unit ? value + unit : value, cache, 1);
+      };
+    },
+    quickTo: function quickTo(target, property, vars) {
+      var _setDefaults22;
+      var tween = gsap.to(target, _setDefaults((_setDefaults22 = {}, _setDefaults22[property] = "+=0.1", _setDefaults22.paused = true, _setDefaults22.stagger = 0, _setDefaults22), vars || {})), func = function func2(value, start, startIsRelative) {
+        return tween.resetTo(property, value, start, startIsRelative);
+      };
+      func.tween = tween;
+      return func;
+    },
+    isTweening: function isTweening(targets) {
+      return _globalTimeline.getTweensOf(targets, true).length > 0;
+    },
+    defaults: function defaults(value) {
+      value && value.ease && (value.ease = _parseEase(value.ease, _defaults.ease));
+      return _mergeDeep(_defaults, value || {});
+    },
+    config: function config2(value) {
+      return _mergeDeep(_config, value || {});
+    },
+    registerEffect: function registerEffect(_ref3) {
+      var name = _ref3.name, effect = _ref3.effect, plugins = _ref3.plugins, defaults2 = _ref3.defaults, extendTimeline = _ref3.extendTimeline;
+      (plugins || "").split(",").forEach(function(pluginName) {
+        return pluginName && !_plugins[pluginName] && !_globals[pluginName] && _warn(name + " effect requires " + pluginName + " plugin.");
+      });
+      _effects[name] = function(targets, vars, tl) {
+        return effect(toArray(targets), _setDefaults(vars || {}, defaults2), tl);
+      };
+      if (extendTimeline) {
+        Timeline.prototype[name] = function(targets, vars, position) {
+          return this.add(_effects[name](targets, _isObject(vars) ? vars : (position = vars) && {}, this), position);
+        };
+      }
+    },
+    registerEase: function registerEase(name, ease) {
+      _easeMap[name] = _parseEase(ease);
+    },
+    parseEase: function parseEase(ease, defaultEase) {
+      return arguments.length ? _parseEase(ease, defaultEase) : _easeMap;
+    },
+    getById: function getById(id) {
+      return _globalTimeline.getById(id);
+    },
+    exportRoot: function exportRoot(vars, includeDelayedCalls) {
+      if (vars === void 0) {
+        vars = {};
+      }
+      var tl = new Timeline(vars), child, next;
+      tl.smoothChildTiming = _isNotFalse(vars.smoothChildTiming);
+      _globalTimeline.remove(tl);
+      tl._dp = 0;
+      tl._time = tl._tTime = _globalTimeline._time;
+      child = _globalTimeline._first;
+      while (child) {
+        next = child._next;
+        if (includeDelayedCalls || !(!child._dur && child instanceof Tween && child.vars.onComplete === child._targets[0])) {
+          _addToTimeline(tl, child, child._start - child._delay);
+        }
+        child = next;
+      }
+      _addToTimeline(_globalTimeline, tl, 0);
+      return tl;
+    },
+    context: function context(func, scope) {
+      return func ? new Context(func, scope) : _context;
+    },
+    matchMedia: function matchMedia(scope) {
+      return new MatchMedia(scope);
+    },
+    matchMediaRefresh: function matchMediaRefresh() {
+      return _media.forEach(function(c) {
+        var cond = c.conditions, found, p;
+        for (p in cond) {
+          if (cond[p]) {
+            cond[p] = false;
+            found = 1;
+          }
+        }
+        found && c.revert();
+      }) || _onMediaChange();
+    },
+    addEventListener: function addEventListener(type, callback) {
+      var a = _listeners[type] || (_listeners[type] = []);
+      ~a.indexOf(callback) || a.push(callback);
+    },
+    removeEventListener: function removeEventListener(type, callback) {
+      var a = _listeners[type], i = a && a.indexOf(callback);
+      i >= 0 && a.splice(i, 1);
+    },
+    utils: {
+      wrap,
+      wrapYoyo,
+      distribute,
+      random,
+      snap,
+      normalize,
+      getUnit,
+      clamp: clamp2,
+      splitColor,
+      toArray,
+      selector,
+      mapRange,
+      pipe,
+      unitize,
+      interpolate,
+      shuffle
+    },
+    install: _install,
+    effects: _effects,
+    ticker: _ticker,
+    updateRoot: Timeline.updateRoot,
+    plugins: _plugins,
+    globalTimeline: _globalTimeline,
+    core: {
+      PropTween,
+      globals: _addGlobal,
+      Tween,
+      Timeline,
+      Animation,
+      getCache: _getCache,
+      _removeLinkedListItem,
+      reverting: function reverting() {
+        return _reverting;
+      },
+      context: function context2(toAdd) {
+        if (toAdd && _context) {
+          _context.data.push(toAdd);
+          toAdd._ctx = _context;
+        }
+        return _context;
+      },
+      suppressOverwrites: function suppressOverwrites(value) {
+        return _suppressOverwrites = value;
+      }
+    }
+  };
+  _forEachName("to,from,fromTo,delayedCall,set,killTweensOf", function(name) {
+    return _gsap[name] = Tween[name];
+  });
+  _ticker.add(Timeline.updateRoot);
+  _quickTween = _gsap.to({}, {
+    duration: 0
+  });
+  var _getPluginPropTween = function _getPluginPropTween2(plugin, prop) {
+    var pt = plugin._pt;
+    while (pt && pt.p !== prop && pt.op !== prop && pt.fp !== prop) {
+      pt = pt._next;
+    }
+    return pt;
+  };
+  var _addModifiers = function _addModifiers2(tween, modifiers) {
+    var targets = tween._targets, p, i, pt;
+    for (p in modifiers) {
+      i = targets.length;
+      while (i--) {
+        pt = tween._ptLookup[i][p];
+        if (pt && (pt = pt.d)) {
+          if (pt._pt) {
+            pt = _getPluginPropTween(pt, p);
+          }
+          pt && pt.modifier && pt.modifier(modifiers[p], tween, targets[i], p);
+        }
+      }
+    }
+  };
+  var _buildModifierPlugin = function _buildModifierPlugin2(name, modifier) {
+    return {
+      name,
+      headless: 1,
+      rawVars: 1,
+      //don't pre-process function-based values or "random()" strings.
+      init: function init7(target, vars, tween) {
+        tween._onInit = function(tween2) {
+          var temp, p;
+          if (_isString(vars)) {
+            temp = {};
+            _forEachName(vars, function(name2) {
+              return temp[name2] = 1;
+            });
+            vars = temp;
+          }
+          if (modifier) {
+            temp = {};
+            for (p in vars) {
+              temp[p] = modifier(vars[p]);
+            }
+            vars = temp;
+          }
+          _addModifiers(tween2, vars);
+        };
+      }
+    };
+  };
+  var gsap = _gsap.registerPlugin({
+    name: "attr",
+    init: function init(target, vars, tween, index, targets) {
+      var p, pt, v;
+      this.tween = tween;
+      for (p in vars) {
+        v = target.getAttribute(p) || "";
+        pt = this.add(target, "setAttribute", (v || 0) + "", vars[p], index, targets, 0, 0, p);
+        pt.op = p;
+        pt.b = v;
+        this._props.push(p);
+      }
+    },
+    render: function render(ratio, data) {
+      var pt = data._pt;
+      while (pt) {
+        _reverting ? pt.set(pt.t, pt.p, pt.b, pt) : pt.r(ratio, pt.d);
+        pt = pt._next;
+      }
+    }
+  }, {
+    name: "endArray",
+    headless: 1,
+    init: function init2(target, value) {
+      var i = value.length;
+      while (i--) {
+        this.add(target, i, target[i] || 0, value[i], 0, 0, 0, 0, 0, 1);
+      }
+    }
+  }, _buildModifierPlugin("roundProps", _roundModifier), _buildModifierPlugin("modifiers"), _buildModifierPlugin("snap", snap)) || _gsap;
+  Tween.version = Timeline.version = gsap.version = "3.13.0";
+  _coreReady = 1;
+  _windowExists() && _wake();
+  var Power0 = _easeMap.Power0;
+  var Power1 = _easeMap.Power1;
+  var Power2 = _easeMap.Power2;
+  var Power3 = _easeMap.Power3;
+  var Power4 = _easeMap.Power4;
+  var Linear = _easeMap.Linear;
+  var Quad = _easeMap.Quad;
+  var Cubic = _easeMap.Cubic;
+  var Quart = _easeMap.Quart;
+  var Quint = _easeMap.Quint;
+  var Strong = _easeMap.Strong;
+  var Elastic = _easeMap.Elastic;
+  var Back = _easeMap.Back;
+  var SteppedEase = _easeMap.SteppedEase;
+  var Bounce = _easeMap.Bounce;
+  var Sine = _easeMap.Sine;
+  var Expo = _easeMap.Expo;
+  var Circ = _easeMap.Circ;
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/CSSPlugin.js
+  init_live_reload();
+  var _win2;
+  var _doc2;
+  var _docElement;
+  var _pluginInitted;
+  var _tempDiv;
+  var _tempDivStyler;
+  var _recentSetterPlugin;
+  var _reverting2;
+  var _windowExists3 = function _windowExists4() {
+    return typeof window !== "undefined";
+  };
+  var _transformProps = {};
+  var _RAD2DEG = 180 / Math.PI;
+  var _DEG2RAD = Math.PI / 180;
+  var _atan2 = Math.atan2;
+  var _bigNum2 = 1e8;
+  var _capsExp = /([A-Z])/g;
+  var _horizontalExp = /(left|right|width|margin|padding|x)/i;
+  var _complexExp = /[\s,\(]\S/;
+  var _propertyAliases = {
+    autoAlpha: "opacity,visibility",
+    scale: "scaleX,scaleY",
+    alpha: "opacity"
+  };
+  var _renderCSSProp = function _renderCSSProp2(ratio, data) {
+    return data.set(data.t, data.p, Math.round((data.s + data.c * ratio) * 1e4) / 1e4 + data.u, data);
+  };
+  var _renderPropWithEnd = function _renderPropWithEnd2(ratio, data) {
+    return data.set(data.t, data.p, ratio === 1 ? data.e : Math.round((data.s + data.c * ratio) * 1e4) / 1e4 + data.u, data);
+  };
+  var _renderCSSPropWithBeginning = function _renderCSSPropWithBeginning2(ratio, data) {
+    return data.set(data.t, data.p, ratio ? Math.round((data.s + data.c * ratio) * 1e4) / 1e4 + data.u : data.b, data);
+  };
+  var _renderRoundedCSSProp = function _renderRoundedCSSProp2(ratio, data) {
+    var value = data.s + data.c * ratio;
+    data.set(data.t, data.p, ~~(value + (value < 0 ? -0.5 : 0.5)) + data.u, data);
+  };
+  var _renderNonTweeningValue = function _renderNonTweeningValue2(ratio, data) {
+    return data.set(data.t, data.p, ratio ? data.e : data.b, data);
+  };
+  var _renderNonTweeningValueOnlyAtEnd = function _renderNonTweeningValueOnlyAtEnd2(ratio, data) {
+    return data.set(data.t, data.p, ratio !== 1 ? data.b : data.e, data);
+  };
+  var _setterCSSStyle = function _setterCSSStyle2(target, property, value) {
+    return target.style[property] = value;
+  };
+  var _setterCSSProp = function _setterCSSProp2(target, property, value) {
+    return target.style.setProperty(property, value);
+  };
+  var _setterTransform = function _setterTransform2(target, property, value) {
+    return target._gsap[property] = value;
+  };
+  var _setterScale = function _setterScale2(target, property, value) {
+    return target._gsap.scaleX = target._gsap.scaleY = value;
+  };
+  var _setterScaleWithRender = function _setterScaleWithRender2(target, property, value, data, ratio) {
+    var cache = target._gsap;
+    cache.scaleX = cache.scaleY = value;
+    cache.renderTransform(ratio, cache);
+  };
+  var _setterTransformWithRender = function _setterTransformWithRender2(target, property, value, data, ratio) {
+    var cache = target._gsap;
+    cache[property] = value;
+    cache.renderTransform(ratio, cache);
+  };
+  var _transformProp = "transform";
+  var _transformOriginProp = _transformProp + "Origin";
+  var _saveStyle = function _saveStyle2(property, isNotCSS) {
+    var _this = this;
+    var target = this.target, style = target.style, cache = target._gsap;
+    if (property in _transformProps && style) {
+      this.tfm = this.tfm || {};
+      if (property !== "transform") {
+        property = _propertyAliases[property] || property;
+        ~property.indexOf(",") ? property.split(",").forEach(function(a) {
+          return _this.tfm[a] = _get(target, a);
+        }) : this.tfm[property] = cache.x ? cache[property] : _get(target, property);
+        property === _transformOriginProp && (this.tfm.zOrigin = cache.zOrigin);
+      } else {
+        return _propertyAliases.transform.split(",").forEach(function(p) {
+          return _saveStyle2.call(_this, p, isNotCSS);
+        });
+      }
+      if (this.props.indexOf(_transformProp) >= 0) {
+        return;
+      }
+      if (cache.svg) {
+        this.svgo = target.getAttribute("data-svg-origin");
+        this.props.push(_transformOriginProp, isNotCSS, "");
+      }
+      property = _transformProp;
+    }
+    (style || isNotCSS) && this.props.push(property, isNotCSS, style[property]);
+  };
+  var _removeIndependentTransforms = function _removeIndependentTransforms2(style) {
+    if (style.translate) {
+      style.removeProperty("translate");
+      style.removeProperty("scale");
+      style.removeProperty("rotate");
+    }
+  };
+  var _revertStyle = function _revertStyle2() {
+    var props = this.props, target = this.target, style = target.style, cache = target._gsap, i, p;
+    for (i = 0; i < props.length; i += 3) {
+      if (!props[i + 1]) {
+        props[i + 2] ? style[props[i]] = props[i + 2] : style.removeProperty(props[i].substr(0, 2) === "--" ? props[i] : props[i].replace(_capsExp, "-$1").toLowerCase());
+      } else if (props[i + 1] === 2) {
+        target[props[i]](props[i + 2]);
+      } else {
+        target[props[i]] = props[i + 2];
+      }
+    }
+    if (this.tfm) {
+      for (p in this.tfm) {
+        cache[p] = this.tfm[p];
+      }
+      if (cache.svg) {
+        cache.renderTransform();
+        target.setAttribute("data-svg-origin", this.svgo || "");
+      }
+      i = _reverting2();
+      if ((!i || !i.isStart) && !style[_transformProp]) {
+        _removeIndependentTransforms(style);
+        if (cache.zOrigin && style[_transformOriginProp]) {
+          style[_transformOriginProp] += " " + cache.zOrigin + "px";
+          cache.zOrigin = 0;
+          cache.renderTransform();
+        }
+        cache.uncache = 1;
+      }
+    }
+  };
+  var _getStyleSaver = function _getStyleSaver2(target, properties) {
+    var saver = {
+      target,
+      props: [],
+      revert: _revertStyle,
+      save: _saveStyle
+    };
+    target._gsap || gsap.core.getCache(target);
+    properties && target.style && target.nodeType && properties.split(",").forEach(function(p) {
+      return saver.save(p);
+    });
+    return saver;
+  };
+  var _supports3D;
+  var _createElement = function _createElement2(type, ns) {
+    var e = _doc2.createElementNS ? _doc2.createElementNS((ns || "http://www.w3.org/1999/xhtml").replace(/^https/, "http"), type) : _doc2.createElement(type);
+    return e && e.style ? e : _doc2.createElement(type);
+  };
+  var _getComputedProperty = function _getComputedProperty2(target, property, skipPrefixFallback) {
+    var cs = getComputedStyle(target);
+    return cs[property] || cs.getPropertyValue(property.replace(_capsExp, "-$1").toLowerCase()) || cs.getPropertyValue(property) || !skipPrefixFallback && _getComputedProperty2(target, _checkPropPrefix(property) || property, 1) || "";
+  };
+  var _prefixes = "O,Moz,ms,Ms,Webkit".split(",");
+  var _checkPropPrefix = function _checkPropPrefix2(property, element, preferPrefix) {
+    var e = element || _tempDiv, s = e.style, i = 5;
+    if (property in s && !preferPrefix) {
+      return property;
+    }
+    property = property.charAt(0).toUpperCase() + property.substr(1);
+    while (i-- && !(_prefixes[i] + property in s)) {
+    }
+    return i < 0 ? null : (i === 3 ? "ms" : i >= 0 ? _prefixes[i] : "") + property;
+  };
+  var _initCore = function _initCore2() {
+    if (_windowExists3() && window.document) {
+      _win2 = window;
+      _doc2 = _win2.document;
+      _docElement = _doc2.documentElement;
+      _tempDiv = _createElement("div") || {
+        style: {}
+      };
+      _tempDivStyler = _createElement("div");
+      _transformProp = _checkPropPrefix(_transformProp);
+      _transformOriginProp = _transformProp + "Origin";
+      _tempDiv.style.cssText = "border-width:0;line-height:0;position:absolute;padding:0";
+      _supports3D = !!_checkPropPrefix("perspective");
+      _reverting2 = gsap.core.reverting;
+      _pluginInitted = 1;
+    }
+  };
+  var _getReparentedCloneBBox = function _getReparentedCloneBBox2(target) {
+    var owner = target.ownerSVGElement, svg = _createElement("svg", owner && owner.getAttribute("xmlns") || "http://www.w3.org/2000/svg"), clone = target.cloneNode(true), bbox;
+    clone.style.display = "block";
+    svg.appendChild(clone);
+    _docElement.appendChild(svg);
+    try {
+      bbox = clone.getBBox();
+    } catch (e) {
+    }
+    svg.removeChild(clone);
+    _docElement.removeChild(svg);
+    return bbox;
+  };
+  var _getAttributeFallbacks = function _getAttributeFallbacks2(target, attributesArray) {
+    var i = attributesArray.length;
+    while (i--) {
+      if (target.hasAttribute(attributesArray[i])) {
+        return target.getAttribute(attributesArray[i]);
+      }
+    }
+  };
+  var _getBBox = function _getBBox2(target) {
+    var bounds, cloned;
+    try {
+      bounds = target.getBBox();
+    } catch (error) {
+      bounds = _getReparentedCloneBBox(target);
+      cloned = 1;
+    }
+    bounds && (bounds.width || bounds.height) || cloned || (bounds = _getReparentedCloneBBox(target));
+    return bounds && !bounds.width && !bounds.x && !bounds.y ? {
+      x: +_getAttributeFallbacks(target, ["x", "cx", "x1"]) || 0,
+      y: +_getAttributeFallbacks(target, ["y", "cy", "y1"]) || 0,
+      width: 0,
+      height: 0
+    } : bounds;
+  };
+  var _isSVG = function _isSVG2(e) {
+    return !!(e.getCTM && (!e.parentNode || e.ownerSVGElement) && _getBBox(e));
+  };
+  var _removeProperty = function _removeProperty2(target, property) {
+    if (property) {
+      var style = target.style, first2Chars;
+      if (property in _transformProps && property !== _transformOriginProp) {
+        property = _transformProp;
+      }
+      if (style.removeProperty) {
+        first2Chars = property.substr(0, 2);
+        if (first2Chars === "ms" || property.substr(0, 6) === "webkit") {
+          property = "-" + property;
+        }
+        style.removeProperty(first2Chars === "--" ? property : property.replace(_capsExp, "-$1").toLowerCase());
+      } else {
+        style.removeAttribute(property);
+      }
+    }
+  };
+  var _addNonTweeningPT = function _addNonTweeningPT2(plugin, target, property, beginning, end, onlySetAtEnd) {
+    var pt = new PropTween(plugin._pt, target, property, 0, 1, onlySetAtEnd ? _renderNonTweeningValueOnlyAtEnd : _renderNonTweeningValue);
+    plugin._pt = pt;
+    pt.b = beginning;
+    pt.e = end;
+    plugin._props.push(property);
+    return pt;
+  };
+  var _nonConvertibleUnits = {
+    deg: 1,
+    rad: 1,
+    turn: 1
+  };
+  var _nonStandardLayouts = {
+    grid: 1,
+    flex: 1
+  };
+  var _convertToUnit = function _convertToUnit2(target, property, value, unit) {
+    var curValue = parseFloat(value) || 0, curUnit = (value + "").trim().substr((curValue + "").length) || "px", style = _tempDiv.style, horizontal = _horizontalExp.test(property), isRootSVG = target.tagName.toLowerCase() === "svg", measureProperty = (isRootSVG ? "client" : "offset") + (horizontal ? "Width" : "Height"), amount = 100, toPixels = unit === "px", toPercent = unit === "%", px, parent, cache, isSVG;
+    if (unit === curUnit || !curValue || _nonConvertibleUnits[unit] || _nonConvertibleUnits[curUnit]) {
+      return curValue;
+    }
+    curUnit !== "px" && !toPixels && (curValue = _convertToUnit2(target, property, value, "px"));
+    isSVG = target.getCTM && _isSVG(target);
+    if ((toPercent || curUnit === "%") && (_transformProps[property] || ~property.indexOf("adius"))) {
+      px = isSVG ? target.getBBox()[horizontal ? "width" : "height"] : target[measureProperty];
+      return _round(toPercent ? curValue / px * amount : curValue / 100 * px);
+    }
+    style[horizontal ? "width" : "height"] = amount + (toPixels ? curUnit : unit);
+    parent = unit !== "rem" && ~property.indexOf("adius") || unit === "em" && target.appendChild && !isRootSVG ? target : target.parentNode;
+    if (isSVG) {
+      parent = (target.ownerSVGElement || {}).parentNode;
+    }
+    if (!parent || parent === _doc2 || !parent.appendChild) {
+      parent = _doc2.body;
+    }
+    cache = parent._gsap;
+    if (cache && toPercent && cache.width && horizontal && cache.time === _ticker.time && !cache.uncache) {
+      return _round(curValue / cache.width * amount);
+    } else {
+      if (toPercent && (property === "height" || property === "width")) {
+        var v = target.style[property];
+        target.style[property] = amount + unit;
+        px = target[measureProperty];
+        v ? target.style[property] = v : _removeProperty(target, property);
+      } else {
+        (toPercent || curUnit === "%") && !_nonStandardLayouts[_getComputedProperty(parent, "display")] && (style.position = _getComputedProperty(target, "position"));
+        parent === target && (style.position = "static");
+        parent.appendChild(_tempDiv);
+        px = _tempDiv[measureProperty];
+        parent.removeChild(_tempDiv);
+        style.position = "absolute";
+      }
+      if (horizontal && toPercent) {
+        cache = _getCache(parent);
+        cache.time = _ticker.time;
+        cache.width = parent[measureProperty];
+      }
+    }
+    return _round(toPixels ? px * curValue / amount : px && curValue ? amount / px * curValue : 0);
+  };
+  var _get = function _get2(target, property, unit, uncache) {
+    var value;
+    _pluginInitted || _initCore();
+    if (property in _propertyAliases && property !== "transform") {
+      property = _propertyAliases[property];
+      if (~property.indexOf(",")) {
+        property = property.split(",")[0];
+      }
+    }
+    if (_transformProps[property] && property !== "transform") {
+      value = _parseTransform(target, uncache);
+      value = property !== "transformOrigin" ? value[property] : value.svg ? value.origin : _firstTwoOnly(_getComputedProperty(target, _transformOriginProp)) + " " + value.zOrigin + "px";
+    } else {
+      value = target.style[property];
+      if (!value || value === "auto" || uncache || ~(value + "").indexOf("calc(")) {
+        value = _specialProps[property] && _specialProps[property](target, property, unit) || _getComputedProperty(target, property) || _getProperty(target, property) || (property === "opacity" ? 1 : 0);
+      }
+    }
+    return unit && !~(value + "").trim().indexOf(" ") ? _convertToUnit(target, property, value, unit) + unit : value;
+  };
+  var _tweenComplexCSSString = function _tweenComplexCSSString2(target, prop, start, end) {
+    if (!start || start === "none") {
+      var p = _checkPropPrefix(prop, target, 1), s = p && _getComputedProperty(target, p, 1);
+      if (s && s !== start) {
+        prop = p;
+        start = s;
+      } else if (prop === "borderColor") {
+        start = _getComputedProperty(target, "borderTopColor");
+      }
+    }
+    var pt = new PropTween(this._pt, target.style, prop, 0, 1, _renderComplexString), index = 0, matchIndex = 0, a, result, startValues, startNum, color, startValue, endValue, endNum, chunk, endUnit, startUnit, endValues;
+    pt.b = start;
+    pt.e = end;
+    start += "";
+    end += "";
+    if (end.substring(0, 6) === "var(--") {
+      end = _getComputedProperty(target, end.substring(4, end.indexOf(")")));
+    }
+    if (end === "auto") {
+      startValue = target.style[prop];
+      target.style[prop] = end;
+      end = _getComputedProperty(target, prop) || end;
+      startValue ? target.style[prop] = startValue : _removeProperty(target, prop);
+    }
+    a = [start, end];
+    _colorStringFilter(a);
+    start = a[0];
+    end = a[1];
+    startValues = start.match(_numWithUnitExp) || [];
+    endValues = end.match(_numWithUnitExp) || [];
+    if (endValues.length) {
+      while (result = _numWithUnitExp.exec(end)) {
+        endValue = result[0];
+        chunk = end.substring(index, result.index);
+        if (color) {
+          color = (color + 1) % 5;
+        } else if (chunk.substr(-5) === "rgba(" || chunk.substr(-5) === "hsla(") {
+          color = 1;
+        }
+        if (endValue !== (startValue = startValues[matchIndex++] || "")) {
+          startNum = parseFloat(startValue) || 0;
+          startUnit = startValue.substr((startNum + "").length);
+          endValue.charAt(1) === "=" && (endValue = _parseRelative(startNum, endValue) + startUnit);
+          endNum = parseFloat(endValue);
+          endUnit = endValue.substr((endNum + "").length);
+          index = _numWithUnitExp.lastIndex - endUnit.length;
+          if (!endUnit) {
+            endUnit = endUnit || _config.units[prop] || startUnit;
+            if (index === end.length) {
+              end += endUnit;
+              pt.e += endUnit;
+            }
+          }
+          if (startUnit !== endUnit) {
+            startNum = _convertToUnit(target, prop, startValue, endUnit) || 0;
+          }
+          pt._pt = {
+            _next: pt._pt,
+            p: chunk || matchIndex === 1 ? chunk : ",",
+            //note: SVG spec allows omission of comma/space when a negative sign is wedged between two numbers, like 2.5-5.3 instead of 2.5,-5.3 but when tweening, the negative value may switch to positive, so we insert the comma just in case.
+            s: startNum,
+            c: endNum - startNum,
+            m: color && color < 4 || prop === "zIndex" ? Math.round : 0
+          };
+        }
+      }
+      pt.c = index < end.length ? end.substring(index, end.length) : "";
+    } else {
+      pt.r = prop === "display" && end === "none" ? _renderNonTweeningValueOnlyAtEnd : _renderNonTweeningValue;
+    }
+    _relExp.test(end) && (pt.e = 0);
+    this._pt = pt;
+    return pt;
+  };
+  var _keywordToPercent = {
+    top: "0%",
+    bottom: "100%",
+    left: "0%",
+    right: "100%",
+    center: "50%"
+  };
+  var _convertKeywordsToPercentages = function _convertKeywordsToPercentages2(value) {
+    var split = value.split(" "), x = split[0], y = split[1] || "50%";
+    if (x === "top" || x === "bottom" || y === "left" || y === "right") {
+      value = x;
+      x = y;
+      y = value;
+    }
+    split[0] = _keywordToPercent[x] || x;
+    split[1] = _keywordToPercent[y] || y;
+    return split.join(" ");
+  };
+  var _renderClearProps = function _renderClearProps2(ratio, data) {
+    if (data.tween && data.tween._time === data.tween._dur) {
+      var target = data.t, style = target.style, props = data.u, cache = target._gsap, prop, clearTransforms, i;
+      if (props === "all" || props === true) {
+        style.cssText = "";
+        clearTransforms = 1;
+      } else {
+        props = props.split(",");
+        i = props.length;
+        while (--i > -1) {
+          prop = props[i];
+          if (_transformProps[prop]) {
+            clearTransforms = 1;
+            prop = prop === "transformOrigin" ? _transformOriginProp : _transformProp;
+          }
+          _removeProperty(target, prop);
+        }
+      }
+      if (clearTransforms) {
+        _removeProperty(target, _transformProp);
+        if (cache) {
+          cache.svg && target.removeAttribute("transform");
+          style.scale = style.rotate = style.translate = "none";
+          _parseTransform(target, 1);
+          cache.uncache = 1;
+          _removeIndependentTransforms(style);
+        }
+      }
+    }
+  };
+  var _specialProps = {
+    clearProps: function clearProps(plugin, target, property, endValue, tween) {
+      if (tween.data !== "isFromStart") {
+        var pt = plugin._pt = new PropTween(plugin._pt, target, property, 0, 0, _renderClearProps);
+        pt.u = endValue;
+        pt.pr = -10;
+        pt.tween = tween;
+        plugin._props.push(property);
+        return 1;
+      }
+    }
+    /* className feature (about 0.4kb gzipped).
+    , className(plugin, target, property, endValue, tween) {
+    	let _renderClassName = (ratio, data) => {
+    			data.css.render(ratio, data.css);
+    			if (!ratio || ratio === 1) {
+    				let inline = data.rmv,
+    					target = data.t,
+    					p;
+    				target.setAttribute("class", ratio ? data.e : data.b);
+    				for (p in inline) {
+    					_removeProperty(target, p);
+    				}
+    			}
+    		},
+    		_getAllStyles = (target) => {
+    			let styles = {},
+    				computed = getComputedStyle(target),
+    				p;
+    			for (p in computed) {
+    				if (isNaN(p) && p !== "cssText" && p !== "length") {
+    					styles[p] = computed[p];
+    				}
+    			}
+    			_setDefaults(styles, _parseTransform(target, 1));
+    			return styles;
+    		},
+    		startClassList = target.getAttribute("class"),
+    		style = target.style,
+    		cssText = style.cssText,
+    		cache = target._gsap,
+    		classPT = cache.classPT,
+    		inlineToRemoveAtEnd = {},
+    		data = {t:target, plugin:plugin, rmv:inlineToRemoveAtEnd, b:startClassList, e:(endValue.charAt(1) !== "=") ? endValue : startClassList.replace(new RegExp("(?:\\s|^)" + endValue.substr(2) + "(?![\\w-])"), "") + ((endValue.charAt(0) === "+") ? " " + endValue.substr(2) : "")},
+    		changingVars = {},
+    		startVars = _getAllStyles(target),
+    		transformRelated = /(transform|perspective)/i,
+    		endVars, p;
+    	if (classPT) {
+    		classPT.r(1, classPT.d);
+    		_removeLinkedListItem(classPT.d.plugin, classPT, "_pt");
+    	}
+    	target.setAttribute("class", data.e);
+    	endVars = _getAllStyles(target, true);
+    	target.setAttribute("class", startClassList);
+    	for (p in endVars) {
+    		if (endVars[p] !== startVars[p] && !transformRelated.test(p)) {
+    			changingVars[p] = endVars[p];
+    			if (!style[p] && style[p] !== "0") {
+    				inlineToRemoveAtEnd[p] = 1;
+    			}
+    		}
+    	}
+    	cache.classPT = plugin._pt = new PropTween(plugin._pt, target, "className", 0, 0, _renderClassName, data, 0, -11);
+    	if (style.cssText !== cssText) { //only apply if things change. Otherwise, in cases like a background-image that's pulled dynamically, it could cause a refresh. See https://gsap.com/forums/topic/20368-possible-gsap-bug-switching-classnames-in-chrome/.
+    		style.cssText = cssText; //we recorded cssText before we swapped classes and ran _getAllStyles() because in cases when a className tween is overwritten, we remove all the related tweening properties from that class change (otherwise class-specific stuff can't override properties we've directly set on the target's style object due to specificity).
+    	}
+    	_parseTransform(target, true); //to clear the caching of transforms
+    	data.css = new gsap.plugins.css();
+    	data.css.init(target, changingVars, tween);
+    	plugin._props.push(...data.css._props);
+    	return 1;
+    }
+    */
+  };
+  var _identity2DMatrix = [1, 0, 0, 1, 0, 0];
+  var _rotationalProperties = {};
+  var _isNullTransform = function _isNullTransform2(value) {
+    return value === "matrix(1, 0, 0, 1, 0, 0)" || value === "none" || !value;
+  };
+  var _getComputedTransformMatrixAsArray = function _getComputedTransformMatrixAsArray2(target) {
+    var matrixString = _getComputedProperty(target, _transformProp);
+    return _isNullTransform(matrixString) ? _identity2DMatrix : matrixString.substr(7).match(_numExp).map(_round);
+  };
+  var _getMatrix = function _getMatrix2(target, force2D) {
+    var cache = target._gsap || _getCache(target), style = target.style, matrix = _getComputedTransformMatrixAsArray(target), parent, nextSibling, temp, addedToDOM;
+    if (cache.svg && target.getAttribute("transform")) {
+      temp = target.transform.baseVal.consolidate().matrix;
+      matrix = [temp.a, temp.b, temp.c, temp.d, temp.e, temp.f];
+      return matrix.join(",") === "1,0,0,1,0,0" ? _identity2DMatrix : matrix;
+    } else if (matrix === _identity2DMatrix && !target.offsetParent && target !== _docElement && !cache.svg) {
+      temp = style.display;
+      style.display = "block";
+      parent = target.parentNode;
+      if (!parent || !target.offsetParent && !target.getBoundingClientRect().width) {
+        addedToDOM = 1;
+        nextSibling = target.nextElementSibling;
+        _docElement.appendChild(target);
+      }
+      matrix = _getComputedTransformMatrixAsArray(target);
+      temp ? style.display = temp : _removeProperty(target, "display");
+      if (addedToDOM) {
+        nextSibling ? parent.insertBefore(target, nextSibling) : parent ? parent.appendChild(target) : _docElement.removeChild(target);
+      }
+    }
+    return force2D && matrix.length > 6 ? [matrix[0], matrix[1], matrix[4], matrix[5], matrix[12], matrix[13]] : matrix;
+  };
+  var _applySVGOrigin = function _applySVGOrigin2(target, origin, originIsAbsolute, smooth, matrixArray, pluginToAddPropTweensTo) {
+    var cache = target._gsap, matrix = matrixArray || _getMatrix(target, true), xOriginOld = cache.xOrigin || 0, yOriginOld = cache.yOrigin || 0, xOffsetOld = cache.xOffset || 0, yOffsetOld = cache.yOffset || 0, a = matrix[0], b = matrix[1], c = matrix[2], d = matrix[3], tx = matrix[4], ty = matrix[5], originSplit = origin.split(" "), xOrigin = parseFloat(originSplit[0]) || 0, yOrigin = parseFloat(originSplit[1]) || 0, bounds, determinant, x, y;
+    if (!originIsAbsolute) {
+      bounds = _getBBox(target);
+      xOrigin = bounds.x + (~originSplit[0].indexOf("%") ? xOrigin / 100 * bounds.width : xOrigin);
+      yOrigin = bounds.y + (~(originSplit[1] || originSplit[0]).indexOf("%") ? yOrigin / 100 * bounds.height : yOrigin);
+    } else if (matrix !== _identity2DMatrix && (determinant = a * d - b * c)) {
+      x = xOrigin * (d / determinant) + yOrigin * (-c / determinant) + (c * ty - d * tx) / determinant;
+      y = xOrigin * (-b / determinant) + yOrigin * (a / determinant) - (a * ty - b * tx) / determinant;
+      xOrigin = x;
+      yOrigin = y;
+    }
+    if (smooth || smooth !== false && cache.smooth) {
+      tx = xOrigin - xOriginOld;
+      ty = yOrigin - yOriginOld;
+      cache.xOffset = xOffsetOld + (tx * a + ty * c) - tx;
+      cache.yOffset = yOffsetOld + (tx * b + ty * d) - ty;
+    } else {
+      cache.xOffset = cache.yOffset = 0;
+    }
+    cache.xOrigin = xOrigin;
+    cache.yOrigin = yOrigin;
+    cache.smooth = !!smooth;
+    cache.origin = origin;
+    cache.originIsAbsolute = !!originIsAbsolute;
+    target.style[_transformOriginProp] = "0px 0px";
+    if (pluginToAddPropTweensTo) {
+      _addNonTweeningPT(pluginToAddPropTweensTo, cache, "xOrigin", xOriginOld, xOrigin);
+      _addNonTweeningPT(pluginToAddPropTweensTo, cache, "yOrigin", yOriginOld, yOrigin);
+      _addNonTweeningPT(pluginToAddPropTweensTo, cache, "xOffset", xOffsetOld, cache.xOffset);
+      _addNonTweeningPT(pluginToAddPropTweensTo, cache, "yOffset", yOffsetOld, cache.yOffset);
+    }
+    target.setAttribute("data-svg-origin", xOrigin + " " + yOrigin);
+  };
+  var _parseTransform = function _parseTransform2(target, uncache) {
+    var cache = target._gsap || new GSCache(target);
+    if ("x" in cache && !uncache && !cache.uncache) {
+      return cache;
+    }
+    var style = target.style, invertedScaleX = cache.scaleX < 0, px = "px", deg = "deg", cs = getComputedStyle(target), origin = _getComputedProperty(target, _transformOriginProp) || "0", x, y, z, scaleX, scaleY, rotation, rotationX, rotationY, skewX, skewY, perspective, xOrigin, yOrigin, matrix, angle, cos, sin, a, b, c, d, a12, a22, t1, t2, t3, a13, a23, a33, a42, a43, a32;
+    x = y = z = rotation = rotationX = rotationY = skewX = skewY = perspective = 0;
+    scaleX = scaleY = 1;
+    cache.svg = !!(target.getCTM && _isSVG(target));
+    if (cs.translate) {
+      if (cs.translate !== "none" || cs.scale !== "none" || cs.rotate !== "none") {
+        style[_transformProp] = (cs.translate !== "none" ? "translate3d(" + (cs.translate + " 0 0").split(" ").slice(0, 3).join(", ") + ") " : "") + (cs.rotate !== "none" ? "rotate(" + cs.rotate + ") " : "") + (cs.scale !== "none" ? "scale(" + cs.scale.split(" ").join(",") + ") " : "") + (cs[_transformProp] !== "none" ? cs[_transformProp] : "");
+      }
+      style.scale = style.rotate = style.translate = "none";
+    }
+    matrix = _getMatrix(target, cache.svg);
+    if (cache.svg) {
+      if (cache.uncache) {
+        t2 = target.getBBox();
+        origin = cache.xOrigin - t2.x + "px " + (cache.yOrigin - t2.y) + "px";
+        t1 = "";
+      } else {
+        t1 = !uncache && target.getAttribute("data-svg-origin");
+      }
+      _applySVGOrigin(target, t1 || origin, !!t1 || cache.originIsAbsolute, cache.smooth !== false, matrix);
+    }
+    xOrigin = cache.xOrigin || 0;
+    yOrigin = cache.yOrigin || 0;
+    if (matrix !== _identity2DMatrix) {
+      a = matrix[0];
+      b = matrix[1];
+      c = matrix[2];
+      d = matrix[3];
+      x = a12 = matrix[4];
+      y = a22 = matrix[5];
+      if (matrix.length === 6) {
+        scaleX = Math.sqrt(a * a + b * b);
+        scaleY = Math.sqrt(d * d + c * c);
+        rotation = a || b ? _atan2(b, a) * _RAD2DEG : 0;
+        skewX = c || d ? _atan2(c, d) * _RAD2DEG + rotation : 0;
+        skewX && (scaleY *= Math.abs(Math.cos(skewX * _DEG2RAD)));
+        if (cache.svg) {
+          x -= xOrigin - (xOrigin * a + yOrigin * c);
+          y -= yOrigin - (xOrigin * b + yOrigin * d);
+        }
+      } else {
+        a32 = matrix[6];
+        a42 = matrix[7];
+        a13 = matrix[8];
+        a23 = matrix[9];
+        a33 = matrix[10];
+        a43 = matrix[11];
+        x = matrix[12];
+        y = matrix[13];
+        z = matrix[14];
+        angle = _atan2(a32, a33);
+        rotationX = angle * _RAD2DEG;
+        if (angle) {
+          cos = Math.cos(-angle);
+          sin = Math.sin(-angle);
+          t1 = a12 * cos + a13 * sin;
+          t2 = a22 * cos + a23 * sin;
+          t3 = a32 * cos + a33 * sin;
+          a13 = a12 * -sin + a13 * cos;
+          a23 = a22 * -sin + a23 * cos;
+          a33 = a32 * -sin + a33 * cos;
+          a43 = a42 * -sin + a43 * cos;
+          a12 = t1;
+          a22 = t2;
+          a32 = t3;
+        }
+        angle = _atan2(-c, a33);
+        rotationY = angle * _RAD2DEG;
+        if (angle) {
+          cos = Math.cos(-angle);
+          sin = Math.sin(-angle);
+          t1 = a * cos - a13 * sin;
+          t2 = b * cos - a23 * sin;
+          t3 = c * cos - a33 * sin;
+          a43 = d * sin + a43 * cos;
+          a = t1;
+          b = t2;
+          c = t3;
+        }
+        angle = _atan2(b, a);
+        rotation = angle * _RAD2DEG;
+        if (angle) {
+          cos = Math.cos(angle);
+          sin = Math.sin(angle);
+          t1 = a * cos + b * sin;
+          t2 = a12 * cos + a22 * sin;
+          b = b * cos - a * sin;
+          a22 = a22 * cos - a12 * sin;
+          a = t1;
+          a12 = t2;
+        }
+        if (rotationX && Math.abs(rotationX) + Math.abs(rotation) > 359.9) {
+          rotationX = rotation = 0;
+          rotationY = 180 - rotationY;
+        }
+        scaleX = _round(Math.sqrt(a * a + b * b + c * c));
+        scaleY = _round(Math.sqrt(a22 * a22 + a32 * a32));
+        angle = _atan2(a12, a22);
+        skewX = Math.abs(angle) > 2e-4 ? angle * _RAD2DEG : 0;
+        perspective = a43 ? 1 / (a43 < 0 ? -a43 : a43) : 0;
+      }
+      if (cache.svg) {
+        t1 = target.getAttribute("transform");
+        cache.forceCSS = target.setAttribute("transform", "") || !_isNullTransform(_getComputedProperty(target, _transformProp));
+        t1 && target.setAttribute("transform", t1);
+      }
+    }
+    if (Math.abs(skewX) > 90 && Math.abs(skewX) < 270) {
+      if (invertedScaleX) {
+        scaleX *= -1;
+        skewX += rotation <= 0 ? 180 : -180;
+        rotation += rotation <= 0 ? 180 : -180;
+      } else {
+        scaleY *= -1;
+        skewX += skewX <= 0 ? 180 : -180;
+      }
+    }
+    uncache = uncache || cache.uncache;
+    cache.x = x - ((cache.xPercent = x && (!uncache && cache.xPercent || (Math.round(target.offsetWidth / 2) === Math.round(-x) ? -50 : 0))) ? target.offsetWidth * cache.xPercent / 100 : 0) + px;
+    cache.y = y - ((cache.yPercent = y && (!uncache && cache.yPercent || (Math.round(target.offsetHeight / 2) === Math.round(-y) ? -50 : 0))) ? target.offsetHeight * cache.yPercent / 100 : 0) + px;
+    cache.z = z + px;
+    cache.scaleX = _round(scaleX);
+    cache.scaleY = _round(scaleY);
+    cache.rotation = _round(rotation) + deg;
+    cache.rotationX = _round(rotationX) + deg;
+    cache.rotationY = _round(rotationY) + deg;
+    cache.skewX = skewX + deg;
+    cache.skewY = skewY + deg;
+    cache.transformPerspective = perspective + px;
+    if (cache.zOrigin = parseFloat(origin.split(" ")[2]) || !uncache && cache.zOrigin || 0) {
+      style[_transformOriginProp] = _firstTwoOnly(origin);
+    }
+    cache.xOffset = cache.yOffset = 0;
+    cache.force3D = _config.force3D;
+    cache.renderTransform = cache.svg ? _renderSVGTransforms : _supports3D ? _renderCSSTransforms : _renderNon3DTransforms;
+    cache.uncache = 0;
+    return cache;
+  };
+  var _firstTwoOnly = function _firstTwoOnly2(value) {
+    return (value = value.split(" "))[0] + " " + value[1];
+  };
+  var _addPxTranslate = function _addPxTranslate2(target, start, value) {
+    var unit = getUnit(start);
+    return _round(parseFloat(start) + parseFloat(_convertToUnit(target, "x", value + "px", unit))) + unit;
+  };
+  var _renderNon3DTransforms = function _renderNon3DTransforms2(ratio, cache) {
+    cache.z = "0px";
+    cache.rotationY = cache.rotationX = "0deg";
+    cache.force3D = 0;
+    _renderCSSTransforms(ratio, cache);
+  };
+  var _zeroDeg = "0deg";
+  var _zeroPx = "0px";
+  var _endParenthesis = ") ";
+  var _renderCSSTransforms = function _renderCSSTransforms2(ratio, cache) {
+    var _ref = cache || this, xPercent = _ref.xPercent, yPercent = _ref.yPercent, x = _ref.x, y = _ref.y, z = _ref.z, rotation = _ref.rotation, rotationY = _ref.rotationY, rotationX = _ref.rotationX, skewX = _ref.skewX, skewY = _ref.skewY, scaleX = _ref.scaleX, scaleY = _ref.scaleY, transformPerspective = _ref.transformPerspective, force3D = _ref.force3D, target = _ref.target, zOrigin = _ref.zOrigin, transforms = "", use3D = force3D === "auto" && ratio && ratio !== 1 || force3D === true;
+    if (zOrigin && (rotationX !== _zeroDeg || rotationY !== _zeroDeg)) {
+      var angle = parseFloat(rotationY) * _DEG2RAD, a13 = Math.sin(angle), a33 = Math.cos(angle), cos;
+      angle = parseFloat(rotationX) * _DEG2RAD;
+      cos = Math.cos(angle);
+      x = _addPxTranslate(target, x, a13 * cos * -zOrigin);
+      y = _addPxTranslate(target, y, -Math.sin(angle) * -zOrigin);
+      z = _addPxTranslate(target, z, a33 * cos * -zOrigin + zOrigin);
+    }
+    if (transformPerspective !== _zeroPx) {
+      transforms += "perspective(" + transformPerspective + _endParenthesis;
+    }
+    if (xPercent || yPercent) {
+      transforms += "translate(" + xPercent + "%, " + yPercent + "%) ";
+    }
+    if (use3D || x !== _zeroPx || y !== _zeroPx || z !== _zeroPx) {
+      transforms += z !== _zeroPx || use3D ? "translate3d(" + x + ", " + y + ", " + z + ") " : "translate(" + x + ", " + y + _endParenthesis;
+    }
+    if (rotation !== _zeroDeg) {
+      transforms += "rotate(" + rotation + _endParenthesis;
+    }
+    if (rotationY !== _zeroDeg) {
+      transforms += "rotateY(" + rotationY + _endParenthesis;
+    }
+    if (rotationX !== _zeroDeg) {
+      transforms += "rotateX(" + rotationX + _endParenthesis;
+    }
+    if (skewX !== _zeroDeg || skewY !== _zeroDeg) {
+      transforms += "skew(" + skewX + ", " + skewY + _endParenthesis;
+    }
+    if (scaleX !== 1 || scaleY !== 1) {
+      transforms += "scale(" + scaleX + ", " + scaleY + _endParenthesis;
+    }
+    target.style[_transformProp] = transforms || "translate(0, 0)";
+  };
+  var _renderSVGTransforms = function _renderSVGTransforms2(ratio, cache) {
+    var _ref2 = cache || this, xPercent = _ref2.xPercent, yPercent = _ref2.yPercent, x = _ref2.x, y = _ref2.y, rotation = _ref2.rotation, skewX = _ref2.skewX, skewY = _ref2.skewY, scaleX = _ref2.scaleX, scaleY = _ref2.scaleY, target = _ref2.target, xOrigin = _ref2.xOrigin, yOrigin = _ref2.yOrigin, xOffset = _ref2.xOffset, yOffset = _ref2.yOffset, forceCSS = _ref2.forceCSS, tx = parseFloat(x), ty = parseFloat(y), a11, a21, a12, a22, temp;
+    rotation = parseFloat(rotation);
+    skewX = parseFloat(skewX);
+    skewY = parseFloat(skewY);
+    if (skewY) {
+      skewY = parseFloat(skewY);
+      skewX += skewY;
+      rotation += skewY;
+    }
+    if (rotation || skewX) {
+      rotation *= _DEG2RAD;
+      skewX *= _DEG2RAD;
+      a11 = Math.cos(rotation) * scaleX;
+      a21 = Math.sin(rotation) * scaleX;
+      a12 = Math.sin(rotation - skewX) * -scaleY;
+      a22 = Math.cos(rotation - skewX) * scaleY;
+      if (skewX) {
+        skewY *= _DEG2RAD;
+        temp = Math.tan(skewX - skewY);
+        temp = Math.sqrt(1 + temp * temp);
+        a12 *= temp;
+        a22 *= temp;
+        if (skewY) {
+          temp = Math.tan(skewY);
+          temp = Math.sqrt(1 + temp * temp);
+          a11 *= temp;
+          a21 *= temp;
+        }
+      }
+      a11 = _round(a11);
+      a21 = _round(a21);
+      a12 = _round(a12);
+      a22 = _round(a22);
+    } else {
+      a11 = scaleX;
+      a22 = scaleY;
+      a21 = a12 = 0;
+    }
+    if (tx && !~(x + "").indexOf("px") || ty && !~(y + "").indexOf("px")) {
+      tx = _convertToUnit(target, "x", x, "px");
+      ty = _convertToUnit(target, "y", y, "px");
+    }
+    if (xOrigin || yOrigin || xOffset || yOffset) {
+      tx = _round(tx + xOrigin - (xOrigin * a11 + yOrigin * a12) + xOffset);
+      ty = _round(ty + yOrigin - (xOrigin * a21 + yOrigin * a22) + yOffset);
+    }
+    if (xPercent || yPercent) {
+      temp = target.getBBox();
+      tx = _round(tx + xPercent / 100 * temp.width);
+      ty = _round(ty + yPercent / 100 * temp.height);
+    }
+    temp = "matrix(" + a11 + "," + a21 + "," + a12 + "," + a22 + "," + tx + "," + ty + ")";
+    target.setAttribute("transform", temp);
+    forceCSS && (target.style[_transformProp] = temp);
+  };
+  var _addRotationalPropTween = function _addRotationalPropTween2(plugin, target, property, startNum, endValue) {
+    var cap = 360, isString = _isString(endValue), endNum = parseFloat(endValue) * (isString && ~endValue.indexOf("rad") ? _RAD2DEG : 1), change = endNum - startNum, finalValue = startNum + change + "deg", direction, pt;
+    if (isString) {
+      direction = endValue.split("_")[1];
+      if (direction === "short") {
+        change %= cap;
+        if (change !== change % (cap / 2)) {
+          change += change < 0 ? cap : -cap;
+        }
+      }
+      if (direction === "cw" && change < 0) {
+        change = (change + cap * _bigNum2) % cap - ~~(change / cap) * cap;
+      } else if (direction === "ccw" && change > 0) {
+        change = (change - cap * _bigNum2) % cap - ~~(change / cap) * cap;
+      }
+    }
+    plugin._pt = pt = new PropTween(plugin._pt, target, property, startNum, change, _renderPropWithEnd);
+    pt.e = finalValue;
+    pt.u = "deg";
+    plugin._props.push(property);
+    return pt;
+  };
+  var _assign = function _assign2(target, source) {
+    for (var p in source) {
+      target[p] = source[p];
+    }
+    return target;
+  };
+  var _addRawTransformPTs = function _addRawTransformPTs2(plugin, transforms, target) {
+    var startCache = _assign({}, target._gsap), exclude = "perspective,force3D,transformOrigin,svgOrigin", style = target.style, endCache, p, startValue, endValue, startNum, endNum, startUnit, endUnit;
+    if (startCache.svg) {
+      startValue = target.getAttribute("transform");
+      target.setAttribute("transform", "");
+      style[_transformProp] = transforms;
+      endCache = _parseTransform(target, 1);
+      _removeProperty(target, _transformProp);
+      target.setAttribute("transform", startValue);
+    } else {
+      startValue = getComputedStyle(target)[_transformProp];
+      style[_transformProp] = transforms;
+      endCache = _parseTransform(target, 1);
+      style[_transformProp] = startValue;
+    }
+    for (p in _transformProps) {
+      startValue = startCache[p];
+      endValue = endCache[p];
+      if (startValue !== endValue && exclude.indexOf(p) < 0) {
+        startUnit = getUnit(startValue);
+        endUnit = getUnit(endValue);
+        startNum = startUnit !== endUnit ? _convertToUnit(target, p, startValue, endUnit) : parseFloat(startValue);
+        endNum = parseFloat(endValue);
+        plugin._pt = new PropTween(plugin._pt, endCache, p, startNum, endNum - startNum, _renderCSSProp);
+        plugin._pt.u = endUnit || 0;
+        plugin._props.push(p);
+      }
+    }
+    _assign(endCache, startCache);
+  };
+  _forEachName("padding,margin,Width,Radius", function(name, index) {
+    var t = "Top", r = "Right", b = "Bottom", l = "Left", props = (index < 3 ? [t, r, b, l] : [t + l, t + r, b + r, b + l]).map(function(side) {
+      return index < 2 ? name + side : "border" + side + name;
+    });
+    _specialProps[index > 1 ? "border" + name : name] = function(plugin, target, property, endValue, tween) {
+      var a, vars;
+      if (arguments.length < 4) {
+        a = props.map(function(prop) {
+          return _get(plugin, prop, property);
+        });
+        vars = a.join(" ");
+        return vars.split(a[0]).length === 5 ? a[0] : vars;
+      }
+      a = (endValue + "").split(" ");
+      vars = {};
+      props.forEach(function(prop, i) {
+        return vars[prop] = a[i] = a[i] || a[(i - 1) / 2 | 0];
+      });
+      plugin.init(target, vars, tween);
+    };
+  });
+  var CSSPlugin = {
+    name: "css",
+    register: _initCore,
+    targetTest: function targetTest(target) {
+      return target.style && target.nodeType;
+    },
+    init: function init3(target, vars, tween, index, targets) {
+      var props = this._props, style = target.style, startAt = tween.vars.startAt, startValue, endValue, endNum, startNum, type, specialProp, p, startUnit, endUnit, relative, isTransformRelated, transformPropTween, cache, smooth, hasPriority, inlineProps;
+      _pluginInitted || _initCore();
+      this.styles = this.styles || _getStyleSaver(target);
+      inlineProps = this.styles.props;
+      this.tween = tween;
+      for (p in vars) {
+        if (p === "autoRound") {
+          continue;
+        }
+        endValue = vars[p];
+        if (_plugins[p] && _checkPlugin(p, vars, tween, index, target, targets)) {
+          continue;
+        }
+        type = typeof endValue;
+        specialProp = _specialProps[p];
+        if (type === "function") {
+          endValue = endValue.call(tween, index, target, targets);
+          type = typeof endValue;
+        }
+        if (type === "string" && ~endValue.indexOf("random(")) {
+          endValue = _replaceRandom(endValue);
+        }
+        if (specialProp) {
+          specialProp(this, target, p, endValue, tween) && (hasPriority = 1);
+        } else if (p.substr(0, 2) === "--") {
+          startValue = (getComputedStyle(target).getPropertyValue(p) + "").trim();
+          endValue += "";
+          _colorExp.lastIndex = 0;
+          if (!_colorExp.test(startValue)) {
+            startUnit = getUnit(startValue);
+            endUnit = getUnit(endValue);
+          }
+          endUnit ? startUnit !== endUnit && (startValue = _convertToUnit(target, p, startValue, endUnit) + endUnit) : startUnit && (endValue += startUnit);
+          this.add(style, "setProperty", startValue, endValue, index, targets, 0, 0, p);
+          props.push(p);
+          inlineProps.push(p, 0, style[p]);
+        } else if (type !== "undefined") {
+          if (startAt && p in startAt) {
+            startValue = typeof startAt[p] === "function" ? startAt[p].call(tween, index, target, targets) : startAt[p];
+            _isString(startValue) && ~startValue.indexOf("random(") && (startValue = _replaceRandom(startValue));
+            getUnit(startValue + "") || startValue === "auto" || (startValue += _config.units[p] || getUnit(_get(target, p)) || "");
+            (startValue + "").charAt(1) === "=" && (startValue = _get(target, p));
+          } else {
+            startValue = _get(target, p);
+          }
+          startNum = parseFloat(startValue);
+          relative = type === "string" && endValue.charAt(1) === "=" && endValue.substr(0, 2);
+          relative && (endValue = endValue.substr(2));
+          endNum = parseFloat(endValue);
+          if (p in _propertyAliases) {
+            if (p === "autoAlpha") {
+              if (startNum === 1 && _get(target, "visibility") === "hidden" && endNum) {
+                startNum = 0;
+              }
+              inlineProps.push("visibility", 0, style.visibility);
+              _addNonTweeningPT(this, style, "visibility", startNum ? "inherit" : "hidden", endNum ? "inherit" : "hidden", !endNum);
+            }
+            if (p !== "scale" && p !== "transform") {
+              p = _propertyAliases[p];
+              ~p.indexOf(",") && (p = p.split(",")[0]);
+            }
+          }
+          isTransformRelated = p in _transformProps;
+          if (isTransformRelated) {
+            this.styles.save(p);
+            if (type === "string" && endValue.substring(0, 6) === "var(--") {
+              endValue = _getComputedProperty(target, endValue.substring(4, endValue.indexOf(")")));
+              endNum = parseFloat(endValue);
+            }
+            if (!transformPropTween) {
+              cache = target._gsap;
+              cache.renderTransform && !vars.parseTransform || _parseTransform(target, vars.parseTransform);
+              smooth = vars.smoothOrigin !== false && cache.smooth;
+              transformPropTween = this._pt = new PropTween(this._pt, style, _transformProp, 0, 1, cache.renderTransform, cache, 0, -1);
+              transformPropTween.dep = 1;
+            }
+            if (p === "scale") {
+              this._pt = new PropTween(this._pt, cache, "scaleY", cache.scaleY, (relative ? _parseRelative(cache.scaleY, relative + endNum) : endNum) - cache.scaleY || 0, _renderCSSProp);
+              this._pt.u = 0;
+              props.push("scaleY", p);
+              p += "X";
+            } else if (p === "transformOrigin") {
+              inlineProps.push(_transformOriginProp, 0, style[_transformOriginProp]);
+              endValue = _convertKeywordsToPercentages(endValue);
+              if (cache.svg) {
+                _applySVGOrigin(target, endValue, 0, smooth, 0, this);
+              } else {
+                endUnit = parseFloat(endValue.split(" ")[2]) || 0;
+                endUnit !== cache.zOrigin && _addNonTweeningPT(this, cache, "zOrigin", cache.zOrigin, endUnit);
+                _addNonTweeningPT(this, style, p, _firstTwoOnly(startValue), _firstTwoOnly(endValue));
+              }
+              continue;
+            } else if (p === "svgOrigin") {
+              _applySVGOrigin(target, endValue, 1, smooth, 0, this);
+              continue;
+            } else if (p in _rotationalProperties) {
+              _addRotationalPropTween(this, cache, p, startNum, relative ? _parseRelative(startNum, relative + endValue) : endValue);
+              continue;
+            } else if (p === "smoothOrigin") {
+              _addNonTweeningPT(this, cache, "smooth", cache.smooth, endValue);
+              continue;
+            } else if (p === "force3D") {
+              cache[p] = endValue;
+              continue;
+            } else if (p === "transform") {
+              _addRawTransformPTs(this, endValue, target);
+              continue;
+            }
+          } else if (!(p in style)) {
+            p = _checkPropPrefix(p) || p;
+          }
+          if (isTransformRelated || (endNum || endNum === 0) && (startNum || startNum === 0) && !_complexExp.test(endValue) && p in style) {
+            startUnit = (startValue + "").substr((startNum + "").length);
+            endNum || (endNum = 0);
+            endUnit = getUnit(endValue) || (p in _config.units ? _config.units[p] : startUnit);
+            startUnit !== endUnit && (startNum = _convertToUnit(target, p, startValue, endUnit));
+            this._pt = new PropTween(this._pt, isTransformRelated ? cache : style, p, startNum, (relative ? _parseRelative(startNum, relative + endNum) : endNum) - startNum, !isTransformRelated && (endUnit === "px" || p === "zIndex") && vars.autoRound !== false ? _renderRoundedCSSProp : _renderCSSProp);
+            this._pt.u = endUnit || 0;
+            if (startUnit !== endUnit && endUnit !== "%") {
+              this._pt.b = startValue;
+              this._pt.r = _renderCSSPropWithBeginning;
+            }
+          } else if (!(p in style)) {
+            if (p in target) {
+              this.add(target, p, startValue || target[p], relative ? relative + endValue : endValue, index, targets);
+            } else if (p !== "parseTransform") {
+              _missingPlugin(p, endValue);
+              continue;
+            }
+          } else {
+            _tweenComplexCSSString.call(this, target, p, startValue, relative ? relative + endValue : endValue);
+          }
+          isTransformRelated || (p in style ? inlineProps.push(p, 0, style[p]) : typeof target[p] === "function" ? inlineProps.push(p, 2, target[p]()) : inlineProps.push(p, 1, startValue || target[p]));
+          props.push(p);
+        }
+      }
+      hasPriority && _sortPropTweensByPriority(this);
+    },
+    render: function render2(ratio, data) {
+      if (data.tween._time || !_reverting2()) {
+        var pt = data._pt;
+        while (pt) {
+          pt.r(ratio, pt.d);
+          pt = pt._next;
+        }
+      } else {
+        data.styles.revert();
+      }
+    },
+    get: _get,
+    aliases: _propertyAliases,
+    getSetter: function getSetter(target, property, plugin) {
+      var p = _propertyAliases[property];
+      p && p.indexOf(",") < 0 && (property = p);
+      return property in _transformProps && property !== _transformOriginProp && (target._gsap.x || _get(target, "x")) ? plugin && _recentSetterPlugin === plugin ? property === "scale" ? _setterScale : _setterTransform : (_recentSetterPlugin = plugin || {}) && (property === "scale" ? _setterScaleWithRender : _setterTransformWithRender) : target.style && !_isUndefined(target.style[property]) ? _setterCSSStyle : ~property.indexOf("-") ? _setterCSSProp : _getSetter(target, property);
+    },
+    core: {
+      _removeProperty,
+      _getMatrix
+    }
+  };
+  gsap.utils.checkPrefix = _checkPropPrefix;
+  gsap.core.getStyleSaver = _getStyleSaver;
+  (function(positionAndScale, rotation, others, aliases) {
+    var all = _forEachName(positionAndScale + "," + rotation + "," + others, function(name) {
+      _transformProps[name] = 1;
+    });
+    _forEachName(rotation, function(name) {
+      _config.units[name] = "deg";
+      _rotationalProperties[name] = 1;
+    });
+    _propertyAliases[all[13]] = positionAndScale + "," + rotation;
+    _forEachName(aliases, function(name) {
+      var split = name.split(":");
+      _propertyAliases[split[1]] = all[split[0]];
+    });
+  })("x,y,z,scale,scaleX,scaleY,xPercent,yPercent", "rotation,rotationX,rotationY,skewX,skewY", "transform,transformOrigin,svgOrigin,force3D,smoothOrigin,transformPerspective", "0:translateX,1:translateY,2:translateZ,8:rotate,8:rotationZ,8:rotateZ,9:rotateX,10:rotateY");
+  _forEachName("x,y,z,top,right,bottom,left,width,height,fontSize,padding,margin,perspective", function(name) {
+    _config.units[name] = "px";
+  });
+  gsap.registerPlugin(CSSPlugin);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/index.js
+  var gsapWithCSS = gsap.registerPlugin(CSSPlugin) || gsap;
+  var TweenMaxWithCSS = gsapWithCSS.core.Tween;
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/ScrollTrigger.js
+  init_live_reload();
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/Observer.js
+  init_live_reload();
+  function _defineProperties(target, props) {
+    for (var i = 0; i < props.length; i++) {
+      var descriptor = props[i];
+      descriptor.enumerable = descriptor.enumerable || false;
+      descriptor.configurable = true;
+      if ("value" in descriptor)
+        descriptor.writable = true;
+      Object.defineProperty(target, descriptor.key, descriptor);
+    }
+  }
+  function _createClass(Constructor, protoProps, staticProps) {
+    if (protoProps)
+      _defineProperties(Constructor.prototype, protoProps);
+    if (staticProps)
+      _defineProperties(Constructor, staticProps);
+    return Constructor;
+  }
+  var gsap2;
+  var _coreInitted2;
+  var _clamp3;
+  var _win3;
+  var _doc3;
+  var _docEl;
+  var _body;
+  var _isTouch;
+  var _pointerType;
+  var ScrollTrigger;
+  var _root;
+  var _normalizer;
+  var _eventTypes;
+  var _context2;
+  var _getGSAP = function _getGSAP2() {
+    return gsap2 || typeof window !== "undefined" && (gsap2 = window.gsap) && gsap2.registerPlugin && gsap2;
+  };
+  var _startup = 1;
+  var _observers = [];
+  var _scrollers = [];
+  var _proxies = [];
+  var _getTime = Date.now;
+  var _bridge = function _bridge2(name, value) {
+    return value;
+  };
+  var _integrate = function _integrate2() {
+    var core = ScrollTrigger.core, data = core.bridge || {}, scrollers = core._scrollers, proxies = core._proxies;
+    scrollers.push.apply(scrollers, _scrollers);
+    proxies.push.apply(proxies, _proxies);
+    _scrollers = scrollers;
+    _proxies = proxies;
+    _bridge = function _bridge3(name, value) {
+      return data[name](value);
+    };
+  };
+  var _getProxyProp = function _getProxyProp2(element, property) {
+    return ~_proxies.indexOf(element) && _proxies[_proxies.indexOf(element) + 1][property];
+  };
+  var _isViewport = function _isViewport2(el) {
+    return !!~_root.indexOf(el);
+  };
+  var _addListener = function _addListener2(element, type, func, passive, capture) {
+    return element.addEventListener(type, func, {
+      passive: passive !== false,
+      capture: !!capture
+    });
+  };
+  var _removeListener = function _removeListener2(element, type, func, capture) {
+    return element.removeEventListener(type, func, !!capture);
+  };
+  var _scrollLeft = "scrollLeft";
+  var _scrollTop = "scrollTop";
+  var _onScroll = function _onScroll2() {
+    return _normalizer && _normalizer.isPressed || _scrollers.cache++;
+  };
+  var _scrollCacheFunc = function _scrollCacheFunc2(f, doNotCache) {
+    var cachingFunc = function cachingFunc2(value) {
+      if (value || value === 0) {
+        _startup && (_win3.history.scrollRestoration = "manual");
+        var isNormalizing = _normalizer && _normalizer.isPressed;
+        value = cachingFunc2.v = Math.round(value) || (_normalizer && _normalizer.iOS ? 1 : 0);
+        f(value);
+        cachingFunc2.cacheID = _scrollers.cache;
+        isNormalizing && _bridge("ss", value);
+      } else if (doNotCache || _scrollers.cache !== cachingFunc2.cacheID || _bridge("ref")) {
+        cachingFunc2.cacheID = _scrollers.cache;
+        cachingFunc2.v = f();
+      }
+      return cachingFunc2.v + cachingFunc2.offset;
+    };
+    cachingFunc.offset = 0;
+    return f && cachingFunc;
+  };
+  var _horizontal = {
+    s: _scrollLeft,
+    p: "left",
+    p2: "Left",
+    os: "right",
+    os2: "Right",
+    d: "width",
+    d2: "Width",
+    a: "x",
+    sc: _scrollCacheFunc(function(value) {
+      return arguments.length ? _win3.scrollTo(value, _vertical.sc()) : _win3.pageXOffset || _doc3[_scrollLeft] || _docEl[_scrollLeft] || _body[_scrollLeft] || 0;
+    })
+  };
+  var _vertical = {
+    s: _scrollTop,
+    p: "top",
+    p2: "Top",
+    os: "bottom",
+    os2: "Bottom",
+    d: "height",
+    d2: "Height",
+    a: "y",
+    op: _horizontal,
+    sc: _scrollCacheFunc(function(value) {
+      return arguments.length ? _win3.scrollTo(_horizontal.sc(), value) : _win3.pageYOffset || _doc3[_scrollTop] || _docEl[_scrollTop] || _body[_scrollTop] || 0;
+    })
+  };
+  var _getTarget = function _getTarget2(t, self) {
+    return (self && self._ctx && self._ctx.selector || gsap2.utils.toArray)(t)[0] || (typeof t === "string" && gsap2.config().nullTargetWarn !== false ? console.warn("Element not found:", t) : null);
+  };
+  var _isWithin = function _isWithin2(element, list) {
+    var i = list.length;
+    while (i--) {
+      if (list[i] === element || list[i].contains(element)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  var _getScrollFunc = function _getScrollFunc2(element, _ref) {
+    var s = _ref.s, sc = _ref.sc;
+    _isViewport(element) && (element = _doc3.scrollingElement || _docEl);
+    var i = _scrollers.indexOf(element), offset = sc === _vertical.sc ? 1 : 2;
+    !~i && (i = _scrollers.push(element) - 1);
+    _scrollers[i + offset] || _addListener(element, "scroll", _onScroll);
+    var prev = _scrollers[i + offset], func = prev || (_scrollers[i + offset] = _scrollCacheFunc(_getProxyProp(element, s), true) || (_isViewport(element) ? sc : _scrollCacheFunc(function(value) {
+      return arguments.length ? element[s] = value : element[s];
+    })));
+    func.target = element;
+    prev || (func.smooth = gsap2.getProperty(element, "scrollBehavior") === "smooth");
+    return func;
+  };
+  var _getVelocityProp = function _getVelocityProp2(value, minTimeRefresh, useDelta) {
+    var v1 = value, v2 = value, t1 = _getTime(), t2 = t1, min = minTimeRefresh || 50, dropToZeroTime = Math.max(500, min * 3), update = function update2(value2, force) {
+      var t = _getTime();
+      if (force || t - t1 > min) {
+        v2 = v1;
+        v1 = value2;
+        t2 = t1;
+        t1 = t;
+      } else if (useDelta) {
+        v1 += value2;
+      } else {
+        v1 = v2 + (value2 - v2) / (t - t2) * (t1 - t2);
+      }
+    }, reset = function reset2() {
+      v2 = v1 = useDelta ? 0 : v1;
+      t2 = t1 = 0;
+    }, getVelocity = function getVelocity2(latestValue) {
+      var tOld = t2, vOld = v2, t = _getTime();
+      (latestValue || latestValue === 0) && latestValue !== v1 && update(latestValue);
+      return t1 === t2 || t - t2 > dropToZeroTime ? 0 : (v1 + (useDelta ? vOld : -vOld)) / ((useDelta ? t : t1) - tOld) * 1e3;
+    };
+    return {
+      update,
+      reset,
+      getVelocity
+    };
+  };
+  var _getEvent = function _getEvent2(e, preventDefault) {
+    preventDefault && !e._gsapAllow && e.preventDefault();
+    return e.changedTouches ? e.changedTouches[0] : e;
+  };
+  var _getAbsoluteMax = function _getAbsoluteMax2(a) {
+    var max = Math.max.apply(Math, a), min = Math.min.apply(Math, a);
+    return Math.abs(max) >= Math.abs(min) ? max : min;
+  };
+  var _setScrollTrigger = function _setScrollTrigger2() {
+    ScrollTrigger = gsap2.core.globals().ScrollTrigger;
+    ScrollTrigger && ScrollTrigger.core && _integrate();
+  };
+  var _initCore3 = function _initCore4(core) {
+    gsap2 = core || _getGSAP();
+    if (!_coreInitted2 && gsap2 && typeof document !== "undefined" && document.body) {
+      _win3 = window;
+      _doc3 = document;
+      _docEl = _doc3.documentElement;
+      _body = _doc3.body;
+      _root = [_win3, _doc3, _docEl, _body];
+      _clamp3 = gsap2.utils.clamp;
+      _context2 = gsap2.core.context || function() {
+      };
+      _pointerType = "onpointerenter" in _body ? "pointer" : "mouse";
+      _isTouch = Observer.isTouch = _win3.matchMedia && _win3.matchMedia("(hover: none), (pointer: coarse)").matches ? 1 : "ontouchstart" in _win3 || navigator.maxTouchPoints > 0 || navigator.msMaxTouchPoints > 0 ? 2 : 0;
+      _eventTypes = Observer.eventTypes = ("ontouchstart" in _docEl ? "touchstart,touchmove,touchcancel,touchend" : !("onpointerdown" in _docEl) ? "mousedown,mousemove,mouseup,mouseup" : "pointerdown,pointermove,pointercancel,pointerup").split(",");
+      setTimeout(function() {
+        return _startup = 0;
+      }, 500);
+      _setScrollTrigger();
+      _coreInitted2 = 1;
+    }
+    return _coreInitted2;
+  };
+  _horizontal.op = _vertical;
+  _scrollers.cache = 0;
+  var Observer = /* @__PURE__ */ function() {
+    function Observer2(vars) {
+      this.init(vars);
+    }
+    var _proto = Observer2.prototype;
+    _proto.init = function init7(vars) {
+      _coreInitted2 || _initCore3(gsap2) || console.warn("Please gsap.registerPlugin(Observer)");
+      ScrollTrigger || _setScrollTrigger();
+      var tolerance = vars.tolerance, dragMinimum = vars.dragMinimum, type = vars.type, target = vars.target, lineHeight = vars.lineHeight, debounce2 = vars.debounce, preventDefault = vars.preventDefault, onStop = vars.onStop, onStopDelay = vars.onStopDelay, ignore = vars.ignore, wheelSpeed = vars.wheelSpeed, event = vars.event, onDragStart = vars.onDragStart, onDragEnd = vars.onDragEnd, onDrag = vars.onDrag, onPress = vars.onPress, onRelease = vars.onRelease, onRight = vars.onRight, onLeft = vars.onLeft, onUp = vars.onUp, onDown = vars.onDown, onChangeX = vars.onChangeX, onChangeY = vars.onChangeY, onChange = vars.onChange, onToggleX = vars.onToggleX, onToggleY = vars.onToggleY, onHover = vars.onHover, onHoverEnd = vars.onHoverEnd, onMove = vars.onMove, ignoreCheck = vars.ignoreCheck, isNormalizer = vars.isNormalizer, onGestureStart = vars.onGestureStart, onGestureEnd = vars.onGestureEnd, onWheel = vars.onWheel, onEnable = vars.onEnable, onDisable = vars.onDisable, onClick = vars.onClick, scrollSpeed = vars.scrollSpeed, capture = vars.capture, allowClicks = vars.allowClicks, lockAxis = vars.lockAxis, onLockAxis = vars.onLockAxis;
+      this.target = target = _getTarget(target) || _docEl;
+      this.vars = vars;
+      ignore && (ignore = gsap2.utils.toArray(ignore));
+      tolerance = tolerance || 1e-9;
+      dragMinimum = dragMinimum || 0;
+      wheelSpeed = wheelSpeed || 1;
+      scrollSpeed = scrollSpeed || 1;
+      type = type || "wheel,touch,pointer";
+      debounce2 = debounce2 !== false;
+      lineHeight || (lineHeight = parseFloat(_win3.getComputedStyle(_body).lineHeight) || 22);
+      var id, onStopDelayedCall, dragged, moved, wheeled, locked, axis, self = this, prevDeltaX = 0, prevDeltaY = 0, passive = vars.passive || !preventDefault && vars.passive !== false, scrollFuncX = _getScrollFunc(target, _horizontal), scrollFuncY = _getScrollFunc(target, _vertical), scrollX = scrollFuncX(), scrollY = scrollFuncY(), limitToTouch = ~type.indexOf("touch") && !~type.indexOf("pointer") && _eventTypes[0] === "pointerdown", isViewport = _isViewport(target), ownerDoc = target.ownerDocument || _doc3, deltaX = [0, 0, 0], deltaY = [0, 0, 0], onClickTime = 0, clickCapture = function clickCapture2() {
+        return onClickTime = _getTime();
+      }, _ignoreCheck = function _ignoreCheck2(e, isPointerOrTouch) {
+        return (self.event = e) && ignore && _isWithin(e.target, ignore) || isPointerOrTouch && limitToTouch && e.pointerType !== "touch" || ignoreCheck && ignoreCheck(e, isPointerOrTouch);
+      }, onStopFunc = function onStopFunc2() {
+        self._vx.reset();
+        self._vy.reset();
+        onStopDelayedCall.pause();
+        onStop && onStop(self);
+      }, update = function update2() {
+        var dx = self.deltaX = _getAbsoluteMax(deltaX), dy = self.deltaY = _getAbsoluteMax(deltaY), changedX = Math.abs(dx) >= tolerance, changedY = Math.abs(dy) >= tolerance;
+        onChange && (changedX || changedY) && onChange(self, dx, dy, deltaX, deltaY);
+        if (changedX) {
+          onRight && self.deltaX > 0 && onRight(self);
+          onLeft && self.deltaX < 0 && onLeft(self);
+          onChangeX && onChangeX(self);
+          onToggleX && self.deltaX < 0 !== prevDeltaX < 0 && onToggleX(self);
+          prevDeltaX = self.deltaX;
+          deltaX[0] = deltaX[1] = deltaX[2] = 0;
+        }
+        if (changedY) {
+          onDown && self.deltaY > 0 && onDown(self);
+          onUp && self.deltaY < 0 && onUp(self);
+          onChangeY && onChangeY(self);
+          onToggleY && self.deltaY < 0 !== prevDeltaY < 0 && onToggleY(self);
+          prevDeltaY = self.deltaY;
+          deltaY[0] = deltaY[1] = deltaY[2] = 0;
+        }
+        if (moved || dragged) {
+          onMove && onMove(self);
+          if (dragged) {
+            onDragStart && dragged === 1 && onDragStart(self);
+            onDrag && onDrag(self);
+            dragged = 0;
+          }
+          moved = false;
+        }
+        locked && !(locked = false) && onLockAxis && onLockAxis(self);
+        if (wheeled) {
+          onWheel(self);
+          wheeled = false;
+        }
+        id = 0;
+      }, onDelta = function onDelta2(x, y, index) {
+        deltaX[index] += x;
+        deltaY[index] += y;
+        self._vx.update(x);
+        self._vy.update(y);
+        debounce2 ? id || (id = requestAnimationFrame(update)) : update();
+      }, onTouchOrPointerDelta = function onTouchOrPointerDelta2(x, y) {
+        if (lockAxis && !axis) {
+          self.axis = axis = Math.abs(x) > Math.abs(y) ? "x" : "y";
+          locked = true;
+        }
+        if (axis !== "y") {
+          deltaX[2] += x;
+          self._vx.update(x, true);
+        }
+        if (axis !== "x") {
+          deltaY[2] += y;
+          self._vy.update(y, true);
+        }
+        debounce2 ? id || (id = requestAnimationFrame(update)) : update();
+      }, _onDrag = function _onDrag2(e) {
+        if (_ignoreCheck(e, 1)) {
+          return;
+        }
+        e = _getEvent(e, preventDefault);
+        var x = e.clientX, y = e.clientY, dx = x - self.x, dy = y - self.y, isDragging = self.isDragging;
+        self.x = x;
+        self.y = y;
+        if (isDragging || (dx || dy) && (Math.abs(self.startX - x) >= dragMinimum || Math.abs(self.startY - y) >= dragMinimum)) {
+          dragged = isDragging ? 2 : 1;
+          isDragging || (self.isDragging = true);
+          onTouchOrPointerDelta(dx, dy);
+        }
+      }, _onPress = self.onPress = function(e) {
+        if (_ignoreCheck(e, 1) || e && e.button) {
+          return;
+        }
+        self.axis = axis = null;
+        onStopDelayedCall.pause();
+        self.isPressed = true;
+        e = _getEvent(e);
+        prevDeltaX = prevDeltaY = 0;
+        self.startX = self.x = e.clientX;
+        self.startY = self.y = e.clientY;
+        self._vx.reset();
+        self._vy.reset();
+        _addListener(isNormalizer ? target : ownerDoc, _eventTypes[1], _onDrag, passive, true);
+        self.deltaX = self.deltaY = 0;
+        onPress && onPress(self);
+      }, _onRelease = self.onRelease = function(e) {
+        if (_ignoreCheck(e, 1)) {
+          return;
+        }
+        _removeListener(isNormalizer ? target : ownerDoc, _eventTypes[1], _onDrag, true);
+        var isTrackingDrag = !isNaN(self.y - self.startY), wasDragging = self.isDragging, isDragNotClick = wasDragging && (Math.abs(self.x - self.startX) > 3 || Math.abs(self.y - self.startY) > 3), eventData = _getEvent(e);
+        if (!isDragNotClick && isTrackingDrag) {
+          self._vx.reset();
+          self._vy.reset();
+          if (preventDefault && allowClicks) {
+            gsap2.delayedCall(0.08, function() {
+              if (_getTime() - onClickTime > 300 && !e.defaultPrevented) {
+                if (e.target.click) {
+                  e.target.click();
+                } else if (ownerDoc.createEvent) {
+                  var syntheticEvent = ownerDoc.createEvent("MouseEvents");
+                  syntheticEvent.initMouseEvent("click", true, true, _win3, 1, eventData.screenX, eventData.screenY, eventData.clientX, eventData.clientY, false, false, false, false, 0, null);
+                  e.target.dispatchEvent(syntheticEvent);
+                }
+              }
+            });
+          }
+        }
+        self.isDragging = self.isGesturing = self.isPressed = false;
+        onStop && wasDragging && !isNormalizer && onStopDelayedCall.restart(true);
+        dragged && update();
+        onDragEnd && wasDragging && onDragEnd(self);
+        onRelease && onRelease(self, isDragNotClick);
+      }, _onGestureStart = function _onGestureStart2(e) {
+        return e.touches && e.touches.length > 1 && (self.isGesturing = true) && onGestureStart(e, self.isDragging);
+      }, _onGestureEnd = function _onGestureEnd2() {
+        return (self.isGesturing = false) || onGestureEnd(self);
+      }, onScroll = function onScroll2(e) {
+        if (_ignoreCheck(e)) {
+          return;
+        }
+        var x = scrollFuncX(), y = scrollFuncY();
+        onDelta((x - scrollX) * scrollSpeed, (y - scrollY) * scrollSpeed, 1);
+        scrollX = x;
+        scrollY = y;
+        onStop && onStopDelayedCall.restart(true);
+      }, _onWheel = function _onWheel2(e) {
+        if (_ignoreCheck(e)) {
+          return;
+        }
+        e = _getEvent(e, preventDefault);
+        onWheel && (wheeled = true);
+        var multiplier = (e.deltaMode === 1 ? lineHeight : e.deltaMode === 2 ? _win3.innerHeight : 1) * wheelSpeed;
+        onDelta(e.deltaX * multiplier, e.deltaY * multiplier, 0);
+        onStop && !isNormalizer && onStopDelayedCall.restart(true);
+      }, _onMove = function _onMove2(e) {
+        if (_ignoreCheck(e)) {
+          return;
+        }
+        var x = e.clientX, y = e.clientY, dx = x - self.x, dy = y - self.y;
+        self.x = x;
+        self.y = y;
+        moved = true;
+        onStop && onStopDelayedCall.restart(true);
+        (dx || dy) && onTouchOrPointerDelta(dx, dy);
+      }, _onHover = function _onHover2(e) {
+        self.event = e;
+        onHover(self);
+      }, _onHoverEnd = function _onHoverEnd2(e) {
+        self.event = e;
+        onHoverEnd(self);
+      }, _onClick = function _onClick2(e) {
+        return _ignoreCheck(e) || _getEvent(e, preventDefault) && onClick(self);
+      };
+      onStopDelayedCall = self._dc = gsap2.delayedCall(onStopDelay || 0.25, onStopFunc).pause();
+      self.deltaX = self.deltaY = 0;
+      self._vx = _getVelocityProp(0, 50, true);
+      self._vy = _getVelocityProp(0, 50, true);
+      self.scrollX = scrollFuncX;
+      self.scrollY = scrollFuncY;
+      self.isDragging = self.isGesturing = self.isPressed = false;
+      _context2(this);
+      self.enable = function(e) {
+        if (!self.isEnabled) {
+          _addListener(isViewport ? ownerDoc : target, "scroll", _onScroll);
+          type.indexOf("scroll") >= 0 && _addListener(isViewport ? ownerDoc : target, "scroll", onScroll, passive, capture);
+          type.indexOf("wheel") >= 0 && _addListener(target, "wheel", _onWheel, passive, capture);
+          if (type.indexOf("touch") >= 0 && _isTouch || type.indexOf("pointer") >= 0) {
+            _addListener(target, _eventTypes[0], _onPress, passive, capture);
+            _addListener(ownerDoc, _eventTypes[2], _onRelease);
+            _addListener(ownerDoc, _eventTypes[3], _onRelease);
+            allowClicks && _addListener(target, "click", clickCapture, true, true);
+            onClick && _addListener(target, "click", _onClick);
+            onGestureStart && _addListener(ownerDoc, "gesturestart", _onGestureStart);
+            onGestureEnd && _addListener(ownerDoc, "gestureend", _onGestureEnd);
+            onHover && _addListener(target, _pointerType + "enter", _onHover);
+            onHoverEnd && _addListener(target, _pointerType + "leave", _onHoverEnd);
+            onMove && _addListener(target, _pointerType + "move", _onMove);
+          }
+          self.isEnabled = true;
+          self.isDragging = self.isGesturing = self.isPressed = moved = dragged = false;
+          self._vx.reset();
+          self._vy.reset();
+          scrollX = scrollFuncX();
+          scrollY = scrollFuncY();
+          e && e.type && _onPress(e);
+          onEnable && onEnable(self);
+        }
+        return self;
+      };
+      self.disable = function() {
+        if (self.isEnabled) {
+          _observers.filter(function(o) {
+            return o !== self && _isViewport(o.target);
+          }).length || _removeListener(isViewport ? ownerDoc : target, "scroll", _onScroll);
+          if (self.isPressed) {
+            self._vx.reset();
+            self._vy.reset();
+            _removeListener(isNormalizer ? target : ownerDoc, _eventTypes[1], _onDrag, true);
+          }
+          _removeListener(isViewport ? ownerDoc : target, "scroll", onScroll, capture);
+          _removeListener(target, "wheel", _onWheel, capture);
+          _removeListener(target, _eventTypes[0], _onPress, capture);
+          _removeListener(ownerDoc, _eventTypes[2], _onRelease);
+          _removeListener(ownerDoc, _eventTypes[3], _onRelease);
+          _removeListener(target, "click", clickCapture, true);
+          _removeListener(target, "click", _onClick);
+          _removeListener(ownerDoc, "gesturestart", _onGestureStart);
+          _removeListener(ownerDoc, "gestureend", _onGestureEnd);
+          _removeListener(target, _pointerType + "enter", _onHover);
+          _removeListener(target, _pointerType + "leave", _onHoverEnd);
+          _removeListener(target, _pointerType + "move", _onMove);
+          self.isEnabled = self.isPressed = self.isDragging = false;
+          onDisable && onDisable(self);
+        }
+      };
+      self.kill = self.revert = function() {
+        self.disable();
+        var i = _observers.indexOf(self);
+        i >= 0 && _observers.splice(i, 1);
+        _normalizer === self && (_normalizer = 0);
+      };
+      _observers.push(self);
+      isNormalizer && _isViewport(target) && (_normalizer = self);
+      self.enable(event);
+    };
+    _createClass(Observer2, [{
+      key: "velocityX",
+      get: function get() {
+        return this._vx.getVelocity();
+      }
+    }, {
+      key: "velocityY",
+      get: function get() {
+        return this._vy.getVelocity();
+      }
+    }]);
+    return Observer2;
+  }();
+  Observer.version = "3.13.0";
+  Observer.create = function(vars) {
+    return new Observer(vars);
+  };
+  Observer.register = _initCore3;
+  Observer.getAll = function() {
+    return _observers.slice();
+  };
+  Observer.getById = function(id) {
+    return _observers.filter(function(o) {
+      return o.vars.id === id;
+    })[0];
+  };
+  _getGSAP() && gsap2.registerPlugin(Observer);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/ScrollTrigger.js
+  var gsap3;
+  var _coreInitted3;
+  var _win4;
+  var _doc4;
+  var _docEl2;
+  var _body2;
+  var _root2;
+  var _resizeDelay;
+  var _toArray;
+  var _clamp4;
+  var _time2;
+  var _syncInterval;
+  var _refreshing;
+  var _pointerIsDown;
+  var _transformProp2;
+  var _i;
+  var _prevWidth;
+  var _prevHeight;
+  var _autoRefresh;
+  var _sort;
+  var _suppressOverwrites2;
+  var _ignoreResize;
+  var _normalizer2;
+  var _ignoreMobileResize;
+  var _baseScreenHeight;
+  var _baseScreenWidth;
+  var _fixIOSBug;
+  var _context3;
+  var _scrollRestoration;
+  var _div100vh;
+  var _100vh;
+  var _isReverted;
+  var _clampingMax;
+  var _limitCallbacks;
+  var _startup2 = 1;
+  var _getTime2 = Date.now;
+  var _time1 = _getTime2();
+  var _lastScrollTime = 0;
+  var _enabled = 0;
+  var _parseClamp = function _parseClamp2(value, type, self) {
+    var clamp4 = _isString3(value) && (value.substr(0, 6) === "clamp(" || value.indexOf("max") > -1);
+    self["_" + type + "Clamp"] = clamp4;
+    return clamp4 ? value.substr(6, value.length - 7) : value;
+  };
+  var _keepClamp = function _keepClamp2(value, clamp4) {
+    return clamp4 && (!_isString3(value) || value.substr(0, 6) !== "clamp(") ? "clamp(" + value + ")" : value;
+  };
+  var _rafBugFix = function _rafBugFix2() {
+    return _enabled && requestAnimationFrame(_rafBugFix2);
+  };
+  var _pointerDownHandler = function _pointerDownHandler2() {
+    return _pointerIsDown = 1;
+  };
+  var _pointerUpHandler = function _pointerUpHandler2() {
+    return _pointerIsDown = 0;
+  };
+  var _passThrough3 = function _passThrough4(v) {
+    return v;
+  };
+  var _round3 = function _round4(value) {
+    return Math.round(value * 1e5) / 1e5 || 0;
+  };
+  var _windowExists5 = function _windowExists6() {
+    return typeof window !== "undefined";
+  };
+  var _getGSAP3 = function _getGSAP4() {
+    return gsap3 || _windowExists5() && (gsap3 = window.gsap) && gsap3.registerPlugin && gsap3;
+  };
+  var _isViewport3 = function _isViewport4(e) {
+    return !!~_root2.indexOf(e);
+  };
+  var _getViewportDimension = function _getViewportDimension2(dimensionProperty) {
+    return (dimensionProperty === "Height" ? _100vh : _win4["inner" + dimensionProperty]) || _docEl2["client" + dimensionProperty] || _body2["client" + dimensionProperty];
+  };
+  var _getBoundsFunc = function _getBoundsFunc2(element) {
+    return _getProxyProp(element, "getBoundingClientRect") || (_isViewport3(element) ? function() {
+      _winOffsets.width = _win4.innerWidth;
+      _winOffsets.height = _100vh;
+      return _winOffsets;
+    } : function() {
+      return _getBounds(element);
+    });
+  };
+  var _getSizeFunc = function _getSizeFunc2(scroller, isViewport, _ref) {
+    var d = _ref.d, d2 = _ref.d2, a = _ref.a;
+    return (a = _getProxyProp(scroller, "getBoundingClientRect")) ? function() {
+      return a()[d];
+    } : function() {
+      return (isViewport ? _getViewportDimension(d2) : scroller["client" + d2]) || 0;
+    };
+  };
+  var _getOffsetsFunc = function _getOffsetsFunc2(element, isViewport) {
+    return !isViewport || ~_proxies.indexOf(element) ? _getBoundsFunc(element) : function() {
+      return _winOffsets;
+    };
+  };
+  var _maxScroll = function _maxScroll2(element, _ref2) {
+    var s = _ref2.s, d2 = _ref2.d2, d = _ref2.d, a = _ref2.a;
+    return Math.max(0, (s = "scroll" + d2) && (a = _getProxyProp(element, s)) ? a() - _getBoundsFunc(element)()[d] : _isViewport3(element) ? (_docEl2[s] || _body2[s]) - _getViewportDimension(d2) : element[s] - element["offset" + d2]);
+  };
+  var _iterateAutoRefresh = function _iterateAutoRefresh2(func, events) {
+    for (var i = 0; i < _autoRefresh.length; i += 3) {
+      (!events || ~events.indexOf(_autoRefresh[i + 1])) && func(_autoRefresh[i], _autoRefresh[i + 1], _autoRefresh[i + 2]);
+    }
+  };
+  var _isString3 = function _isString4(value) {
+    return typeof value === "string";
+  };
+  var _isFunction3 = function _isFunction4(value) {
+    return typeof value === "function";
+  };
+  var _isNumber3 = function _isNumber4(value) {
+    return typeof value === "number";
+  };
+  var _isObject3 = function _isObject4(value) {
+    return typeof value === "object";
+  };
+  var _endAnimation = function _endAnimation2(animation, reversed, pause) {
+    return animation && animation.progress(reversed ? 0 : 1) && pause && animation.pause();
+  };
+  var _callback3 = function _callback4(self, func) {
+    if (self.enabled) {
+      var result = self._ctx ? self._ctx.add(function() {
+        return func(self);
+      }) : func(self);
+      result && result.totalTime && (self.callbackAnimation = result);
+    }
+  };
+  var _abs = Math.abs;
+  var _left = "left";
+  var _top = "top";
+  var _right = "right";
+  var _bottom = "bottom";
+  var _width = "width";
+  var _height = "height";
+  var _Right = "Right";
+  var _Left = "Left";
+  var _Top = "Top";
+  var _Bottom = "Bottom";
+  var _padding = "padding";
+  var _margin = "margin";
+  var _Width = "Width";
+  var _Height = "Height";
+  var _px = "px";
+  var _getComputedStyle = function _getComputedStyle2(element) {
+    return _win4.getComputedStyle(element);
+  };
+  var _makePositionable = function _makePositionable2(element) {
+    var position = _getComputedStyle(element).position;
+    element.style.position = position === "absolute" || position === "fixed" ? position : "relative";
+  };
+  var _setDefaults3 = function _setDefaults4(obj, defaults2) {
+    for (var p in defaults2) {
+      p in obj || (obj[p] = defaults2[p]);
+    }
+    return obj;
+  };
+  var _getBounds = function _getBounds2(element, withoutTransforms) {
+    var tween = withoutTransforms && _getComputedStyle(element)[_transformProp2] !== "matrix(1, 0, 0, 1, 0, 0)" && gsap3.to(element, {
+      x: 0,
+      y: 0,
+      xPercent: 0,
+      yPercent: 0,
+      rotation: 0,
+      rotationX: 0,
+      rotationY: 0,
+      scale: 1,
+      skewX: 0,
+      skewY: 0
+    }).progress(1), bounds = element.getBoundingClientRect();
+    tween && tween.progress(0).kill();
+    return bounds;
+  };
+  var _getSize = function _getSize2(element, _ref3) {
+    var d2 = _ref3.d2;
+    return element["offset" + d2] || element["client" + d2] || 0;
+  };
+  var _getLabelRatioArray = function _getLabelRatioArray2(timeline2) {
+    var a = [], labels = timeline2.labels, duration = timeline2.duration(), p;
+    for (p in labels) {
+      a.push(labels[p] / duration);
+    }
+    return a;
+  };
+  var _getClosestLabel = function _getClosestLabel2(animation) {
+    return function(value) {
+      return gsap3.utils.snap(_getLabelRatioArray(animation), value);
+    };
+  };
+  var _snapDirectional = function _snapDirectional2(snapIncrementOrArray) {
+    var snap3 = gsap3.utils.snap(snapIncrementOrArray), a = Array.isArray(snapIncrementOrArray) && snapIncrementOrArray.slice(0).sort(function(a2, b) {
+      return a2 - b;
+    });
+    return a ? function(value, direction, threshold) {
+      if (threshold === void 0) {
+        threshold = 1e-3;
+      }
+      var i;
+      if (!direction) {
+        return snap3(value);
+      }
+      if (direction > 0) {
+        value -= threshold;
+        for (i = 0; i < a.length; i++) {
+          if (a[i] >= value) {
+            return a[i];
+          }
+        }
+        return a[i - 1];
+      } else {
+        i = a.length;
+        value += threshold;
+        while (i--) {
+          if (a[i] <= value) {
+            return a[i];
+          }
+        }
+      }
+      return a[0];
+    } : function(value, direction, threshold) {
+      if (threshold === void 0) {
+        threshold = 1e-3;
+      }
+      var snapped = snap3(value);
+      return !direction || Math.abs(snapped - value) < threshold || snapped - value < 0 === direction < 0 ? snapped : snap3(direction < 0 ? value - snapIncrementOrArray : value + snapIncrementOrArray);
+    };
+  };
+  var _getLabelAtDirection = function _getLabelAtDirection2(timeline2) {
+    return function(value, st) {
+      return _snapDirectional(_getLabelRatioArray(timeline2))(value, st.direction);
+    };
+  };
+  var _multiListener = function _multiListener2(func, element, types, callback) {
+    return types.split(",").forEach(function(type) {
+      return func(element, type, callback);
+    });
+  };
+  var _addListener3 = function _addListener4(element, type, func, nonPassive, capture) {
+    return element.addEventListener(type, func, {
+      passive: !nonPassive,
+      capture: !!capture
+    });
+  };
+  var _removeListener3 = function _removeListener4(element, type, func, capture) {
+    return element.removeEventListener(type, func, !!capture);
+  };
+  var _wheelListener = function _wheelListener2(func, el, scrollFunc) {
+    scrollFunc = scrollFunc && scrollFunc.wheelHandler;
+    if (scrollFunc) {
+      func(el, "wheel", scrollFunc);
+      func(el, "touchmove", scrollFunc);
+    }
+  };
+  var _markerDefaults = {
+    startColor: "green",
+    endColor: "red",
+    indent: 0,
+    fontSize: "16px",
+    fontWeight: "normal"
+  };
+  var _defaults2 = {
+    toggleActions: "play",
+    anticipatePin: 0
+  };
+  var _keywords = {
+    top: 0,
+    left: 0,
+    center: 0.5,
+    bottom: 1,
+    right: 1
+  };
+  var _offsetToPx = function _offsetToPx2(value, size) {
+    if (_isString3(value)) {
+      var eqIndex = value.indexOf("="), relative = ~eqIndex ? +(value.charAt(eqIndex - 1) + 1) * parseFloat(value.substr(eqIndex + 1)) : 0;
+      if (~eqIndex) {
+        value.indexOf("%") > eqIndex && (relative *= size / 100);
+        value = value.substr(0, eqIndex - 1);
+      }
+      value = relative + (value in _keywords ? _keywords[value] * size : ~value.indexOf("%") ? parseFloat(value) * size / 100 : parseFloat(value) || 0);
+    }
+    return value;
+  };
+  var _createMarker = function _createMarker2(type, name, container, direction, _ref4, offset, matchWidthEl, containerAnimation) {
+    var startColor = _ref4.startColor, endColor = _ref4.endColor, fontSize = _ref4.fontSize, indent = _ref4.indent, fontWeight = _ref4.fontWeight;
+    var e = _doc4.createElement("div"), useFixedPosition = _isViewport3(container) || _getProxyProp(container, "pinType") === "fixed", isScroller = type.indexOf("scroller") !== -1, parent = useFixedPosition ? _body2 : container, isStart = type.indexOf("start") !== -1, color = isStart ? startColor : endColor, css = "border-color:" + color + ";font-size:" + fontSize + ";color:" + color + ";font-weight:" + fontWeight + ";pointer-events:none;white-space:nowrap;font-family:sans-serif,Arial;z-index:1000;padding:4px 8px;border-width:0;border-style:solid;";
+    css += "position:" + ((isScroller || containerAnimation) && useFixedPosition ? "fixed;" : "absolute;");
+    (isScroller || containerAnimation || !useFixedPosition) && (css += (direction === _vertical ? _right : _bottom) + ":" + (offset + parseFloat(indent)) + "px;");
+    matchWidthEl && (css += "box-sizing:border-box;text-align:left;width:" + matchWidthEl.offsetWidth + "px;");
+    e._isStart = isStart;
+    e.setAttribute("class", "gsap-marker-" + type + (name ? " marker-" + name : ""));
+    e.style.cssText = css;
+    e.innerText = name || name === 0 ? type + "-" + name : type;
+    parent.children[0] ? parent.insertBefore(e, parent.children[0]) : parent.appendChild(e);
+    e._offset = e["offset" + direction.op.d2];
+    _positionMarker(e, 0, direction, isStart);
+    return e;
+  };
+  var _positionMarker = function _positionMarker2(marker, start, direction, flipped) {
+    var vars = {
+      display: "block"
+    }, side = direction[flipped ? "os2" : "p2"], oppositeSide = direction[flipped ? "p2" : "os2"];
+    marker._isFlipped = flipped;
+    vars[direction.a + "Percent"] = flipped ? -100 : 0;
+    vars[direction.a] = flipped ? "1px" : 0;
+    vars["border" + side + _Width] = 1;
+    vars["border" + oppositeSide + _Width] = 0;
+    vars[direction.p] = start + "px";
+    gsap3.set(marker, vars);
+  };
+  var _triggers = [];
+  var _ids = {};
+  var _rafID;
+  var _sync = function _sync2() {
+    return _getTime2() - _lastScrollTime > 34 && (_rafID || (_rafID = requestAnimationFrame(_updateAll)));
+  };
+  var _onScroll3 = function _onScroll4() {
+    if (!_normalizer2 || !_normalizer2.isPressed || _normalizer2.startX > _body2.clientWidth) {
+      _scrollers.cache++;
+      if (_normalizer2) {
+        _rafID || (_rafID = requestAnimationFrame(_updateAll));
+      } else {
+        _updateAll();
+      }
+      _lastScrollTime || _dispatch3("scrollStart");
+      _lastScrollTime = _getTime2();
+    }
+  };
+  var _setBaseDimensions = function _setBaseDimensions2() {
+    _baseScreenWidth = _win4.innerWidth;
+    _baseScreenHeight = _win4.innerHeight;
+  };
+  var _onResize = function _onResize2(force) {
+    _scrollers.cache++;
+    (force === true || !_refreshing && !_ignoreResize && !_doc4.fullscreenElement && !_doc4.webkitFullscreenElement && (!_ignoreMobileResize || _baseScreenWidth !== _win4.innerWidth || Math.abs(_win4.innerHeight - _baseScreenHeight) > _win4.innerHeight * 0.25)) && _resizeDelay.restart(true);
+  };
+  var _listeners2 = {};
+  var _emptyArray2 = [];
+  var _softRefresh = function _softRefresh2() {
+    return _removeListener3(ScrollTrigger2, "scrollEnd", _softRefresh2) || _refreshAll(true);
+  };
+  var _dispatch3 = function _dispatch4(type) {
+    return _listeners2[type] && _listeners2[type].map(function(f) {
+      return f();
+    }) || _emptyArray2;
+  };
+  var _savedStyles = [];
+  var _revertRecorded = function _revertRecorded2(media) {
+    for (var i = 0; i < _savedStyles.length; i += 5) {
+      if (!media || _savedStyles[i + 4] && _savedStyles[i + 4].query === media) {
+        _savedStyles[i].style.cssText = _savedStyles[i + 1];
+        _savedStyles[i].getBBox && _savedStyles[i].setAttribute("transform", _savedStyles[i + 2] || "");
+        _savedStyles[i + 3].uncache = 1;
+      }
+    }
+  };
+  var _revertAll = function _revertAll2(kill2, media) {
+    var trigger;
+    for (_i = 0; _i < _triggers.length; _i++) {
+      trigger = _triggers[_i];
+      if (trigger && (!media || trigger._ctx === media)) {
+        if (kill2) {
+          trigger.kill(1);
+        } else {
+          trigger.revert(true, true);
+        }
+      }
+    }
+    _isReverted = true;
+    media && _revertRecorded(media);
+    media || _dispatch3("revert");
+  };
+  var _clearScrollMemory = function _clearScrollMemory2(scrollRestoration, force) {
+    _scrollers.cache++;
+    (force || !_refreshingAll) && _scrollers.forEach(function(obj) {
+      return _isFunction3(obj) && obj.cacheID++ && (obj.rec = 0);
+    });
+    _isString3(scrollRestoration) && (_win4.history.scrollRestoration = _scrollRestoration = scrollRestoration);
+  };
+  var _refreshingAll;
+  var _refreshID = 0;
+  var _queueRefreshID;
+  var _queueRefreshAll = function _queueRefreshAll2() {
+    if (_queueRefreshID !== _refreshID) {
+      var id = _queueRefreshID = _refreshID;
+      requestAnimationFrame(function() {
+        return id === _refreshID && _refreshAll(true);
+      });
+    }
+  };
+  var _refresh100vh = function _refresh100vh2() {
+    _body2.appendChild(_div100vh);
+    _100vh = !_normalizer2 && _div100vh.offsetHeight || _win4.innerHeight;
+    _body2.removeChild(_div100vh);
+  };
+  var _hideAllMarkers = function _hideAllMarkers2(hide) {
+    return _toArray(".gsap-marker-start, .gsap-marker-end, .gsap-marker-scroller-start, .gsap-marker-scroller-end").forEach(function(el) {
+      return el.style.display = hide ? "none" : "block";
+    });
+  };
+  var _refreshAll = function _refreshAll2(force, skipRevert) {
+    _docEl2 = _doc4.documentElement;
+    _body2 = _doc4.body;
+    _root2 = [_win4, _doc4, _docEl2, _body2];
+    if (_lastScrollTime && !force && !_isReverted) {
+      _addListener3(ScrollTrigger2, "scrollEnd", _softRefresh);
+      return;
+    }
+    _refresh100vh();
+    _refreshingAll = ScrollTrigger2.isRefreshing = true;
+    _scrollers.forEach(function(obj) {
+      return _isFunction3(obj) && ++obj.cacheID && (obj.rec = obj());
+    });
+    var refreshInits = _dispatch3("refreshInit");
+    _sort && ScrollTrigger2.sort();
+    skipRevert || _revertAll();
+    _scrollers.forEach(function(obj) {
+      if (_isFunction3(obj)) {
+        obj.smooth && (obj.target.style.scrollBehavior = "auto");
+        obj(0);
+      }
+    });
+    _triggers.slice(0).forEach(function(t) {
+      return t.refresh();
+    });
+    _isReverted = false;
+    _triggers.forEach(function(t) {
+      if (t._subPinOffset && t.pin) {
+        var prop = t.vars.horizontal ? "offsetWidth" : "offsetHeight", original = t.pin[prop];
+        t.revert(true, 1);
+        t.adjustPinSpacing(t.pin[prop] - original);
+        t.refresh();
+      }
+    });
+    _clampingMax = 1;
+    _hideAllMarkers(true);
+    _triggers.forEach(function(t) {
+      var max = _maxScroll(t.scroller, t._dir), endClamp = t.vars.end === "max" || t._endClamp && t.end > max, startClamp = t._startClamp && t.start >= max;
+      (endClamp || startClamp) && t.setPositions(startClamp ? max - 1 : t.start, endClamp ? Math.max(startClamp ? max : t.start + 1, max) : t.end, true);
+    });
+    _hideAllMarkers(false);
+    _clampingMax = 0;
+    refreshInits.forEach(function(result) {
+      return result && result.render && result.render(-1);
+    });
+    _scrollers.forEach(function(obj) {
+      if (_isFunction3(obj)) {
+        obj.smooth && requestAnimationFrame(function() {
+          return obj.target.style.scrollBehavior = "smooth";
+        });
+        obj.rec && obj(obj.rec);
+      }
+    });
+    _clearScrollMemory(_scrollRestoration, 1);
+    _resizeDelay.pause();
+    _refreshID++;
+    _refreshingAll = 2;
+    _updateAll(2);
+    _triggers.forEach(function(t) {
+      return _isFunction3(t.vars.onRefresh) && t.vars.onRefresh(t);
+    });
+    _refreshingAll = ScrollTrigger2.isRefreshing = false;
+    _dispatch3("refresh");
+  };
+  var _lastScroll = 0;
+  var _direction = 1;
+  var _primary;
+  var _updateAll = function _updateAll2(force) {
+    if (force === 2 || !_refreshingAll && !_isReverted) {
+      ScrollTrigger2.isUpdating = true;
+      _primary && _primary.update(0);
+      var l = _triggers.length, time = _getTime2(), recordVelocity = time - _time1 >= 50, scroll = l && _triggers[0].scroll();
+      _direction = _lastScroll > scroll ? -1 : 1;
+      _refreshingAll || (_lastScroll = scroll);
+      if (recordVelocity) {
+        if (_lastScrollTime && !_pointerIsDown && time - _lastScrollTime > 200) {
+          _lastScrollTime = 0;
+          _dispatch3("scrollEnd");
+        }
+        _time2 = _time1;
+        _time1 = time;
+      }
+      if (_direction < 0) {
+        _i = l;
+        while (_i-- > 0) {
+          _triggers[_i] && _triggers[_i].update(0, recordVelocity);
+        }
+        _direction = 1;
+      } else {
+        for (_i = 0; _i < l; _i++) {
+          _triggers[_i] && _triggers[_i].update(0, recordVelocity);
+        }
+      }
+      ScrollTrigger2.isUpdating = false;
+    }
+    _rafID = 0;
+  };
+  var _propNamesToCopy = [_left, _top, _bottom, _right, _margin + _Bottom, _margin + _Right, _margin + _Top, _margin + _Left, "display", "flexShrink", "float", "zIndex", "gridColumnStart", "gridColumnEnd", "gridRowStart", "gridRowEnd", "gridArea", "justifySelf", "alignSelf", "placeSelf", "order"];
+  var _stateProps = _propNamesToCopy.concat([_width, _height, "boxSizing", "max" + _Width, "max" + _Height, "position", _margin, _padding, _padding + _Top, _padding + _Right, _padding + _Bottom, _padding + _Left]);
+  var _swapPinOut = function _swapPinOut2(pin, spacer, state) {
+    _setState(state);
+    var cache = pin._gsap;
+    if (cache.spacerIsNative) {
+      _setState(cache.spacerState);
+    } else if (pin._gsap.swappedIn) {
+      var parent = spacer.parentNode;
+      if (parent) {
+        parent.insertBefore(pin, spacer);
+        parent.removeChild(spacer);
+      }
+    }
+    pin._gsap.swappedIn = false;
+  };
+  var _swapPinIn = function _swapPinIn2(pin, spacer, cs, spacerState) {
+    if (!pin._gsap.swappedIn) {
+      var i = _propNamesToCopy.length, spacerStyle = spacer.style, pinStyle = pin.style, p;
+      while (i--) {
+        p = _propNamesToCopy[i];
+        spacerStyle[p] = cs[p];
+      }
+      spacerStyle.position = cs.position === "absolute" ? "absolute" : "relative";
+      cs.display === "inline" && (spacerStyle.display = "inline-block");
+      pinStyle[_bottom] = pinStyle[_right] = "auto";
+      spacerStyle.flexBasis = cs.flexBasis || "auto";
+      spacerStyle.overflow = "visible";
+      spacerStyle.boxSizing = "border-box";
+      spacerStyle[_width] = _getSize(pin, _horizontal) + _px;
+      spacerStyle[_height] = _getSize(pin, _vertical) + _px;
+      spacerStyle[_padding] = pinStyle[_margin] = pinStyle[_top] = pinStyle[_left] = "0";
+      _setState(spacerState);
+      pinStyle[_width] = pinStyle["max" + _Width] = cs[_width];
+      pinStyle[_height] = pinStyle["max" + _Height] = cs[_height];
+      pinStyle[_padding] = cs[_padding];
+      if (pin.parentNode !== spacer) {
+        pin.parentNode.insertBefore(spacer, pin);
+        spacer.appendChild(pin);
+      }
+      pin._gsap.swappedIn = true;
+    }
+  };
+  var _capsExp2 = /([A-Z])/g;
+  var _setState = function _setState2(state) {
+    if (state) {
+      var style = state.t.style, l = state.length, i = 0, p, value;
+      (state.t._gsap || gsap3.core.getCache(state.t)).uncache = 1;
+      for (; i < l; i += 2) {
+        value = state[i + 1];
+        p = state[i];
+        if (value) {
+          style[p] = value;
+        } else if (style[p]) {
+          style.removeProperty(p.replace(_capsExp2, "-$1").toLowerCase());
+        }
+      }
+    }
+  };
+  var _getState = function _getState2(element) {
+    var l = _stateProps.length, style = element.style, state = [], i = 0;
+    for (; i < l; i++) {
+      state.push(_stateProps[i], style[_stateProps[i]]);
+    }
+    state.t = element;
+    return state;
+  };
+  var _copyState = function _copyState2(state, override, omitOffsets) {
+    var result = [], l = state.length, i = omitOffsets ? 8 : 0, p;
+    for (; i < l; i += 2) {
+      p = state[i];
+      result.push(p, p in override ? override[p] : state[i + 1]);
+    }
+    result.t = state.t;
+    return result;
+  };
+  var _winOffsets = {
+    left: 0,
+    top: 0
+  };
+  var _parsePosition3 = function _parsePosition4(value, trigger, scrollerSize, direction, scroll, marker, markerScroller, self, scrollerBounds, borderWidth, useFixedPosition, scrollerMax, containerAnimation, clampZeroProp) {
+    _isFunction3(value) && (value = value(self));
+    if (_isString3(value) && value.substr(0, 3) === "max") {
+      value = scrollerMax + (value.charAt(4) === "=" ? _offsetToPx("0" + value.substr(3), scrollerSize) : 0);
+    }
+    var time = containerAnimation ? containerAnimation.time() : 0, p1, p2, element;
+    containerAnimation && containerAnimation.seek(0);
+    isNaN(value) || (value = +value);
+    if (!_isNumber3(value)) {
+      _isFunction3(trigger) && (trigger = trigger(self));
+      var offsets = (value || "0").split(" "), bounds, localOffset, globalOffset, display;
+      element = _getTarget(trigger, self) || _body2;
+      bounds = _getBounds(element) || {};
+      if ((!bounds || !bounds.left && !bounds.top) && _getComputedStyle(element).display === "none") {
+        display = element.style.display;
+        element.style.display = "block";
+        bounds = _getBounds(element);
+        display ? element.style.display = display : element.style.removeProperty("display");
+      }
+      localOffset = _offsetToPx(offsets[0], bounds[direction.d]);
+      globalOffset = _offsetToPx(offsets[1] || "0", scrollerSize);
+      value = bounds[direction.p] - scrollerBounds[direction.p] - borderWidth + localOffset + scroll - globalOffset;
+      markerScroller && _positionMarker(markerScroller, globalOffset, direction, scrollerSize - globalOffset < 20 || markerScroller._isStart && globalOffset > 20);
+      scrollerSize -= scrollerSize - globalOffset;
+    } else {
+      containerAnimation && (value = gsap3.utils.mapRange(containerAnimation.scrollTrigger.start, containerAnimation.scrollTrigger.end, 0, scrollerMax, value));
+      markerScroller && _positionMarker(markerScroller, scrollerSize, direction, true);
+    }
+    if (clampZeroProp) {
+      self[clampZeroProp] = value || -1e-3;
+      value < 0 && (value = 0);
+    }
+    if (marker) {
+      var position = value + scrollerSize, isStart = marker._isStart;
+      p1 = "scroll" + direction.d2;
+      _positionMarker(marker, position, direction, isStart && position > 20 || !isStart && (useFixedPosition ? Math.max(_body2[p1], _docEl2[p1]) : marker.parentNode[p1]) <= position + 1);
+      if (useFixedPosition) {
+        scrollerBounds = _getBounds(markerScroller);
+        useFixedPosition && (marker.style[direction.op.p] = scrollerBounds[direction.op.p] - direction.op.m - marker._offset + _px);
+      }
+    }
+    if (containerAnimation && element) {
+      p1 = _getBounds(element);
+      containerAnimation.seek(scrollerMax);
+      p2 = _getBounds(element);
+      containerAnimation._caScrollDist = p1[direction.p] - p2[direction.p];
+      value = value / containerAnimation._caScrollDist * scrollerMax;
+    }
+    containerAnimation && containerAnimation.seek(time);
+    return containerAnimation ? value : Math.round(value);
+  };
+  var _prefixExp = /(webkit|moz|length|cssText|inset)/i;
+  var _reparent = function _reparent2(element, parent, top, left) {
+    if (element.parentNode !== parent) {
+      var style = element.style, p, cs;
+      if (parent === _body2) {
+        element._stOrig = style.cssText;
+        cs = _getComputedStyle(element);
+        for (p in cs) {
+          if (!+p && !_prefixExp.test(p) && cs[p] && typeof style[p] === "string" && p !== "0") {
+            style[p] = cs[p];
+          }
+        }
+        style.top = top;
+        style.left = left;
+      } else {
+        style.cssText = element._stOrig;
+      }
+      gsap3.core.getCache(element).uncache = 1;
+      parent.appendChild(element);
+    }
+  };
+  var _interruptionTracker = function _interruptionTracker2(getValueFunc, initialValue, onInterrupt) {
+    var last1 = initialValue, last2 = last1;
+    return function(value) {
+      var current = Math.round(getValueFunc());
+      if (current !== last1 && current !== last2 && Math.abs(current - last1) > 3 && Math.abs(current - last2) > 3) {
+        value = current;
+        onInterrupt && onInterrupt();
+      }
+      last2 = last1;
+      last1 = Math.round(value);
+      return last1;
+    };
+  };
+  var _shiftMarker = function _shiftMarker2(marker, direction, value) {
+    var vars = {};
+    vars[direction.p] = "+=" + value;
+    gsap3.set(marker, vars);
+  };
+  var _getTweenCreator = function _getTweenCreator2(scroller, direction) {
+    var getScroll = _getScrollFunc(scroller, direction), prop = "_scroll" + direction.p2, getTween = function getTween2(scrollTo, vars, initialValue, change1, change2) {
+      var tween = getTween2.tween, onComplete = vars.onComplete, modifiers = {};
+      initialValue = initialValue || getScroll();
+      var checkForInterruption = _interruptionTracker(getScroll, initialValue, function() {
+        tween.kill();
+        getTween2.tween = 0;
+      });
+      change2 = change1 && change2 || 0;
+      change1 = change1 || scrollTo - initialValue;
+      tween && tween.kill();
+      vars[prop] = scrollTo;
+      vars.inherit = false;
+      vars.modifiers = modifiers;
+      modifiers[prop] = function() {
+        return checkForInterruption(initialValue + change1 * tween.ratio + change2 * tween.ratio * tween.ratio);
+      };
+      vars.onUpdate = function() {
+        _scrollers.cache++;
+        getTween2.tween && _updateAll();
+      };
+      vars.onComplete = function() {
+        getTween2.tween = 0;
+        onComplete && onComplete.call(tween);
+      };
+      tween = getTween2.tween = gsap3.to(scroller, vars);
+      return tween;
+    };
+    scroller[prop] = getScroll;
+    getScroll.wheelHandler = function() {
+      return getTween.tween && getTween.tween.kill() && (getTween.tween = 0);
+    };
+    _addListener3(scroller, "wheel", getScroll.wheelHandler);
+    ScrollTrigger2.isTouch && _addListener3(scroller, "touchmove", getScroll.wheelHandler);
+    return getTween;
+  };
+  var ScrollTrigger2 = /* @__PURE__ */ function() {
+    function ScrollTrigger3(vars, animation) {
+      _coreInitted3 || ScrollTrigger3.register(gsap3) || console.warn("Please gsap.registerPlugin(ScrollTrigger)");
+      _context3(this);
+      this.init(vars, animation);
+    }
+    var _proto = ScrollTrigger3.prototype;
+    _proto.init = function init7(vars, animation) {
+      this.progress = this.start = 0;
+      this.vars && this.kill(true, true);
+      if (!_enabled) {
+        this.update = this.refresh = this.kill = _passThrough3;
+        return;
+      }
+      vars = _setDefaults3(_isString3(vars) || _isNumber3(vars) || vars.nodeType ? {
+        trigger: vars
+      } : vars, _defaults2);
+      var _vars = vars, onUpdate = _vars.onUpdate, toggleClass = _vars.toggleClass, id = _vars.id, onToggle = _vars.onToggle, onRefresh = _vars.onRefresh, scrub = _vars.scrub, trigger = _vars.trigger, pin = _vars.pin, pinSpacing = _vars.pinSpacing, invalidateOnRefresh = _vars.invalidateOnRefresh, anticipatePin = _vars.anticipatePin, onScrubComplete = _vars.onScrubComplete, onSnapComplete = _vars.onSnapComplete, once = _vars.once, snap3 = _vars.snap, pinReparent = _vars.pinReparent, pinSpacer = _vars.pinSpacer, containerAnimation = _vars.containerAnimation, fastScrollEnd = _vars.fastScrollEnd, preventOverlaps = _vars.preventOverlaps, direction = vars.horizontal || vars.containerAnimation && vars.horizontal !== false ? _horizontal : _vertical, isToggle = !scrub && scrub !== 0, scroller = _getTarget(vars.scroller || _win4), scrollerCache = gsap3.core.getCache(scroller), isViewport = _isViewport3(scroller), useFixedPosition = ("pinType" in vars ? vars.pinType : _getProxyProp(scroller, "pinType") || isViewport && "fixed") === "fixed", callbacks = [vars.onEnter, vars.onLeave, vars.onEnterBack, vars.onLeaveBack], toggleActions = isToggle && vars.toggleActions.split(" "), markers = "markers" in vars ? vars.markers : _defaults2.markers, borderWidth = isViewport ? 0 : parseFloat(_getComputedStyle(scroller)["border" + direction.p2 + _Width]) || 0, self = this, onRefreshInit = vars.onRefreshInit && function() {
+        return vars.onRefreshInit(self);
+      }, getScrollerSize = _getSizeFunc(scroller, isViewport, direction), getScrollerOffsets = _getOffsetsFunc(scroller, isViewport), lastSnap = 0, lastRefresh = 0, prevProgress = 0, scrollFunc = _getScrollFunc(scroller, direction), tweenTo, pinCache, snapFunc, scroll1, scroll2, start, end, markerStart, markerEnd, markerStartTrigger, markerEndTrigger, markerVars, executingOnRefresh, change, pinOriginalState, pinActiveState, pinState, spacer, offset, pinGetter, pinSetter, pinStart, pinChange, spacingStart, spacerState, markerStartSetter, pinMoves, markerEndSetter, cs, snap1, snap22, scrubTween, scrubSmooth, snapDurClamp, snapDelayedCall, prevScroll, prevAnimProgress, caMarkerSetter, customRevertReturn;
+      self._startClamp = self._endClamp = false;
+      self._dir = direction;
+      anticipatePin *= 45;
+      self.scroller = scroller;
+      self.scroll = containerAnimation ? containerAnimation.time.bind(containerAnimation) : scrollFunc;
+      scroll1 = scrollFunc();
+      self.vars = vars;
+      animation = animation || vars.animation;
+      if ("refreshPriority" in vars) {
+        _sort = 1;
+        vars.refreshPriority === -9999 && (_primary = self);
+      }
+      scrollerCache.tweenScroll = scrollerCache.tweenScroll || {
+        top: _getTweenCreator(scroller, _vertical),
+        left: _getTweenCreator(scroller, _horizontal)
+      };
+      self.tweenTo = tweenTo = scrollerCache.tweenScroll[direction.p];
+      self.scrubDuration = function(value) {
+        scrubSmooth = _isNumber3(value) && value;
+        if (!scrubSmooth) {
+          scrubTween && scrubTween.progress(1).kill();
+          scrubTween = 0;
+        } else {
+          scrubTween ? scrubTween.duration(value) : scrubTween = gsap3.to(animation, {
+            ease: "expo",
+            totalProgress: "+=0",
+            inherit: false,
+            duration: scrubSmooth,
+            paused: true,
+            onComplete: function onComplete() {
+              return onScrubComplete && onScrubComplete(self);
+            }
+          });
+        }
+      };
+      if (animation) {
+        animation.vars.lazy = false;
+        animation._initted && !self.isReverted || animation.vars.immediateRender !== false && vars.immediateRender !== false && animation.duration() && animation.render(0, true, true);
+        self.animation = animation.pause();
+        animation.scrollTrigger = self;
+        self.scrubDuration(scrub);
+        snap1 = 0;
+        id || (id = animation.vars.id);
+      }
+      if (snap3) {
+        if (!_isObject3(snap3) || snap3.push) {
+          snap3 = {
+            snapTo: snap3
+          };
+        }
+        "scrollBehavior" in _body2.style && gsap3.set(isViewport ? [_body2, _docEl2] : scroller, {
+          scrollBehavior: "auto"
+        });
+        _scrollers.forEach(function(o) {
+          return _isFunction3(o) && o.target === (isViewport ? _doc4.scrollingElement || _docEl2 : scroller) && (o.smooth = false);
+        });
+        snapFunc = _isFunction3(snap3.snapTo) ? snap3.snapTo : snap3.snapTo === "labels" ? _getClosestLabel(animation) : snap3.snapTo === "labelsDirectional" ? _getLabelAtDirection(animation) : snap3.directional !== false ? function(value, st) {
+          return _snapDirectional(snap3.snapTo)(value, _getTime2() - lastRefresh < 500 ? 0 : st.direction);
+        } : gsap3.utils.snap(snap3.snapTo);
+        snapDurClamp = snap3.duration || {
+          min: 0.1,
+          max: 2
+        };
+        snapDurClamp = _isObject3(snapDurClamp) ? _clamp4(snapDurClamp.min, snapDurClamp.max) : _clamp4(snapDurClamp, snapDurClamp);
+        snapDelayedCall = gsap3.delayedCall(snap3.delay || scrubSmooth / 2 || 0.1, function() {
+          var scroll = scrollFunc(), refreshedRecently = _getTime2() - lastRefresh < 500, tween = tweenTo.tween;
+          if ((refreshedRecently || Math.abs(self.getVelocity()) < 10) && !tween && !_pointerIsDown && lastSnap !== scroll) {
+            var progress = (scroll - start) / change, totalProgress = animation && !isToggle ? animation.totalProgress() : progress, velocity = refreshedRecently ? 0 : (totalProgress - snap22) / (_getTime2() - _time2) * 1e3 || 0, change1 = gsap3.utils.clamp(-progress, 1 - progress, _abs(velocity / 2) * velocity / 0.185), naturalEnd = progress + (snap3.inertia === false ? 0 : change1), endValue, endScroll, _snap = snap3, onStart = _snap.onStart, _onInterrupt = _snap.onInterrupt, _onComplete = _snap.onComplete;
+            endValue = snapFunc(naturalEnd, self);
+            _isNumber3(endValue) || (endValue = naturalEnd);
+            endScroll = Math.max(0, Math.round(start + endValue * change));
+            if (scroll <= end && scroll >= start && endScroll !== scroll) {
+              if (tween && !tween._initted && tween.data <= _abs(endScroll - scroll)) {
+                return;
+              }
+              if (snap3.inertia === false) {
+                change1 = endValue - progress;
+              }
+              tweenTo(endScroll, {
+                duration: snapDurClamp(_abs(Math.max(_abs(naturalEnd - totalProgress), _abs(endValue - totalProgress)) * 0.185 / velocity / 0.05 || 0)),
+                ease: snap3.ease || "power3",
+                data: _abs(endScroll - scroll),
+                // record the distance so that if another snap tween occurs (conflict) we can prioritize the closest snap.
+                onInterrupt: function onInterrupt() {
+                  return snapDelayedCall.restart(true) && _onInterrupt && _onInterrupt(self);
+                },
+                onComplete: function onComplete() {
+                  self.update();
+                  lastSnap = scrollFunc();
+                  if (animation && !isToggle) {
+                    scrubTween ? scrubTween.resetTo("totalProgress", endValue, animation._tTime / animation._tDur) : animation.progress(endValue);
+                  }
+                  snap1 = snap22 = animation && !isToggle ? animation.totalProgress() : self.progress;
+                  onSnapComplete && onSnapComplete(self);
+                  _onComplete && _onComplete(self);
+                }
+              }, scroll, change1 * change, endScroll - scroll - change1 * change);
+              onStart && onStart(self, tweenTo.tween);
+            }
+          } else if (self.isActive && lastSnap !== scroll) {
+            snapDelayedCall.restart(true);
+          }
+        }).pause();
+      }
+      id && (_ids[id] = self);
+      trigger = self.trigger = _getTarget(trigger || pin !== true && pin);
+      customRevertReturn = trigger && trigger._gsap && trigger._gsap.stRevert;
+      customRevertReturn && (customRevertReturn = customRevertReturn(self));
+      pin = pin === true ? trigger : _getTarget(pin);
+      _isString3(toggleClass) && (toggleClass = {
+        targets: trigger,
+        className: toggleClass
+      });
+      if (pin) {
+        pinSpacing === false || pinSpacing === _margin || (pinSpacing = !pinSpacing && pin.parentNode && pin.parentNode.style && _getComputedStyle(pin.parentNode).display === "flex" ? false : _padding);
+        self.pin = pin;
+        pinCache = gsap3.core.getCache(pin);
+        if (!pinCache.spacer) {
+          if (pinSpacer) {
+            pinSpacer = _getTarget(pinSpacer);
+            pinSpacer && !pinSpacer.nodeType && (pinSpacer = pinSpacer.current || pinSpacer.nativeElement);
+            pinCache.spacerIsNative = !!pinSpacer;
+            pinSpacer && (pinCache.spacerState = _getState(pinSpacer));
+          }
+          pinCache.spacer = spacer = pinSpacer || _doc4.createElement("div");
+          spacer.classList.add("pin-spacer");
+          id && spacer.classList.add("pin-spacer-" + id);
+          pinCache.pinState = pinOriginalState = _getState(pin);
+        } else {
+          pinOriginalState = pinCache.pinState;
+        }
+        vars.force3D !== false && gsap3.set(pin, {
+          force3D: true
+        });
+        self.spacer = spacer = pinCache.spacer;
+        cs = _getComputedStyle(pin);
+        spacingStart = cs[pinSpacing + direction.os2];
+        pinGetter = gsap3.getProperty(pin);
+        pinSetter = gsap3.quickSetter(pin, direction.a, _px);
+        _swapPinIn(pin, spacer, cs);
+        pinState = _getState(pin);
+      }
+      if (markers) {
+        markerVars = _isObject3(markers) ? _setDefaults3(markers, _markerDefaults) : _markerDefaults;
+        markerStartTrigger = _createMarker("scroller-start", id, scroller, direction, markerVars, 0);
+        markerEndTrigger = _createMarker("scroller-end", id, scroller, direction, markerVars, 0, markerStartTrigger);
+        offset = markerStartTrigger["offset" + direction.op.d2];
+        var content = _getTarget(_getProxyProp(scroller, "content") || scroller);
+        markerStart = this.markerStart = _createMarker("start", id, content, direction, markerVars, offset, 0, containerAnimation);
+        markerEnd = this.markerEnd = _createMarker("end", id, content, direction, markerVars, offset, 0, containerAnimation);
+        containerAnimation && (caMarkerSetter = gsap3.quickSetter([markerStart, markerEnd], direction.a, _px));
+        if (!useFixedPosition && !(_proxies.length && _getProxyProp(scroller, "fixedMarkers") === true)) {
+          _makePositionable(isViewport ? _body2 : scroller);
+          gsap3.set([markerStartTrigger, markerEndTrigger], {
+            force3D: true
+          });
+          markerStartSetter = gsap3.quickSetter(markerStartTrigger, direction.a, _px);
+          markerEndSetter = gsap3.quickSetter(markerEndTrigger, direction.a, _px);
+        }
+      }
+      if (containerAnimation) {
+        var oldOnUpdate = containerAnimation.vars.onUpdate, oldParams = containerAnimation.vars.onUpdateParams;
+        containerAnimation.eventCallback("onUpdate", function() {
+          self.update(0, 0, 1);
+          oldOnUpdate && oldOnUpdate.apply(containerAnimation, oldParams || []);
+        });
+      }
+      self.previous = function() {
+        return _triggers[_triggers.indexOf(self) - 1];
+      };
+      self.next = function() {
+        return _triggers[_triggers.indexOf(self) + 1];
+      };
+      self.revert = function(revert, temp) {
+        if (!temp) {
+          return self.kill(true);
+        }
+        var r = revert !== false || !self.enabled, prevRefreshing = _refreshing;
+        if (r !== self.isReverted) {
+          if (r) {
+            prevScroll = Math.max(scrollFunc(), self.scroll.rec || 0);
+            prevProgress = self.progress;
+            prevAnimProgress = animation && animation.progress();
+          }
+          markerStart && [markerStart, markerEnd, markerStartTrigger, markerEndTrigger].forEach(function(m) {
+            return m.style.display = r ? "none" : "block";
+          });
+          if (r) {
+            _refreshing = self;
+            self.update(r);
+          }
+          if (pin && (!pinReparent || !self.isActive)) {
+            if (r) {
+              _swapPinOut(pin, spacer, pinOriginalState);
+            } else {
+              _swapPinIn(pin, spacer, _getComputedStyle(pin), spacerState);
+            }
+          }
+          r || self.update(r);
+          _refreshing = prevRefreshing;
+          self.isReverted = r;
+        }
+      };
+      self.refresh = function(soft, force, position, pinOffset) {
+        if ((_refreshing || !self.enabled) && !force) {
+          return;
+        }
+        if (pin && soft && _lastScrollTime) {
+          _addListener3(ScrollTrigger3, "scrollEnd", _softRefresh);
+          return;
+        }
+        !_refreshingAll && onRefreshInit && onRefreshInit(self);
+        _refreshing = self;
+        if (tweenTo.tween && !position) {
+          tweenTo.tween.kill();
+          tweenTo.tween = 0;
+        }
+        scrubTween && scrubTween.pause();
+        if (invalidateOnRefresh && animation) {
+          animation.revert({
+            kill: false
+          }).invalidate();
+          animation.getChildren && animation.getChildren(true, true, false).forEach(function(t) {
+            return t.vars.immediateRender && t.render(0, true, true);
+          });
+        }
+        self.isReverted || self.revert(true, true);
+        self._subPinOffset = false;
+        var size = getScrollerSize(), scrollerBounds = getScrollerOffsets(), max = containerAnimation ? containerAnimation.duration() : _maxScroll(scroller, direction), isFirstRefresh = change <= 0.01 || !change, offset2 = 0, otherPinOffset = pinOffset || 0, parsedEnd = _isObject3(position) ? position.end : vars.end, parsedEndTrigger = vars.endTrigger || trigger, parsedStart = _isObject3(position) ? position.start : vars.start || (vars.start === 0 || !trigger ? 0 : pin ? "0 0" : "0 100%"), pinnedContainer = self.pinnedContainer = vars.pinnedContainer && _getTarget(vars.pinnedContainer, self), triggerIndex = trigger && Math.max(0, _triggers.indexOf(self)) || 0, i = triggerIndex, cs2, bounds, scroll, isVertical, override, curTrigger, curPin, oppositeScroll, initted, revertedPins, forcedOverflow, markerStartOffset, markerEndOffset;
+        if (markers && _isObject3(position)) {
+          markerStartOffset = gsap3.getProperty(markerStartTrigger, direction.p);
+          markerEndOffset = gsap3.getProperty(markerEndTrigger, direction.p);
+        }
+        while (i-- > 0) {
+          curTrigger = _triggers[i];
+          curTrigger.end || curTrigger.refresh(0, 1) || (_refreshing = self);
+          curPin = curTrigger.pin;
+          if (curPin && (curPin === trigger || curPin === pin || curPin === pinnedContainer) && !curTrigger.isReverted) {
+            revertedPins || (revertedPins = []);
+            revertedPins.unshift(curTrigger);
+            curTrigger.revert(true, true);
+          }
+          if (curTrigger !== _triggers[i]) {
+            triggerIndex--;
+            i--;
+          }
+        }
+        _isFunction3(parsedStart) && (parsedStart = parsedStart(self));
+        parsedStart = _parseClamp(parsedStart, "start", self);
+        start = _parsePosition3(parsedStart, trigger, size, direction, scrollFunc(), markerStart, markerStartTrigger, self, scrollerBounds, borderWidth, useFixedPosition, max, containerAnimation, self._startClamp && "_startClamp") || (pin ? -1e-3 : 0);
+        _isFunction3(parsedEnd) && (parsedEnd = parsedEnd(self));
+        if (_isString3(parsedEnd) && !parsedEnd.indexOf("+=")) {
+          if (~parsedEnd.indexOf(" ")) {
+            parsedEnd = (_isString3(parsedStart) ? parsedStart.split(" ")[0] : "") + parsedEnd;
+          } else {
+            offset2 = _offsetToPx(parsedEnd.substr(2), size);
+            parsedEnd = _isString3(parsedStart) ? parsedStart : (containerAnimation ? gsap3.utils.mapRange(0, containerAnimation.duration(), containerAnimation.scrollTrigger.start, containerAnimation.scrollTrigger.end, start) : start) + offset2;
+            parsedEndTrigger = trigger;
+          }
+        }
+        parsedEnd = _parseClamp(parsedEnd, "end", self);
+        end = Math.max(start, _parsePosition3(parsedEnd || (parsedEndTrigger ? "100% 0" : max), parsedEndTrigger, size, direction, scrollFunc() + offset2, markerEnd, markerEndTrigger, self, scrollerBounds, borderWidth, useFixedPosition, max, containerAnimation, self._endClamp && "_endClamp")) || -1e-3;
+        offset2 = 0;
+        i = triggerIndex;
+        while (i--) {
+          curTrigger = _triggers[i];
+          curPin = curTrigger.pin;
+          if (curPin && curTrigger.start - curTrigger._pinPush <= start && !containerAnimation && curTrigger.end > 0) {
+            cs2 = curTrigger.end - (self._startClamp ? Math.max(0, curTrigger.start) : curTrigger.start);
+            if ((curPin === trigger && curTrigger.start - curTrigger._pinPush < start || curPin === pinnedContainer) && isNaN(parsedStart)) {
+              offset2 += cs2 * (1 - curTrigger.progress);
+            }
+            curPin === pin && (otherPinOffset += cs2);
+          }
+        }
+        start += offset2;
+        end += offset2;
+        self._startClamp && (self._startClamp += offset2);
+        if (self._endClamp && !_refreshingAll) {
+          self._endClamp = end || -1e-3;
+          end = Math.min(end, _maxScroll(scroller, direction));
+        }
+        change = end - start || (start -= 0.01) && 1e-3;
+        if (isFirstRefresh) {
+          prevProgress = gsap3.utils.clamp(0, 1, gsap3.utils.normalize(start, end, prevScroll));
+        }
+        self._pinPush = otherPinOffset;
+        if (markerStart && offset2) {
+          cs2 = {};
+          cs2[direction.a] = "+=" + offset2;
+          pinnedContainer && (cs2[direction.p] = "-=" + scrollFunc());
+          gsap3.set([markerStart, markerEnd], cs2);
+        }
+        if (pin && !(_clampingMax && self.end >= _maxScroll(scroller, direction))) {
+          cs2 = _getComputedStyle(pin);
+          isVertical = direction === _vertical;
+          scroll = scrollFunc();
+          pinStart = parseFloat(pinGetter(direction.a)) + otherPinOffset;
+          if (!max && end > 1) {
+            forcedOverflow = (isViewport ? _doc4.scrollingElement || _docEl2 : scroller).style;
+            forcedOverflow = {
+              style: forcedOverflow,
+              value: forcedOverflow["overflow" + direction.a.toUpperCase()]
+            };
+            if (isViewport && _getComputedStyle(_body2)["overflow" + direction.a.toUpperCase()] !== "scroll") {
+              forcedOverflow.style["overflow" + direction.a.toUpperCase()] = "scroll";
+            }
+          }
+          _swapPinIn(pin, spacer, cs2);
+          pinState = _getState(pin);
+          bounds = _getBounds(pin, true);
+          oppositeScroll = useFixedPosition && _getScrollFunc(scroller, isVertical ? _horizontal : _vertical)();
+          if (pinSpacing) {
+            spacerState = [pinSpacing + direction.os2, change + otherPinOffset + _px];
+            spacerState.t = spacer;
+            i = pinSpacing === _padding ? _getSize(pin, direction) + change + otherPinOffset : 0;
+            if (i) {
+              spacerState.push(direction.d, i + _px);
+              spacer.style.flexBasis !== "auto" && (spacer.style.flexBasis = i + _px);
+            }
+            _setState(spacerState);
+            if (pinnedContainer) {
+              _triggers.forEach(function(t) {
+                if (t.pin === pinnedContainer && t.vars.pinSpacing !== false) {
+                  t._subPinOffset = true;
+                }
+              });
+            }
+            useFixedPosition && scrollFunc(prevScroll);
+          } else {
+            i = _getSize(pin, direction);
+            i && spacer.style.flexBasis !== "auto" && (spacer.style.flexBasis = i + _px);
+          }
+          if (useFixedPosition) {
+            override = {
+              top: bounds.top + (isVertical ? scroll - start : oppositeScroll) + _px,
+              left: bounds.left + (isVertical ? oppositeScroll : scroll - start) + _px,
+              boxSizing: "border-box",
+              position: "fixed"
+            };
+            override[_width] = override["max" + _Width] = Math.ceil(bounds.width) + _px;
+            override[_height] = override["max" + _Height] = Math.ceil(bounds.height) + _px;
+            override[_margin] = override[_margin + _Top] = override[_margin + _Right] = override[_margin + _Bottom] = override[_margin + _Left] = "0";
+            override[_padding] = cs2[_padding];
+            override[_padding + _Top] = cs2[_padding + _Top];
+            override[_padding + _Right] = cs2[_padding + _Right];
+            override[_padding + _Bottom] = cs2[_padding + _Bottom];
+            override[_padding + _Left] = cs2[_padding + _Left];
+            pinActiveState = _copyState(pinOriginalState, override, pinReparent);
+            _refreshingAll && scrollFunc(0);
+          }
+          if (animation) {
+            initted = animation._initted;
+            _suppressOverwrites2(1);
+            animation.render(animation.duration(), true, true);
+            pinChange = pinGetter(direction.a) - pinStart + change + otherPinOffset;
+            pinMoves = Math.abs(change - pinChange) > 1;
+            useFixedPosition && pinMoves && pinActiveState.splice(pinActiveState.length - 2, 2);
+            animation.render(0, true, true);
+            initted || animation.invalidate(true);
+            animation.parent || animation.totalTime(animation.totalTime());
+            _suppressOverwrites2(0);
+          } else {
+            pinChange = change;
+          }
+          forcedOverflow && (forcedOverflow.value ? forcedOverflow.style["overflow" + direction.a.toUpperCase()] = forcedOverflow.value : forcedOverflow.style.removeProperty("overflow-" + direction.a));
+        } else if (trigger && scrollFunc() && !containerAnimation) {
+          bounds = trigger.parentNode;
+          while (bounds && bounds !== _body2) {
+            if (bounds._pinOffset) {
+              start -= bounds._pinOffset;
+              end -= bounds._pinOffset;
+            }
+            bounds = bounds.parentNode;
+          }
+        }
+        revertedPins && revertedPins.forEach(function(t) {
+          return t.revert(false, true);
+        });
+        self.start = start;
+        self.end = end;
+        scroll1 = scroll2 = _refreshingAll ? prevScroll : scrollFunc();
+        if (!containerAnimation && !_refreshingAll) {
+          scroll1 < prevScroll && scrollFunc(prevScroll);
+          self.scroll.rec = 0;
+        }
+        self.revert(false, true);
+        lastRefresh = _getTime2();
+        if (snapDelayedCall) {
+          lastSnap = -1;
+          snapDelayedCall.restart(true);
+        }
+        _refreshing = 0;
+        animation && isToggle && (animation._initted || prevAnimProgress) && animation.progress() !== prevAnimProgress && animation.progress(prevAnimProgress || 0, true).render(animation.time(), true, true);
+        if (isFirstRefresh || prevProgress !== self.progress || containerAnimation || invalidateOnRefresh || animation && !animation._initted) {
+          animation && !isToggle && (animation._initted || prevProgress || animation.vars.immediateRender !== false) && animation.totalProgress(containerAnimation && start < -1e-3 && !prevProgress ? gsap3.utils.normalize(start, end, 0) : prevProgress, true);
+          self.progress = isFirstRefresh || (scroll1 - start) / change === prevProgress ? 0 : prevProgress;
+        }
+        pin && pinSpacing && (spacer._pinOffset = Math.round(self.progress * pinChange));
+        scrubTween && scrubTween.invalidate();
+        if (!isNaN(markerStartOffset)) {
+          markerStartOffset -= gsap3.getProperty(markerStartTrigger, direction.p);
+          markerEndOffset -= gsap3.getProperty(markerEndTrigger, direction.p);
+          _shiftMarker(markerStartTrigger, direction, markerStartOffset);
+          _shiftMarker(markerStart, direction, markerStartOffset - (pinOffset || 0));
+          _shiftMarker(markerEndTrigger, direction, markerEndOffset);
+          _shiftMarker(markerEnd, direction, markerEndOffset - (pinOffset || 0));
+        }
+        isFirstRefresh && !_refreshingAll && self.update();
+        if (onRefresh && !_refreshingAll && !executingOnRefresh) {
+          executingOnRefresh = true;
+          onRefresh(self);
+          executingOnRefresh = false;
+        }
+      };
+      self.getVelocity = function() {
+        return (scrollFunc() - scroll2) / (_getTime2() - _time2) * 1e3 || 0;
+      };
+      self.endAnimation = function() {
+        _endAnimation(self.callbackAnimation);
+        if (animation) {
+          scrubTween ? scrubTween.progress(1) : !animation.paused() ? _endAnimation(animation, animation.reversed()) : isToggle || _endAnimation(animation, self.direction < 0, 1);
+        }
+      };
+      self.labelToScroll = function(label) {
+        return animation && animation.labels && (start || self.refresh() || start) + animation.labels[label] / animation.duration() * change || 0;
+      };
+      self.getTrailing = function(name) {
+        var i = _triggers.indexOf(self), a = self.direction > 0 ? _triggers.slice(0, i).reverse() : _triggers.slice(i + 1);
+        return (_isString3(name) ? a.filter(function(t) {
+          return t.vars.preventOverlaps === name;
+        }) : a).filter(function(t) {
+          return self.direction > 0 ? t.end <= start : t.start >= end;
+        });
+      };
+      self.update = function(reset, recordVelocity, forceFake) {
+        if (containerAnimation && !forceFake && !reset) {
+          return;
+        }
+        var scroll = _refreshingAll === true ? prevScroll : self.scroll(), p = reset ? 0 : (scroll - start) / change, clipped = p < 0 ? 0 : p > 1 ? 1 : p || 0, prevProgress2 = self.progress, isActive, wasActive, toggleState, action, stateChanged, toggled, isAtMax, isTakingAction;
+        if (recordVelocity) {
+          scroll2 = scroll1;
+          scroll1 = containerAnimation ? scrollFunc() : scroll;
+          if (snap3) {
+            snap22 = snap1;
+            snap1 = animation && !isToggle ? animation.totalProgress() : clipped;
+          }
+        }
+        if (anticipatePin && pin && !_refreshing && !_startup2 && _lastScrollTime) {
+          if (!clipped && start < scroll + (scroll - scroll2) / (_getTime2() - _time2) * anticipatePin) {
+            clipped = 1e-4;
+          } else if (clipped === 1 && end > scroll + (scroll - scroll2) / (_getTime2() - _time2) * anticipatePin) {
+            clipped = 0.9999;
+          }
+        }
+        if (clipped !== prevProgress2 && self.enabled) {
+          isActive = self.isActive = !!clipped && clipped < 1;
+          wasActive = !!prevProgress2 && prevProgress2 < 1;
+          toggled = isActive !== wasActive;
+          stateChanged = toggled || !!clipped !== !!prevProgress2;
+          self.direction = clipped > prevProgress2 ? 1 : -1;
+          self.progress = clipped;
+          if (stateChanged && !_refreshing) {
+            toggleState = clipped && !prevProgress2 ? 0 : clipped === 1 ? 1 : prevProgress2 === 1 ? 2 : 3;
+            if (isToggle) {
+              action = !toggled && toggleActions[toggleState + 1] !== "none" && toggleActions[toggleState + 1] || toggleActions[toggleState];
+              isTakingAction = animation && (action === "complete" || action === "reset" || action in animation);
+            }
+          }
+          preventOverlaps && (toggled || isTakingAction) && (isTakingAction || scrub || !animation) && (_isFunction3(preventOverlaps) ? preventOverlaps(self) : self.getTrailing(preventOverlaps).forEach(function(t) {
+            return t.endAnimation();
+          }));
+          if (!isToggle) {
+            if (scrubTween && !_refreshing && !_startup2) {
+              scrubTween._dp._time - scrubTween._start !== scrubTween._time && scrubTween.render(scrubTween._dp._time - scrubTween._start);
+              if (scrubTween.resetTo) {
+                scrubTween.resetTo("totalProgress", clipped, animation._tTime / animation._tDur);
+              } else {
+                scrubTween.vars.totalProgress = clipped;
+                scrubTween.invalidate().restart();
+              }
+            } else if (animation) {
+              animation.totalProgress(clipped, !!(_refreshing && (lastRefresh || reset)));
+            }
+          }
+          if (pin) {
+            reset && pinSpacing && (spacer.style[pinSpacing + direction.os2] = spacingStart);
+            if (!useFixedPosition) {
+              pinSetter(_round3(pinStart + pinChange * clipped));
+            } else if (stateChanged) {
+              isAtMax = !reset && clipped > prevProgress2 && end + 1 > scroll && scroll + 1 >= _maxScroll(scroller, direction);
+              if (pinReparent) {
+                if (!reset && (isActive || isAtMax)) {
+                  var bounds = _getBounds(pin, true), _offset = scroll - start;
+                  _reparent(pin, _body2, bounds.top + (direction === _vertical ? _offset : 0) + _px, bounds.left + (direction === _vertical ? 0 : _offset) + _px);
+                } else {
+                  _reparent(pin, spacer);
+                }
+              }
+              _setState(isActive || isAtMax ? pinActiveState : pinState);
+              pinMoves && clipped < 1 && isActive || pinSetter(pinStart + (clipped === 1 && !isAtMax ? pinChange : 0));
+            }
+          }
+          snap3 && !tweenTo.tween && !_refreshing && !_startup2 && snapDelayedCall.restart(true);
+          toggleClass && (toggled || once && clipped && (clipped < 1 || !_limitCallbacks)) && _toArray(toggleClass.targets).forEach(function(el) {
+            return el.classList[isActive || once ? "add" : "remove"](toggleClass.className);
+          });
+          onUpdate && !isToggle && !reset && onUpdate(self);
+          if (stateChanged && !_refreshing) {
+            if (isToggle) {
+              if (isTakingAction) {
+                if (action === "complete") {
+                  animation.pause().totalProgress(1);
+                } else if (action === "reset") {
+                  animation.restart(true).pause();
+                } else if (action === "restart") {
+                  animation.restart(true);
+                } else {
+                  animation[action]();
+                }
+              }
+              onUpdate && onUpdate(self);
+            }
+            if (toggled || !_limitCallbacks) {
+              onToggle && toggled && _callback3(self, onToggle);
+              callbacks[toggleState] && _callback3(self, callbacks[toggleState]);
+              once && (clipped === 1 ? self.kill(false, 1) : callbacks[toggleState] = 0);
+              if (!toggled) {
+                toggleState = clipped === 1 ? 1 : 3;
+                callbacks[toggleState] && _callback3(self, callbacks[toggleState]);
+              }
+            }
+            if (fastScrollEnd && !isActive && Math.abs(self.getVelocity()) > (_isNumber3(fastScrollEnd) ? fastScrollEnd : 2500)) {
+              _endAnimation(self.callbackAnimation);
+              scrubTween ? scrubTween.progress(1) : _endAnimation(animation, action === "reverse" ? 1 : !clipped, 1);
+            }
+          } else if (isToggle && onUpdate && !_refreshing) {
+            onUpdate(self);
+          }
+        }
+        if (markerEndSetter) {
+          var n = containerAnimation ? scroll / containerAnimation.duration() * (containerAnimation._caScrollDist || 0) : scroll;
+          markerStartSetter(n + (markerStartTrigger._isFlipped ? 1 : 0));
+          markerEndSetter(n);
+        }
+        caMarkerSetter && caMarkerSetter(-scroll / containerAnimation.duration() * (containerAnimation._caScrollDist || 0));
+      };
+      self.enable = function(reset, refresh) {
+        if (!self.enabled) {
+          self.enabled = true;
+          _addListener3(scroller, "resize", _onResize);
+          isViewport || _addListener3(scroller, "scroll", _onScroll3);
+          onRefreshInit && _addListener3(ScrollTrigger3, "refreshInit", onRefreshInit);
+          if (reset !== false) {
+            self.progress = prevProgress = 0;
+            scroll1 = scroll2 = lastSnap = scrollFunc();
+          }
+          refresh !== false && self.refresh();
+        }
+      };
+      self.getTween = function(snap4) {
+        return snap4 && tweenTo ? tweenTo.tween : scrubTween;
+      };
+      self.setPositions = function(newStart, newEnd, keepClamp, pinOffset) {
+        if (containerAnimation) {
+          var st = containerAnimation.scrollTrigger, duration = containerAnimation.duration(), _change = st.end - st.start;
+          newStart = st.start + _change * newStart / duration;
+          newEnd = st.start + _change * newEnd / duration;
+        }
+        self.refresh(false, false, {
+          start: _keepClamp(newStart, keepClamp && !!self._startClamp),
+          end: _keepClamp(newEnd, keepClamp && !!self._endClamp)
+        }, pinOffset);
+        self.update();
+      };
+      self.adjustPinSpacing = function(amount) {
+        if (spacerState && amount) {
+          var i = spacerState.indexOf(direction.d) + 1;
+          spacerState[i] = parseFloat(spacerState[i]) + amount + _px;
+          spacerState[1] = parseFloat(spacerState[1]) + amount + _px;
+          _setState(spacerState);
+        }
+      };
+      self.disable = function(reset, allowAnimation) {
+        if (self.enabled) {
+          reset !== false && self.revert(true, true);
+          self.enabled = self.isActive = false;
+          allowAnimation || scrubTween && scrubTween.pause();
+          prevScroll = 0;
+          pinCache && (pinCache.uncache = 1);
+          onRefreshInit && _removeListener3(ScrollTrigger3, "refreshInit", onRefreshInit);
+          if (snapDelayedCall) {
+            snapDelayedCall.pause();
+            tweenTo.tween && tweenTo.tween.kill() && (tweenTo.tween = 0);
+          }
+          if (!isViewport) {
+            var i = _triggers.length;
+            while (i--) {
+              if (_triggers[i].scroller === scroller && _triggers[i] !== self) {
+                return;
+              }
+            }
+            _removeListener3(scroller, "resize", _onResize);
+            isViewport || _removeListener3(scroller, "scroll", _onScroll3);
+          }
+        }
+      };
+      self.kill = function(revert, allowAnimation) {
+        self.disable(revert, allowAnimation);
+        scrubTween && !allowAnimation && scrubTween.kill();
+        id && delete _ids[id];
+        var i = _triggers.indexOf(self);
+        i >= 0 && _triggers.splice(i, 1);
+        i === _i && _direction > 0 && _i--;
+        i = 0;
+        _triggers.forEach(function(t) {
+          return t.scroller === self.scroller && (i = 1);
+        });
+        i || _refreshingAll || (self.scroll.rec = 0);
+        if (animation) {
+          animation.scrollTrigger = null;
+          revert && animation.revert({
+            kill: false
+          });
+          allowAnimation || animation.kill();
+        }
+        markerStart && [markerStart, markerEnd, markerStartTrigger, markerEndTrigger].forEach(function(m) {
+          return m.parentNode && m.parentNode.removeChild(m);
+        });
+        _primary === self && (_primary = 0);
+        if (pin) {
+          pinCache && (pinCache.uncache = 1);
+          i = 0;
+          _triggers.forEach(function(t) {
+            return t.pin === pin && i++;
+          });
+          i || (pinCache.spacer = 0);
+        }
+        vars.onKill && vars.onKill(self);
+      };
+      _triggers.push(self);
+      self.enable(false, false);
+      customRevertReturn && customRevertReturn(self);
+      if (animation && animation.add && !change) {
+        var updateFunc = self.update;
+        self.update = function() {
+          self.update = updateFunc;
+          _scrollers.cache++;
+          start || end || self.refresh();
+        };
+        gsap3.delayedCall(0.01, self.update);
+        change = 0.01;
+        start = end = 0;
+      } else {
+        self.refresh();
+      }
+      pin && _queueRefreshAll();
+    };
+    ScrollTrigger3.register = function register3(core) {
+      if (!_coreInitted3) {
+        gsap3 = core || _getGSAP3();
+        _windowExists5() && window.document && ScrollTrigger3.enable();
+        _coreInitted3 = _enabled;
+      }
+      return _coreInitted3;
+    };
+    ScrollTrigger3.defaults = function defaults2(config3) {
+      if (config3) {
+        for (var p in config3) {
+          _defaults2[p] = config3[p];
+        }
+      }
+      return _defaults2;
+    };
+    ScrollTrigger3.disable = function disable(reset, kill2) {
+      _enabled = 0;
+      _triggers.forEach(function(trigger) {
+        return trigger[kill2 ? "kill" : "disable"](reset);
+      });
+      _removeListener3(_win4, "wheel", _onScroll3);
+      _removeListener3(_doc4, "scroll", _onScroll3);
+      clearInterval(_syncInterval);
+      _removeListener3(_doc4, "touchcancel", _passThrough3);
+      _removeListener3(_body2, "touchstart", _passThrough3);
+      _multiListener(_removeListener3, _doc4, "pointerdown,touchstart,mousedown", _pointerDownHandler);
+      _multiListener(_removeListener3, _doc4, "pointerup,touchend,mouseup", _pointerUpHandler);
+      _resizeDelay.kill();
+      _iterateAutoRefresh(_removeListener3);
+      for (var i = 0; i < _scrollers.length; i += 3) {
+        _wheelListener(_removeListener3, _scrollers[i], _scrollers[i + 1]);
+        _wheelListener(_removeListener3, _scrollers[i], _scrollers[i + 2]);
+      }
+    };
+    ScrollTrigger3.enable = function enable() {
+      _win4 = window;
+      _doc4 = document;
+      _docEl2 = _doc4.documentElement;
+      _body2 = _doc4.body;
+      if (gsap3) {
+        _toArray = gsap3.utils.toArray;
+        _clamp4 = gsap3.utils.clamp;
+        _context3 = gsap3.core.context || _passThrough3;
+        _suppressOverwrites2 = gsap3.core.suppressOverwrites || _passThrough3;
+        _scrollRestoration = _win4.history.scrollRestoration || "auto";
+        _lastScroll = _win4.pageYOffset || 0;
+        gsap3.core.globals("ScrollTrigger", ScrollTrigger3);
+        if (_body2) {
+          _enabled = 1;
+          _div100vh = document.createElement("div");
+          _div100vh.style.height = "100vh";
+          _div100vh.style.position = "absolute";
+          _refresh100vh();
+          _rafBugFix();
+          Observer.register(gsap3);
+          ScrollTrigger3.isTouch = Observer.isTouch;
+          _fixIOSBug = Observer.isTouch && /(iPad|iPhone|iPod|Mac)/g.test(navigator.userAgent);
+          _ignoreMobileResize = Observer.isTouch === 1;
+          _addListener3(_win4, "wheel", _onScroll3);
+          _root2 = [_win4, _doc4, _docEl2, _body2];
+          if (gsap3.matchMedia) {
+            ScrollTrigger3.matchMedia = function(vars) {
+              var mm = gsap3.matchMedia(), p;
+              for (p in vars) {
+                mm.add(p, vars[p]);
+              }
+              return mm;
+            };
+            gsap3.addEventListener("matchMediaInit", function() {
+              return _revertAll();
+            });
+            gsap3.addEventListener("matchMediaRevert", function() {
+              return _revertRecorded();
+            });
+            gsap3.addEventListener("matchMedia", function() {
+              _refreshAll(0, 1);
+              _dispatch3("matchMedia");
+            });
+            gsap3.matchMedia().add("(orientation: portrait)", function() {
+              _setBaseDimensions();
+              return _setBaseDimensions;
+            });
+          } else {
+            console.warn("Requires GSAP 3.11.0 or later");
+          }
+          _setBaseDimensions();
+          _addListener3(_doc4, "scroll", _onScroll3);
+          var bodyHasStyle = _body2.hasAttribute("style"), bodyStyle = _body2.style, border = bodyStyle.borderTopStyle, AnimationProto = gsap3.core.Animation.prototype, bounds, i;
+          AnimationProto.revert || Object.defineProperty(AnimationProto, "revert", {
+            value: function value() {
+              return this.time(-0.01, true);
+            }
+          });
+          bodyStyle.borderTopStyle = "solid";
+          bounds = _getBounds(_body2);
+          _vertical.m = Math.round(bounds.top + _vertical.sc()) || 0;
+          _horizontal.m = Math.round(bounds.left + _horizontal.sc()) || 0;
+          border ? bodyStyle.borderTopStyle = border : bodyStyle.removeProperty("border-top-style");
+          if (!bodyHasStyle) {
+            _body2.setAttribute("style", "");
+            _body2.removeAttribute("style");
+          }
+          _syncInterval = setInterval(_sync, 250);
+          gsap3.delayedCall(0.5, function() {
+            return _startup2 = 0;
+          });
+          _addListener3(_doc4, "touchcancel", _passThrough3);
+          _addListener3(_body2, "touchstart", _passThrough3);
+          _multiListener(_addListener3, _doc4, "pointerdown,touchstart,mousedown", _pointerDownHandler);
+          _multiListener(_addListener3, _doc4, "pointerup,touchend,mouseup", _pointerUpHandler);
+          _transformProp2 = gsap3.utils.checkPrefix("transform");
+          _stateProps.push(_transformProp2);
+          _coreInitted3 = _getTime2();
+          _resizeDelay = gsap3.delayedCall(0.2, _refreshAll).pause();
+          _autoRefresh = [_doc4, "visibilitychange", function() {
+            var w = _win4.innerWidth, h = _win4.innerHeight;
+            if (_doc4.hidden) {
+              _prevWidth = w;
+              _prevHeight = h;
+            } else if (_prevWidth !== w || _prevHeight !== h) {
+              _onResize();
+            }
+          }, _doc4, "DOMContentLoaded", _refreshAll, _win4, "load", _refreshAll, _win4, "resize", _onResize];
+          _iterateAutoRefresh(_addListener3);
+          _triggers.forEach(function(trigger) {
+            return trigger.enable(0, 1);
+          });
+          for (i = 0; i < _scrollers.length; i += 3) {
+            _wheelListener(_removeListener3, _scrollers[i], _scrollers[i + 1]);
+            _wheelListener(_removeListener3, _scrollers[i], _scrollers[i + 2]);
+          }
+        }
+      }
+    };
+    ScrollTrigger3.config = function config3(vars) {
+      "limitCallbacks" in vars && (_limitCallbacks = !!vars.limitCallbacks);
+      var ms = vars.syncInterval;
+      ms && clearInterval(_syncInterval) || (_syncInterval = ms) && setInterval(_sync, ms);
+      "ignoreMobileResize" in vars && (_ignoreMobileResize = ScrollTrigger3.isTouch === 1 && vars.ignoreMobileResize);
+      if ("autoRefreshEvents" in vars) {
+        _iterateAutoRefresh(_removeListener3) || _iterateAutoRefresh(_addListener3, vars.autoRefreshEvents || "none");
+        _ignoreResize = (vars.autoRefreshEvents + "").indexOf("resize") === -1;
+      }
+    };
+    ScrollTrigger3.scrollerProxy = function scrollerProxy(target, vars) {
+      var t = _getTarget(target), i = _scrollers.indexOf(t), isViewport = _isViewport3(t);
+      if (~i) {
+        _scrollers.splice(i, isViewport ? 6 : 2);
+      }
+      if (vars) {
+        isViewport ? _proxies.unshift(_win4, vars, _body2, vars, _docEl2, vars) : _proxies.unshift(t, vars);
+      }
+    };
+    ScrollTrigger3.clearMatchMedia = function clearMatchMedia(query) {
+      _triggers.forEach(function(t) {
+        return t._ctx && t._ctx.query === query && t._ctx.kill(true, true);
+      });
+    };
+    ScrollTrigger3.isInViewport = function isInViewport(element, ratio, horizontal) {
+      var bounds = (_isString3(element) ? _getTarget(element) : element).getBoundingClientRect(), offset = bounds[horizontal ? _width : _height] * ratio || 0;
+      return horizontal ? bounds.right - offset > 0 && bounds.left + offset < _win4.innerWidth : bounds.bottom - offset > 0 && bounds.top + offset < _win4.innerHeight;
+    };
+    ScrollTrigger3.positionInViewport = function positionInViewport(element, referencePoint, horizontal) {
+      _isString3(element) && (element = _getTarget(element));
+      var bounds = element.getBoundingClientRect(), size = bounds[horizontal ? _width : _height], offset = referencePoint == null ? size / 2 : referencePoint in _keywords ? _keywords[referencePoint] * size : ~referencePoint.indexOf("%") ? parseFloat(referencePoint) * size / 100 : parseFloat(referencePoint) || 0;
+      return horizontal ? (bounds.left + offset) / _win4.innerWidth : (bounds.top + offset) / _win4.innerHeight;
+    };
+    ScrollTrigger3.killAll = function killAll(allowListeners) {
+      _triggers.slice(0).forEach(function(t) {
+        return t.vars.id !== "ScrollSmoother" && t.kill();
+      });
+      if (allowListeners !== true) {
+        var listeners = _listeners2.killAll || [];
+        _listeners2 = {};
+        listeners.forEach(function(f) {
+          return f();
+        });
+      }
+    };
+    return ScrollTrigger3;
+  }();
+  ScrollTrigger2.version = "3.13.0";
+  ScrollTrigger2.saveStyles = function(targets) {
+    return targets ? _toArray(targets).forEach(function(target) {
+      if (target && target.style) {
+        var i = _savedStyles.indexOf(target);
+        i >= 0 && _savedStyles.splice(i, 5);
+        _savedStyles.push(target, target.style.cssText, target.getBBox && target.getAttribute("transform"), gsap3.core.getCache(target), _context3());
+      }
+    }) : _savedStyles;
+  };
+  ScrollTrigger2.revert = function(soft, media) {
+    return _revertAll(!soft, media);
+  };
+  ScrollTrigger2.create = function(vars, animation) {
+    return new ScrollTrigger2(vars, animation);
+  };
+  ScrollTrigger2.refresh = function(safe) {
+    return safe ? _onResize(true) : (_coreInitted3 || ScrollTrigger2.register()) && _refreshAll(true);
+  };
+  ScrollTrigger2.update = function(force) {
+    return ++_scrollers.cache && _updateAll(force === true ? 2 : 0);
+  };
+  ScrollTrigger2.clearScrollMemory = _clearScrollMemory;
+  ScrollTrigger2.maxScroll = function(element, horizontal) {
+    return _maxScroll(element, horizontal ? _horizontal : _vertical);
+  };
+  ScrollTrigger2.getScrollFunc = function(element, horizontal) {
+    return _getScrollFunc(_getTarget(element), horizontal ? _horizontal : _vertical);
+  };
+  ScrollTrigger2.getById = function(id) {
+    return _ids[id];
+  };
+  ScrollTrigger2.getAll = function() {
+    return _triggers.filter(function(t) {
+      return t.vars.id !== "ScrollSmoother";
+    });
+  };
+  ScrollTrigger2.isScrolling = function() {
+    return !!_lastScrollTime;
+  };
+  ScrollTrigger2.snapDirectional = _snapDirectional;
+  ScrollTrigger2.addEventListener = function(type, callback) {
+    var a = _listeners2[type] || (_listeners2[type] = []);
+    ~a.indexOf(callback) || a.push(callback);
+  };
+  ScrollTrigger2.removeEventListener = function(type, callback) {
+    var a = _listeners2[type], i = a && a.indexOf(callback);
+    i >= 0 && a.splice(i, 1);
+  };
+  ScrollTrigger2.batch = function(targets, vars) {
+    var result = [], varsCopy = {}, interval = vars.interval || 0.016, batchMax = vars.batchMax || 1e9, proxyCallback = function proxyCallback2(type, callback) {
+      var elements = [], triggers = [], delay = gsap3.delayedCall(interval, function() {
+        callback(elements, triggers);
+        elements = [];
+        triggers = [];
+      }).pause();
+      return function(self) {
+        elements.length || delay.restart(true);
+        elements.push(self.trigger);
+        triggers.push(self);
+        batchMax <= elements.length && delay.progress(1);
+      };
+    }, p;
+    for (p in vars) {
+      varsCopy[p] = p.substr(0, 2) === "on" && _isFunction3(vars[p]) && p !== "onRefreshInit" ? proxyCallback(p, vars[p]) : vars[p];
+    }
+    if (_isFunction3(batchMax)) {
+      batchMax = batchMax();
+      _addListener3(ScrollTrigger2, "refresh", function() {
+        return batchMax = vars.batchMax();
+      });
+    }
+    _toArray(targets).forEach(function(target) {
+      var config3 = {};
+      for (p in varsCopy) {
+        config3[p] = varsCopy[p];
+      }
+      config3.trigger = target;
+      result.push(ScrollTrigger2.create(config3));
+    });
+    return result;
+  };
+  var _clampScrollAndGetDurationMultiplier = function _clampScrollAndGetDurationMultiplier2(scrollFunc, current, end, max) {
+    current > max ? scrollFunc(max) : current < 0 && scrollFunc(0);
+    return end > max ? (max - current) / (end - current) : end < 0 ? current / (current - end) : 1;
+  };
+  var _allowNativePanning = function _allowNativePanning2(target, direction) {
+    if (direction === true) {
+      target.style.removeProperty("touch-action");
+    } else {
+      target.style.touchAction = direction === true ? "auto" : direction ? "pan-" + direction + (Observer.isTouch ? " pinch-zoom" : "") : "none";
+    }
+    target === _docEl2 && _allowNativePanning2(_body2, direction);
+  };
+  var _overflow = {
+    auto: 1,
+    scroll: 1
+  };
+  var _nestedScroll = function _nestedScroll2(_ref5) {
+    var event = _ref5.event, target = _ref5.target, axis = _ref5.axis;
+    var node = (event.changedTouches ? event.changedTouches[0] : event).target, cache = node._gsap || gsap3.core.getCache(node), time = _getTime2(), cs;
+    if (!cache._isScrollT || time - cache._isScrollT > 2e3) {
+      while (node && node !== _body2 && (node.scrollHeight <= node.clientHeight && node.scrollWidth <= node.clientWidth || !(_overflow[(cs = _getComputedStyle(node)).overflowY] || _overflow[cs.overflowX]))) {
+        node = node.parentNode;
+      }
+      cache._isScroll = node && node !== target && !_isViewport3(node) && (_overflow[(cs = _getComputedStyle(node)).overflowY] || _overflow[cs.overflowX]);
+      cache._isScrollT = time;
+    }
+    if (cache._isScroll || axis === "x") {
+      event.stopPropagation();
+      event._gsapAllow = true;
+    }
+  };
+  var _inputObserver = function _inputObserver2(target, type, inputs, nested) {
+    return Observer.create({
+      target,
+      capture: true,
+      debounce: false,
+      lockAxis: true,
+      type,
+      onWheel: nested = nested && _nestedScroll,
+      onPress: nested,
+      onDrag: nested,
+      onScroll: nested,
+      onEnable: function onEnable() {
+        return inputs && _addListener3(_doc4, Observer.eventTypes[0], _captureInputs, false, true);
+      },
+      onDisable: function onDisable() {
+        return _removeListener3(_doc4, Observer.eventTypes[0], _captureInputs, true);
+      }
+    });
+  };
+  var _inputExp = /(input|label|select|textarea)/i;
+  var _inputIsFocused;
+  var _captureInputs = function _captureInputs2(e) {
+    var isInput = _inputExp.test(e.target.tagName);
+    if (isInput || _inputIsFocused) {
+      e._gsapAllow = true;
+      _inputIsFocused = isInput;
+    }
+  };
+  var _getScrollNormalizer = function _getScrollNormalizer2(vars) {
+    _isObject3(vars) || (vars = {});
+    vars.preventDefault = vars.isNormalizer = vars.allowClicks = true;
+    vars.type || (vars.type = "wheel,touch");
+    vars.debounce = !!vars.debounce;
+    vars.id = vars.id || "normalizer";
+    var _vars2 = vars, normalizeScrollX = _vars2.normalizeScrollX, momentum = _vars2.momentum, allowNestedScroll = _vars2.allowNestedScroll, onRelease = _vars2.onRelease, self, maxY, target = _getTarget(vars.target) || _docEl2, smoother = gsap3.core.globals().ScrollSmoother, smootherInstance = smoother && smoother.get(), content = _fixIOSBug && (vars.content && _getTarget(vars.content) || smootherInstance && vars.content !== false && !smootherInstance.smooth() && smootherInstance.content()), scrollFuncY = _getScrollFunc(target, _vertical), scrollFuncX = _getScrollFunc(target, _horizontal), scale = 1, initialScale = (Observer.isTouch && _win4.visualViewport ? _win4.visualViewport.scale * _win4.visualViewport.width : _win4.outerWidth) / _win4.innerWidth, wheelRefresh = 0, resolveMomentumDuration = _isFunction3(momentum) ? function() {
+      return momentum(self);
+    } : function() {
+      return momentum || 2.8;
+    }, lastRefreshID, skipTouchMove, inputObserver = _inputObserver(target, vars.type, true, allowNestedScroll), resumeTouchMove = function resumeTouchMove2() {
+      return skipTouchMove = false;
+    }, scrollClampX = _passThrough3, scrollClampY = _passThrough3, updateClamps = function updateClamps2() {
+      maxY = _maxScroll(target, _vertical);
+      scrollClampY = _clamp4(_fixIOSBug ? 1 : 0, maxY);
+      normalizeScrollX && (scrollClampX = _clamp4(0, _maxScroll(target, _horizontal)));
+      lastRefreshID = _refreshID;
+    }, removeContentOffset = function removeContentOffset2() {
+      content._gsap.y = _round3(parseFloat(content._gsap.y) + scrollFuncY.offset) + "px";
+      content.style.transform = "matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, " + parseFloat(content._gsap.y) + ", 0, 1)";
+      scrollFuncY.offset = scrollFuncY.cacheID = 0;
+    }, ignoreDrag = function ignoreDrag2() {
+      if (skipTouchMove) {
+        requestAnimationFrame(resumeTouchMove);
+        var offset = _round3(self.deltaY / 2), scroll = scrollClampY(scrollFuncY.v - offset);
+        if (content && scroll !== scrollFuncY.v + scrollFuncY.offset) {
+          scrollFuncY.offset = scroll - scrollFuncY.v;
+          var y = _round3((parseFloat(content && content._gsap.y) || 0) - scrollFuncY.offset);
+          content.style.transform = "matrix3d(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, " + y + ", 0, 1)";
+          content._gsap.y = y + "px";
+          scrollFuncY.cacheID = _scrollers.cache;
+          _updateAll();
+        }
+        return true;
+      }
+      scrollFuncY.offset && removeContentOffset();
+      skipTouchMove = true;
+    }, tween, startScrollX, startScrollY, onStopDelayedCall, onResize = function onResize2() {
+      updateClamps();
+      if (tween.isActive() && tween.vars.scrollY > maxY) {
+        scrollFuncY() > maxY ? tween.progress(1) && scrollFuncY(maxY) : tween.resetTo("scrollY", maxY);
+      }
+    };
+    content && gsap3.set(content, {
+      y: "+=0"
+    });
+    vars.ignoreCheck = function(e) {
+      return _fixIOSBug && e.type === "touchmove" && ignoreDrag(e) || scale > 1.05 && e.type !== "touchstart" || self.isGesturing || e.touches && e.touches.length > 1;
+    };
+    vars.onPress = function() {
+      skipTouchMove = false;
+      var prevScale = scale;
+      scale = _round3((_win4.visualViewport && _win4.visualViewport.scale || 1) / initialScale);
+      tween.pause();
+      prevScale !== scale && _allowNativePanning(target, scale > 1.01 ? true : normalizeScrollX ? false : "x");
+      startScrollX = scrollFuncX();
+      startScrollY = scrollFuncY();
+      updateClamps();
+      lastRefreshID = _refreshID;
+    };
+    vars.onRelease = vars.onGestureStart = function(self2, wasDragging) {
+      scrollFuncY.offset && removeContentOffset();
+      if (!wasDragging) {
+        onStopDelayedCall.restart(true);
+      } else {
+        _scrollers.cache++;
+        var dur = resolveMomentumDuration(), currentScroll, endScroll;
+        if (normalizeScrollX) {
+          currentScroll = scrollFuncX();
+          endScroll = currentScroll + dur * 0.05 * -self2.velocityX / 0.227;
+          dur *= _clampScrollAndGetDurationMultiplier(scrollFuncX, currentScroll, endScroll, _maxScroll(target, _horizontal));
+          tween.vars.scrollX = scrollClampX(endScroll);
+        }
+        currentScroll = scrollFuncY();
+        endScroll = currentScroll + dur * 0.05 * -self2.velocityY / 0.227;
+        dur *= _clampScrollAndGetDurationMultiplier(scrollFuncY, currentScroll, endScroll, _maxScroll(target, _vertical));
+        tween.vars.scrollY = scrollClampY(endScroll);
+        tween.invalidate().duration(dur).play(0.01);
+        if (_fixIOSBug && tween.vars.scrollY >= maxY || currentScroll >= maxY - 1) {
+          gsap3.to({}, {
+            onUpdate: onResize,
+            duration: dur
+          });
+        }
+      }
+      onRelease && onRelease(self2);
+    };
+    vars.onWheel = function() {
+      tween._ts && tween.pause();
+      if (_getTime2() - wheelRefresh > 1e3) {
+        lastRefreshID = 0;
+        wheelRefresh = _getTime2();
+      }
+    };
+    vars.onChange = function(self2, dx, dy, xArray, yArray) {
+      _refreshID !== lastRefreshID && updateClamps();
+      dx && normalizeScrollX && scrollFuncX(scrollClampX(xArray[2] === dx ? startScrollX + (self2.startX - self2.x) : scrollFuncX() + dx - xArray[1]));
+      if (dy) {
+        scrollFuncY.offset && removeContentOffset();
+        var isTouch = yArray[2] === dy, y = isTouch ? startScrollY + self2.startY - self2.y : scrollFuncY() + dy - yArray[1], yClamped = scrollClampY(y);
+        isTouch && y !== yClamped && (startScrollY += yClamped - y);
+        scrollFuncY(yClamped);
+      }
+      (dy || dx) && _updateAll();
+    };
+    vars.onEnable = function() {
+      _allowNativePanning(target, normalizeScrollX ? false : "x");
+      ScrollTrigger2.addEventListener("refresh", onResize);
+      _addListener3(_win4, "resize", onResize);
+      if (scrollFuncY.smooth) {
+        scrollFuncY.target.style.scrollBehavior = "auto";
+        scrollFuncY.smooth = scrollFuncX.smooth = false;
+      }
+      inputObserver.enable();
+    };
+    vars.onDisable = function() {
+      _allowNativePanning(target, true);
+      _removeListener3(_win4, "resize", onResize);
+      ScrollTrigger2.removeEventListener("refresh", onResize);
+      inputObserver.kill();
+    };
+    vars.lockAxis = vars.lockAxis !== false;
+    self = new Observer(vars);
+    self.iOS = _fixIOSBug;
+    _fixIOSBug && !scrollFuncY() && scrollFuncY(1);
+    _fixIOSBug && gsap3.ticker.add(_passThrough3);
+    onStopDelayedCall = self._dc;
+    tween = gsap3.to(self, {
+      ease: "power4",
+      paused: true,
+      inherit: false,
+      scrollX: normalizeScrollX ? "+=0.1" : "+=0",
+      scrollY: "+=0.1",
+      modifiers: {
+        scrollY: _interruptionTracker(scrollFuncY, scrollFuncY(), function() {
+          return tween.pause();
+        })
+      },
+      onUpdate: _updateAll,
+      onComplete: onStopDelayedCall.vars.onComplete
+    });
+    return self;
+  };
+  ScrollTrigger2.sort = function(func) {
+    if (_isFunction3(func)) {
+      return _triggers.sort(func);
+    }
+    var scroll = _win4.pageYOffset || 0;
+    ScrollTrigger2.getAll().forEach(function(t) {
+      return t._sortY = t.trigger ? scroll + t.trigger.getBoundingClientRect().top : t.start + _win4.innerHeight;
+    });
+    return _triggers.sort(func || function(a, b) {
+      return (a.vars.refreshPriority || 0) * -1e6 + (a.vars.containerAnimation ? 1e6 : a._sortY) - ((b.vars.containerAnimation ? 1e6 : b._sortY) + (b.vars.refreshPriority || 0) * -1e6);
+    });
+  };
+  ScrollTrigger2.observe = function(vars) {
+    return new Observer(vars);
+  };
+  ScrollTrigger2.normalizeScroll = function(vars) {
+    if (typeof vars === "undefined") {
+      return _normalizer2;
+    }
+    if (vars === true && _normalizer2) {
+      return _normalizer2.enable();
+    }
+    if (vars === false) {
+      _normalizer2 && _normalizer2.kill();
+      _normalizer2 = vars;
+      return;
+    }
+    var normalizer = vars instanceof Observer ? vars : _getScrollNormalizer(vars);
+    _normalizer2 && _normalizer2.target === normalizer.target && _normalizer2.kill();
+    _isViewport3(normalizer.target) && (_normalizer2 = normalizer);
+    return normalizer;
+  };
+  ScrollTrigger2.core = {
+    // smaller file size way to leverage in ScrollSmoother and Observer
+    _getVelocityProp,
+    _inputObserver,
+    _scrollers,
+    _proxies,
+    bridge: {
+      // when normalizeScroll sets the scroll position (ss = setScroll)
+      ss: function ss() {
+        _lastScrollTime || _dispatch3("scrollStart");
+        _lastScrollTime = _getTime2();
+      },
+      // a way to get the _refreshing value in Observer
+      ref: function ref() {
+        return _refreshing;
+      }
+    }
+  };
+  _getGSAP3() && gsap3.registerPlugin(ScrollTrigger2);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/SplitText.js
+  init_live_reload();
+  var gsap4;
+  var _fonts;
+  var _coreInitted4;
+  var _initIfNecessary = () => _coreInitted4 || SplitText.register(window.gsap);
+  var _charSegmenter = typeof Intl !== "undefined" ? new Intl.Segmenter() : 0;
+  var _toArray2 = (r) => typeof r === "string" ? _toArray2(document.querySelectorAll(r)) : "length" in r ? Array.from(r) : [r];
+  var _elements = (targets) => _toArray2(targets).filter((e) => e instanceof HTMLElement);
+  var _emptyArray3 = [];
+  var _context4 = function() {
+  };
+  var _spacesRegEx = /\s+/g;
+  var _emojiSafeRegEx = new RegExp("\\p{RI}\\p{RI}|\\p{Emoji}(\\p{EMod}|\\u{FE0F}\\u{20E3}?|[\\u{E0020}-\\u{E007E}]+\\u{E007F})?(\\u{200D}\\p{Emoji}(\\p{EMod}|\\u{FE0F}\\u{20E3}?|[\\u{E0020}-\\u{E007E}]+\\u{E007F})?)*|.", "gu");
+  var _emptyBounds = { left: 0, top: 0, width: 0, height: 0 };
+  var _stretchToFitSpecialChars = (collection, specialCharsRegEx) => {
+    if (specialCharsRegEx) {
+      let charsFound = new Set(collection.join("").match(specialCharsRegEx) || _emptyArray3), i = collection.length, slots, word, char, combined;
+      if (charsFound.size) {
+        while (--i > -1) {
+          word = collection[i];
+          for (char of charsFound) {
+            if (char.startsWith(word) && char.length > word.length) {
+              slots = 0;
+              combined = word;
+              while (char.startsWith(combined += collection[i + ++slots]) && combined.length < char.length) {
+              }
+              if (slots && combined.length === char.length) {
+                collection[i] = char;
+                collection.splice(i + 1, slots);
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+    return collection;
+  };
+  var _disallowInline = (element) => window.getComputedStyle(element).display === "inline" && (element.style.display = "inline-block");
+  var _insertNodeBefore = (newChild, parent, existingChild) => parent.insertBefore(typeof newChild === "string" ? document.createTextNode(newChild) : newChild, existingChild);
+  var _getWrapper = (type, config3, collection) => {
+    let className = config3[type + "sClass"] || "", { tag = "div", aria = "auto", propIndex = false } = config3, display = type === "line" ? "block" : "inline-block", incrementClass = className.indexOf("++") > -1, wrapper = (text) => {
+      let el = document.createElement(tag), i = collection.length + 1;
+      className && (el.className = className + (incrementClass ? " " + className + i : ""));
+      propIndex && el.style.setProperty("--" + type, i + "");
+      aria !== "none" && el.setAttribute("aria-hidden", "true");
+      if (tag !== "span") {
+        el.style.position = "relative";
+        el.style.display = display;
+      }
+      el.textContent = text;
+      collection.push(el);
+      return el;
+    };
+    incrementClass && (className = className.replace("++", ""));
+    wrapper.collection = collection;
+    return wrapper;
+  };
+  var _getLineWrapper = (element, nodes, config3, collection) => {
+    let lineWrapper = _getWrapper("line", config3, collection), textAlign = window.getComputedStyle(element).textAlign || "left";
+    return (startIndex, endIndex) => {
+      let newLine = lineWrapper("");
+      newLine.style.textAlign = textAlign;
+      element.insertBefore(newLine, nodes[startIndex]);
+      for (; startIndex < endIndex; startIndex++) {
+        newLine.appendChild(nodes[startIndex]);
+      }
+      newLine.normalize();
+    };
+  };
+  var _splitWordsAndCharsRecursively = (element, config3, wordWrapper, charWrapper, prepForCharsOnly, deepSlice, ignore, charSplitRegEx, specialCharsRegEx, isNested) => {
+    var _a;
+    let nodes = Array.from(element.childNodes), i = 0, { wordDelimiter, reduceWhiteSpace = true, prepareText } = config3, elementBounds = element.getBoundingClientRect(), lastBounds = elementBounds, isPreformatted = !reduceWhiteSpace && window.getComputedStyle(element).whiteSpace.substring(0, 3) === "pre", ignoredPreviousSibling = 0, wordsCollection = wordWrapper.collection, wordDelimIsNotSpace, wordDelimString, wordDelimSplitter, curNode, words, curWordEl, startsWithSpace, endsWithSpace, j, bounds, curWordChars, clonedNode, curSubNode, tempSubNode, curTextContent, wordText, lastWordText, k;
+    if (typeof wordDelimiter === "object") {
+      wordDelimSplitter = wordDelimiter.delimiter || wordDelimiter;
+      wordDelimString = wordDelimiter.replaceWith || "";
+    } else {
+      wordDelimString = wordDelimiter === "" ? "" : wordDelimiter || " ";
+    }
+    wordDelimIsNotSpace = wordDelimString !== " ";
+    for (; i < nodes.length; i++) {
+      curNode = nodes[i];
+      if (curNode.nodeType === 3) {
+        curTextContent = curNode.textContent || "";
+        if (reduceWhiteSpace) {
+          curTextContent = curTextContent.replace(_spacesRegEx, " ");
+        } else if (isPreformatted) {
+          curTextContent = curTextContent.replace(/\n/g, wordDelimString + "\n");
+        }
+        prepareText && (curTextContent = prepareText(curTextContent, element));
+        curNode.textContent = curTextContent;
+        words = wordDelimString || wordDelimSplitter ? curTextContent.split(wordDelimSplitter || wordDelimString) : curTextContent.match(charSplitRegEx) || _emptyArray3;
+        lastWordText = words[words.length - 1];
+        endsWithSpace = wordDelimIsNotSpace ? lastWordText.slice(-1) === " " : !lastWordText;
+        lastWordText || words.pop();
+        lastBounds = elementBounds;
+        startsWithSpace = wordDelimIsNotSpace ? words[0].charAt(0) === " " : !words[0];
+        startsWithSpace && _insertNodeBefore(" ", element, curNode);
+        words[0] || words.shift();
+        _stretchToFitSpecialChars(words, specialCharsRegEx);
+        deepSlice && isNested || (curNode.textContent = "");
+        for (j = 1; j <= words.length; j++) {
+          wordText = words[j - 1];
+          if (!reduceWhiteSpace && isPreformatted && wordText.charAt(0) === "\n") {
+            (_a = curNode.previousSibling) == null ? void 0 : _a.remove();
+            _insertNodeBefore(document.createElement("br"), element, curNode);
+            wordText = wordText.slice(1);
+          }
+          if (!reduceWhiteSpace && wordText === "") {
+            _insertNodeBefore(wordDelimString, element, curNode);
+          } else if (wordText === " ") {
+            element.insertBefore(document.createTextNode(" "), curNode);
+          } else {
+            wordDelimIsNotSpace && wordText.charAt(0) === " " && _insertNodeBefore(" ", element, curNode);
+            if (ignoredPreviousSibling && j === 1 && !startsWithSpace && wordsCollection.indexOf(ignoredPreviousSibling.parentNode) > -1) {
+              curWordEl = wordsCollection[wordsCollection.length - 1];
+              curWordEl.appendChild(document.createTextNode(charWrapper ? "" : wordText));
+            } else {
+              curWordEl = wordWrapper(charWrapper ? "" : wordText);
+              _insertNodeBefore(curWordEl, element, curNode);
+              ignoredPreviousSibling && j === 1 && !startsWithSpace && curWordEl.insertBefore(ignoredPreviousSibling, curWordEl.firstChild);
+            }
+            if (charWrapper) {
+              curWordChars = _charSegmenter ? _stretchToFitSpecialChars([..._charSegmenter.segment(wordText)].map((s) => s.segment), specialCharsRegEx) : wordText.match(charSplitRegEx) || _emptyArray3;
+              for (k = 0; k < curWordChars.length; k++) {
+                curWordEl.appendChild(curWordChars[k] === " " ? document.createTextNode(" ") : charWrapper(curWordChars[k]));
+              }
+            }
+            if (deepSlice && isNested) {
+              curTextContent = curNode.textContent = curTextContent.substring(wordText.length + 1, curTextContent.length);
+              bounds = curWordEl.getBoundingClientRect();
+              if (bounds.top > lastBounds.top && bounds.left <= lastBounds.left) {
+                clonedNode = element.cloneNode();
+                curSubNode = element.childNodes[0];
+                while (curSubNode && curSubNode !== curWordEl) {
+                  tempSubNode = curSubNode;
+                  curSubNode = curSubNode.nextSibling;
+                  clonedNode.appendChild(tempSubNode);
+                }
+                element.parentNode.insertBefore(clonedNode, element);
+                prepForCharsOnly && _disallowInline(clonedNode);
+              }
+              lastBounds = bounds;
+            }
+            if (j < words.length || endsWithSpace) {
+              _insertNodeBefore(j >= words.length ? " " : wordDelimIsNotSpace && wordText.slice(-1) === " " ? " " + wordDelimString : wordDelimString, element, curNode);
+            }
+          }
+        }
+        element.removeChild(curNode);
+        ignoredPreviousSibling = 0;
+      } else if (curNode.nodeType === 1) {
+        if (ignore && ignore.indexOf(curNode) > -1) {
+          wordsCollection.indexOf(curNode.previousSibling) > -1 && wordsCollection[wordsCollection.length - 1].appendChild(curNode);
+          ignoredPreviousSibling = curNode;
+        } else {
+          _splitWordsAndCharsRecursively(curNode, config3, wordWrapper, charWrapper, prepForCharsOnly, deepSlice, ignore, charSplitRegEx, specialCharsRegEx, true);
+          ignoredPreviousSibling = 0;
+        }
+        prepForCharsOnly && _disallowInline(curNode);
+      }
+    }
+  };
+  var _SplitText = class _SplitText2 {
+    constructor(elements, config3) {
+      this.isSplit = false;
+      _initIfNecessary();
+      this.elements = _elements(elements);
+      this.chars = [];
+      this.words = [];
+      this.lines = [];
+      this.masks = [];
+      this.vars = config3;
+      this._split = () => this.isSplit && this.split(this.vars);
+      let orig = [], timerId, checkWidths = () => {
+        let i = orig.length, o;
+        while (i--) {
+          o = orig[i];
+          let w = o.element.offsetWidth;
+          if (w !== o.width) {
+            o.width = w;
+            this._split();
+            return;
+          }
+        }
+      };
+      this._data = { orig, obs: typeof ResizeObserver !== "undefined" && new ResizeObserver(() => {
+        clearTimeout(timerId);
+        timerId = setTimeout(checkWidths, 200);
+      }) };
+      _context4(this);
+      this.split(config3);
+    }
+    split(config3) {
+      this.isSplit && this.revert();
+      this.vars = config3 = config3 || this.vars || {};
+      let { type = "chars,words,lines", aria = "auto", deepSlice = true, smartWrap, onSplit, autoSplit = false, specialChars, mask } = this.vars, splitLines = type.indexOf("lines") > -1, splitCharacters = type.indexOf("chars") > -1, splitWords = type.indexOf("words") > -1, onlySplitCharacters = splitCharacters && !splitWords && !splitLines, specialCharsRegEx = specialChars && ("push" in specialChars ? new RegExp("(?:" + specialChars.join("|") + ")", "gu") : specialChars), finalCharSplitRegEx = specialCharsRegEx ? new RegExp(specialCharsRegEx.source + "|" + _emojiSafeRegEx.source, "gu") : _emojiSafeRegEx, ignore = !!config3.ignore && _elements(config3.ignore), { orig, animTime, obs } = this._data, onSplitResult;
+      if (splitCharacters || splitWords || splitLines) {
+        this.elements.forEach((element, index) => {
+          orig[index] = {
+            element,
+            html: element.innerHTML,
+            ariaL: element.getAttribute("aria-label"),
+            ariaH: element.getAttribute("aria-hidden")
+          };
+          aria === "auto" ? element.setAttribute("aria-label", (element.textContent || "").trim()) : aria === "hidden" && element.setAttribute("aria-hidden", "true");
+          let chars = [], words = [], lines = [], charWrapper = splitCharacters ? _getWrapper("char", config3, chars) : null, wordWrapper = _getWrapper("word", config3, words), i, curWord, smartWrapSpan, nextSibling;
+          _splitWordsAndCharsRecursively(element, config3, wordWrapper, charWrapper, onlySplitCharacters, deepSlice && (splitLines || onlySplitCharacters), ignore, finalCharSplitRegEx, specialCharsRegEx, false);
+          if (splitLines) {
+            let nodes = _toArray2(element.childNodes), wrapLine = _getLineWrapper(element, nodes, config3, lines), curNode, toRemove = [], lineStartIndex = 0, allBounds = nodes.map((n) => n.nodeType === 1 ? n.getBoundingClientRect() : _emptyBounds), lastBounds = _emptyBounds;
+            for (i = 0; i < nodes.length; i++) {
+              curNode = nodes[i];
+              if (curNode.nodeType === 1) {
+                if (curNode.nodeName === "BR") {
+                  toRemove.push(curNode);
+                  wrapLine(lineStartIndex, i + 1);
+                  lineStartIndex = i + 1;
+                  lastBounds = allBounds[lineStartIndex];
+                } else {
+                  if (i && allBounds[i].top > lastBounds.top && allBounds[i].left <= lastBounds.left) {
+                    wrapLine(lineStartIndex, i);
+                    lineStartIndex = i;
+                  }
+                  lastBounds = allBounds[i];
+                }
+              }
+            }
+            lineStartIndex < i && wrapLine(lineStartIndex, i);
+            toRemove.forEach((el) => {
+              var _a;
+              return (_a = el.parentNode) == null ? void 0 : _a.removeChild(el);
+            });
+          }
+          if (!splitWords) {
+            for (i = 0; i < words.length; i++) {
+              curWord = words[i];
+              if (splitCharacters || !curWord.nextSibling || curWord.nextSibling.nodeType !== 3) {
+                if (smartWrap && !splitLines) {
+                  smartWrapSpan = document.createElement("span");
+                  smartWrapSpan.style.whiteSpace = "nowrap";
+                  while (curWord.firstChild) {
+                    smartWrapSpan.appendChild(curWord.firstChild);
+                  }
+                  curWord.replaceWith(smartWrapSpan);
+                } else {
+                  curWord.replaceWith(...curWord.childNodes);
+                }
+              } else {
+                nextSibling = curWord.nextSibling;
+                if (nextSibling && nextSibling.nodeType === 3) {
+                  nextSibling.textContent = (curWord.textContent || "") + (nextSibling.textContent || "");
+                  curWord.remove();
+                }
+              }
+            }
+            words.length = 0;
+            element.normalize();
+          }
+          this.lines.push(...lines);
+          this.words.push(...words);
+          this.chars.push(...chars);
+        });
+        mask && this[mask] && this.masks.push(...this[mask].map((el) => {
+          let maskEl = el.cloneNode();
+          el.replaceWith(maskEl);
+          maskEl.appendChild(el);
+          el.className && (maskEl.className = el.className.replace(/(\b\w+\b)/g, "$1-mask"));
+          maskEl.style.overflow = "clip";
+          return maskEl;
+        }));
+      }
+      this.isSplit = true;
+      _fonts && (autoSplit ? _fonts.addEventListener("loadingdone", this._split) : _fonts.status === "loading" && console.warn("SplitText called before fonts loaded"));
+      if ((onSplitResult = onSplit && onSplit(this)) && onSplitResult.totalTime) {
+        this._data.anim = animTime ? onSplitResult.totalTime(animTime) : onSplitResult;
+      }
+      splitLines && autoSplit && this.elements.forEach((element, index) => {
+        orig[index].width = element.offsetWidth;
+        obs && obs.observe(element);
+      });
+      return this;
+    }
+    revert() {
+      var _a, _b;
+      let { orig, anim, obs } = this._data;
+      obs && obs.disconnect();
+      orig.forEach(({ element, html, ariaL, ariaH }) => {
+        element.innerHTML = html;
+        ariaL ? element.setAttribute("aria-label", ariaL) : element.removeAttribute("aria-label");
+        ariaH ? element.setAttribute("aria-hidden", ariaH) : element.removeAttribute("aria-hidden");
+      });
+      this.chars.length = this.words.length = this.lines.length = orig.length = this.masks.length = 0;
+      this.isSplit = false;
+      _fonts == null ? void 0 : _fonts.removeEventListener("loadingdone", this._split);
+      if (anim) {
+        this._data.animTime = anim.totalTime();
+        anim.revert();
+      }
+      (_b = (_a = this.vars).onRevert) == null ? void 0 : _b.call(_a, this);
+      return this;
+    }
+    static create(elements, config3) {
+      return new _SplitText2(elements, config3);
+    }
+    static register(core) {
+      gsap4 = gsap4 || core || window.gsap;
+      if (gsap4) {
+        _toArray2 = gsap4.utils.toArray;
+        _context4 = gsap4.core.context || _context4;
+      }
+      if (!_coreInitted4 && window.innerWidth > 0) {
+        _fonts = document.fonts;
+        _coreInitted4 = true;
+      }
+    }
+  };
+  _SplitText.version = "3.13.0";
+  var SplitText = _SplitText;
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/CustomEase.js
+  init_live_reload();
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/utils/paths.js
+  init_live_reload();
+  var _svgPathExp = /[achlmqstvz]|(-?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/ig;
+  var _numbersExp = /(?:(-)?\d*\.?\d*(?:e[\-+]?\d+)?)[0-9]/ig;
+  var _scientific = /[\+\-]?\d*\.?\d+e[\+\-]?\d+/ig;
+  var _selectorExp = /(^[#\.][a-z]|[a-y][a-z])/i;
+  var _DEG2RAD2 = Math.PI / 180;
+  var _RAD2DEG2 = 180 / Math.PI;
+  var _sin2 = Math.sin;
+  var _cos2 = Math.cos;
+  var _abs2 = Math.abs;
+  var _sqrt2 = Math.sqrt;
+  var _isString5 = function _isString6(value) {
+    return typeof value === "string";
+  };
+  var _isNumber5 = function _isNumber6(value) {
+    return typeof value === "number";
+  };
+  var _roundingNum = 1e5;
+  var _round5 = function _round6(value) {
+    return Math.round(value * _roundingNum) / _roundingNum || 0;
+  };
+  function getRawPath(value) {
+    value = _isString5(value) && _selectorExp.test(value) ? document.querySelector(value) || value : value;
+    var e = value.getAttribute ? value : 0, rawPath;
+    if (e && (value = value.getAttribute("d"))) {
+      if (!e._gsPath) {
+        e._gsPath = {};
+      }
+      rawPath = e._gsPath[value];
+      return rawPath && !rawPath._dirty ? rawPath : e._gsPath[value] = stringToRawPath(value);
+    }
+    return !value ? console.warn("Expecting a <path> element or an SVG path data string") : _isString5(value) ? stringToRawPath(value) : _isNumber5(value[0]) ? [value] : value;
+  }
+  function reverseSegment(segment) {
+    var i = 0, y;
+    segment.reverse();
+    for (; i < segment.length; i += 2) {
+      y = segment[i];
+      segment[i] = segment[i + 1];
+      segment[i + 1] = y;
+    }
+    segment.reversed = !segment.reversed;
+  }
+  var _createPath = function _createPath2(e, ignore) {
+    var path = document.createElementNS("http://www.w3.org/2000/svg", "path"), attr = [].slice.call(e.attributes), i = attr.length, name;
+    ignore = "," + ignore + ",";
+    while (--i > -1) {
+      name = attr[i].nodeName.toLowerCase();
+      if (ignore.indexOf("," + name + ",") < 0) {
+        path.setAttributeNS(null, name, attr[i].nodeValue);
+      }
+    }
+    return path;
+  };
+  var _typeAttrs = {
+    rect: "rx,ry,x,y,width,height",
+    circle: "r,cx,cy",
+    ellipse: "rx,ry,cx,cy",
+    line: "x1,x2,y1,y2"
+  };
+  var _attrToObj = function _attrToObj2(e, attrs) {
+    var props = attrs ? attrs.split(",") : [], obj = {}, i = props.length;
+    while (--i > -1) {
+      obj[props[i]] = +e.getAttribute(props[i]) || 0;
+    }
+    return obj;
+  };
+  function convertToPath(element, swap) {
+    var type = element.tagName.toLowerCase(), circ = 0.552284749831, data, x, y, r, ry, path, rcirc, rycirc, points, w, h, x2, x3, x4, x5, x6, y2, y3, y4, y5, y6, attr;
+    if (type === "path" || !element.getBBox) {
+      return element;
+    }
+    path = _createPath(element, "x,y,width,height,cx,cy,rx,ry,r,x1,x2,y1,y2,points");
+    attr = _attrToObj(element, _typeAttrs[type]);
+    if (type === "rect") {
+      r = attr.rx;
+      ry = attr.ry || r;
+      x = attr.x;
+      y = attr.y;
+      w = attr.width - r * 2;
+      h = attr.height - ry * 2;
+      if (r || ry) {
+        x2 = x + r * (1 - circ);
+        x3 = x + r;
+        x4 = x3 + w;
+        x5 = x4 + r * circ;
+        x6 = x4 + r;
+        y2 = y + ry * (1 - circ);
+        y3 = y + ry;
+        y4 = y3 + h;
+        y5 = y4 + ry * circ;
+        y6 = y4 + ry;
+        data = "M" + x6 + "," + y3 + " V" + y4 + " C" + [x6, y5, x5, y6, x4, y6, x4 - (x4 - x3) / 3, y6, x3 + (x4 - x3) / 3, y6, x3, y6, x2, y6, x, y5, x, y4, x, y4 - (y4 - y3) / 3, x, y3 + (y4 - y3) / 3, x, y3, x, y2, x2, y, x3, y, x3 + (x4 - x3) / 3, y, x4 - (x4 - x3) / 3, y, x4, y, x5, y, x6, y2, x6, y3].join(",") + "z";
+      } else {
+        data = "M" + (x + w) + "," + y + " v" + h + " h" + -w + " v" + -h + " h" + w + "z";
+      }
+    } else if (type === "circle" || type === "ellipse") {
+      if (type === "circle") {
+        r = ry = attr.r;
+        rycirc = r * circ;
+      } else {
+        r = attr.rx;
+        ry = attr.ry;
+        rycirc = ry * circ;
+      }
+      x = attr.cx;
+      y = attr.cy;
+      rcirc = r * circ;
+      data = "M" + (x + r) + "," + y + " C" + [x + r, y + rycirc, x + rcirc, y + ry, x, y + ry, x - rcirc, y + ry, x - r, y + rycirc, x - r, y, x - r, y - rycirc, x - rcirc, y - ry, x, y - ry, x + rcirc, y - ry, x + r, y - rycirc, x + r, y].join(",") + "z";
+    } else if (type === "line") {
+      data = "M" + attr.x1 + "," + attr.y1 + " L" + attr.x2 + "," + attr.y2;
+    } else if (type === "polyline" || type === "polygon") {
+      points = (element.getAttribute("points") + "").match(_numbersExp) || [];
+      x = points.shift();
+      y = points.shift();
+      data = "M" + x + "," + y + " L" + points.join(",");
+      if (type === "polygon") {
+        data += "," + x + "," + y + "z";
+      }
+    }
+    path.setAttribute("d", rawPathToString(path._gsRawPath = stringToRawPath(data)));
+    if (swap && element.parentNode) {
+      element.parentNode.insertBefore(path, element);
+      element.parentNode.removeChild(element);
+    }
+    return path;
+  }
+  function transformRawPath(rawPath, a, b, c, d, tx, ty) {
+    var j = rawPath.length, segment, l, i, x, y;
+    while (--j > -1) {
+      segment = rawPath[j];
+      l = segment.length;
+      for (i = 0; i < l; i += 2) {
+        x = segment[i];
+        y = segment[i + 1];
+        segment[i] = x * a + y * c + tx;
+        segment[i + 1] = x * b + y * d + ty;
+      }
+    }
+    rawPath._dirty = 1;
+    return rawPath;
+  }
+  function arcToSegment(lastX, lastY, rx, ry, angle, largeArcFlag, sweepFlag, x, y) {
+    if (lastX === x && lastY === y) {
+      return;
+    }
+    rx = _abs2(rx);
+    ry = _abs2(ry);
+    var angleRad = angle % 360 * _DEG2RAD2, cosAngle = _cos2(angleRad), sinAngle = _sin2(angleRad), PI = Math.PI, TWOPI = PI * 2, dx2 = (lastX - x) / 2, dy2 = (lastY - y) / 2, x1 = cosAngle * dx2 + sinAngle * dy2, y1 = -sinAngle * dx2 + cosAngle * dy2, x1_sq = x1 * x1, y1_sq = y1 * y1, radiiCheck = x1_sq / (rx * rx) + y1_sq / (ry * ry);
+    if (radiiCheck > 1) {
+      rx = _sqrt2(radiiCheck) * rx;
+      ry = _sqrt2(radiiCheck) * ry;
+    }
+    var rx_sq = rx * rx, ry_sq = ry * ry, sq = (rx_sq * ry_sq - rx_sq * y1_sq - ry_sq * x1_sq) / (rx_sq * y1_sq + ry_sq * x1_sq);
+    if (sq < 0) {
+      sq = 0;
+    }
+    var coef = (largeArcFlag === sweepFlag ? -1 : 1) * _sqrt2(sq), cx1 = coef * (rx * y1 / ry), cy1 = coef * -(ry * x1 / rx), sx2 = (lastX + x) / 2, sy2 = (lastY + y) / 2, cx = sx2 + (cosAngle * cx1 - sinAngle * cy1), cy = sy2 + (sinAngle * cx1 + cosAngle * cy1), ux = (x1 - cx1) / rx, uy = (y1 - cy1) / ry, vx = (-x1 - cx1) / rx, vy = (-y1 - cy1) / ry, temp = ux * ux + uy * uy, angleStart = (uy < 0 ? -1 : 1) * Math.acos(ux / _sqrt2(temp)), angleExtent = (ux * vy - uy * vx < 0 ? -1 : 1) * Math.acos((ux * vx + uy * vy) / _sqrt2(temp * (vx * vx + vy * vy)));
+    isNaN(angleExtent) && (angleExtent = PI);
+    if (!sweepFlag && angleExtent > 0) {
+      angleExtent -= TWOPI;
+    } else if (sweepFlag && angleExtent < 0) {
+      angleExtent += TWOPI;
+    }
+    angleStart %= TWOPI;
+    angleExtent %= TWOPI;
+    var segments = Math.ceil(_abs2(angleExtent) / (TWOPI / 4)), rawPath = [], angleIncrement = angleExtent / segments, controlLength = 4 / 3 * _sin2(angleIncrement / 2) / (1 + _cos2(angleIncrement / 2)), ma = cosAngle * rx, mb = sinAngle * rx, mc = sinAngle * -ry, md = cosAngle * ry, i;
+    for (i = 0; i < segments; i++) {
+      angle = angleStart + i * angleIncrement;
+      x1 = _cos2(angle);
+      y1 = _sin2(angle);
+      ux = _cos2(angle += angleIncrement);
+      uy = _sin2(angle);
+      rawPath.push(x1 - controlLength * y1, y1 + controlLength * x1, ux + controlLength * uy, uy - controlLength * ux, ux, uy);
+    }
+    for (i = 0; i < rawPath.length; i += 2) {
+      x1 = rawPath[i];
+      y1 = rawPath[i + 1];
+      rawPath[i] = x1 * ma + y1 * mc + cx;
+      rawPath[i + 1] = x1 * mb + y1 * md + cy;
+    }
+    rawPath[i - 2] = x;
+    rawPath[i - 1] = y;
+    return rawPath;
+  }
+  function stringToRawPath(d) {
+    var a = (d + "").replace(_scientific, function(m) {
+      var n = +m;
+      return n < 1e-4 && n > -1e-4 ? 0 : n;
+    }).match(_svgPathExp) || [], path = [], relativeX = 0, relativeY = 0, twoThirds = 2 / 3, elements = a.length, points = 0, errorMessage = "ERROR: malformed path: " + d, i, j, x, y, command, isRelative, segment, startX, startY, difX, difY, beziers, prevCommand, flag1, flag2, line = function line2(sx, sy, ex, ey) {
+      difX = (ex - sx) / 3;
+      difY = (ey - sy) / 3;
+      segment.push(sx + difX, sy + difY, ex - difX, ey - difY, ex, ey);
+    };
+    if (!d || !isNaN(a[0]) || isNaN(a[1])) {
+      console.log(errorMessage);
+      return path;
+    }
+    for (i = 0; i < elements; i++) {
+      prevCommand = command;
+      if (isNaN(a[i])) {
+        command = a[i].toUpperCase();
+        isRelative = command !== a[i];
+      } else {
+        i--;
+      }
+      x = +a[i + 1];
+      y = +a[i + 2];
+      if (isRelative) {
+        x += relativeX;
+        y += relativeY;
+      }
+      if (!i) {
+        startX = x;
+        startY = y;
+      }
+      if (command === "M") {
+        if (segment) {
+          if (segment.length < 8) {
+            path.length -= 1;
+          } else {
+            points += segment.length;
+          }
+        }
+        relativeX = startX = x;
+        relativeY = startY = y;
+        segment = [x, y];
+        path.push(segment);
+        i += 2;
+        command = "L";
+      } else if (command === "C") {
+        if (!segment) {
+          segment = [0, 0];
+        }
+        if (!isRelative) {
+          relativeX = relativeY = 0;
+        }
+        segment.push(x, y, relativeX + a[i + 3] * 1, relativeY + a[i + 4] * 1, relativeX += a[i + 5] * 1, relativeY += a[i + 6] * 1);
+        i += 6;
+      } else if (command === "S") {
+        difX = relativeX;
+        difY = relativeY;
+        if (prevCommand === "C" || prevCommand === "S") {
+          difX += relativeX - segment[segment.length - 4];
+          difY += relativeY - segment[segment.length - 3];
+        }
+        if (!isRelative) {
+          relativeX = relativeY = 0;
+        }
+        segment.push(difX, difY, x, y, relativeX += a[i + 3] * 1, relativeY += a[i + 4] * 1);
+        i += 4;
+      } else if (command === "Q") {
+        difX = relativeX + (x - relativeX) * twoThirds;
+        difY = relativeY + (y - relativeY) * twoThirds;
+        if (!isRelative) {
+          relativeX = relativeY = 0;
+        }
+        relativeX += a[i + 3] * 1;
+        relativeY += a[i + 4] * 1;
+        segment.push(difX, difY, relativeX + (x - relativeX) * twoThirds, relativeY + (y - relativeY) * twoThirds, relativeX, relativeY);
+        i += 4;
+      } else if (command === "T") {
+        difX = relativeX - segment[segment.length - 4];
+        difY = relativeY - segment[segment.length - 3];
+        segment.push(relativeX + difX, relativeY + difY, x + (relativeX + difX * 1.5 - x) * twoThirds, y + (relativeY + difY * 1.5 - y) * twoThirds, relativeX = x, relativeY = y);
+        i += 2;
+      } else if (command === "H") {
+        line(relativeX, relativeY, relativeX = x, relativeY);
+        i += 1;
+      } else if (command === "V") {
+        line(relativeX, relativeY, relativeX, relativeY = x + (isRelative ? relativeY - relativeX : 0));
+        i += 1;
+      } else if (command === "L" || command === "Z") {
+        if (command === "Z") {
+          x = startX;
+          y = startY;
+          segment.closed = true;
+        }
+        if (command === "L" || _abs2(relativeX - x) > 0.5 || _abs2(relativeY - y) > 0.5) {
+          line(relativeX, relativeY, x, y);
+          if (command === "L") {
+            i += 2;
+          }
+        }
+        relativeX = x;
+        relativeY = y;
+      } else if (command === "A") {
+        flag1 = a[i + 4];
+        flag2 = a[i + 5];
+        difX = a[i + 6];
+        difY = a[i + 7];
+        j = 7;
+        if (flag1.length > 1) {
+          if (flag1.length < 3) {
+            difY = difX;
+            difX = flag2;
+            j--;
+          } else {
+            difY = flag2;
+            difX = flag1.substr(2);
+            j -= 2;
+          }
+          flag2 = flag1.charAt(1);
+          flag1 = flag1.charAt(0);
+        }
+        beziers = arcToSegment(relativeX, relativeY, +a[i + 1], +a[i + 2], +a[i + 3], +flag1, +flag2, (isRelative ? relativeX : 0) + difX * 1, (isRelative ? relativeY : 0) + difY * 1);
+        i += j;
+        if (beziers) {
+          for (j = 0; j < beziers.length; j++) {
+            segment.push(beziers[j]);
+          }
+        }
+        relativeX = segment[segment.length - 2];
+        relativeY = segment[segment.length - 1];
+      } else {
+        console.log(errorMessage);
+      }
+    }
+    i = segment.length;
+    if (i < 6) {
+      path.pop();
+      i = 0;
+    } else if (segment[0] === segment[i - 2] && segment[1] === segment[i - 1]) {
+      segment.closed = true;
+    }
+    path.totalPoints = points + i;
+    return path;
+  }
+  function rawPathToString(rawPath) {
+    if (_isNumber5(rawPath[0])) {
+      rawPath = [rawPath];
+    }
+    var result = "", l = rawPath.length, sl, s, i, segment;
+    for (s = 0; s < l; s++) {
+      segment = rawPath[s];
+      result += "M" + _round5(segment[0]) + "," + _round5(segment[1]) + " C";
+      sl = segment.length;
+      for (i = 2; i < sl; i++) {
+        result += _round5(segment[i++]) + "," + _round5(segment[i++]) + " " + _round5(segment[i++]) + "," + _round5(segment[i++]) + " " + _round5(segment[i++]) + "," + _round5(segment[i]) + " ";
+      }
+      if (segment.closed) {
+        result += "z";
+      }
+    }
+    return result;
+  }
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/CustomEase.js
+  var gsap5;
+  var _coreInitted5;
+  var _getGSAP5 = function _getGSAP6() {
+    return gsap5 || typeof window !== "undefined" && (gsap5 = window.gsap) && gsap5.registerPlugin && gsap5;
+  };
+  var _initCore5 = function _initCore6() {
+    gsap5 = _getGSAP5();
+    if (gsap5) {
+      gsap5.registerEase("_CE", CustomEase.create);
+      _coreInitted5 = 1;
+    } else {
+      console.warn("Please gsap.registerPlugin(CustomEase)");
+    }
+  };
+  var _bigNum3 = 1e20;
+  var _round7 = function _round8(value) {
+    return ~~(value * 1e3 + (value < 0 ? -0.5 : 0.5)) / 1e3;
+  };
+  var _bonusValidated = 1;
+  var _numExp2 = /[-+=.]*\d+[.e\-+]*\d*[e\-+]*\d*/gi;
+  var _needsParsingExp = /[cLlsSaAhHvVtTqQ]/g;
+  var _findMinimum = function _findMinimum2(values) {
+    var l = values.length, min = _bigNum3, i;
+    for (i = 1; i < l; i += 6) {
+      +values[i] < min && (min = +values[i]);
+    }
+    return min;
+  };
+  var _normalize = function _normalize2(values, height, originY) {
+    if (!originY && originY !== 0) {
+      originY = Math.max(+values[values.length - 1], +values[1]);
+    }
+    var tx = +values[0] * -1, ty = -originY, l = values.length, sx = 1 / (+values[l - 2] + tx), sy = -height || (Math.abs(+values[l - 1] - +values[1]) < 0.01 * (+values[l - 2] - +values[0]) ? _findMinimum(values) + ty : +values[l - 1] + ty), i;
+    if (sy) {
+      sy = 1 / sy;
+    } else {
+      sy = -sx;
+    }
+    for (i = 0; i < l; i += 2) {
+      values[i] = (+values[i] + tx) * sx;
+      values[i + 1] = (+values[i + 1] + ty) * sy;
+    }
+  };
+  var _bezierToPoints = function _bezierToPoints2(x1, y1, x2, y2, x3, y3, x4, y4, threshold, points, index) {
+    var x12 = (x1 + x2) / 2, y12 = (y1 + y2) / 2, x23 = (x2 + x3) / 2, y23 = (y2 + y3) / 2, x34 = (x3 + x4) / 2, y34 = (y3 + y4) / 2, x123 = (x12 + x23) / 2, y123 = (y12 + y23) / 2, x234 = (x23 + x34) / 2, y234 = (y23 + y34) / 2, x1234 = (x123 + x234) / 2, y1234 = (y123 + y234) / 2, dx = x4 - x1, dy = y4 - y1, d2 = Math.abs((x2 - x4) * dy - (y2 - y4) * dx), d3 = Math.abs((x3 - x4) * dy - (y3 - y4) * dx), length;
+    if (!points) {
+      points = [{
+        x: x1,
+        y: y1
+      }, {
+        x: x4,
+        y: y4
+      }];
+      index = 1;
+    }
+    points.splice(index || points.length - 1, 0, {
+      x: x1234,
+      y: y1234
+    });
+    if ((d2 + d3) * (d2 + d3) > threshold * (dx * dx + dy * dy)) {
+      length = points.length;
+      _bezierToPoints2(x1, y1, x12, y12, x123, y123, x1234, y1234, threshold, points, index);
+      _bezierToPoints2(x1234, y1234, x234, y234, x34, y34, x4, y4, threshold, points, index + 1 + (points.length - length));
+    }
+    return points;
+  };
+  var CustomEase = /* @__PURE__ */ function() {
+    function CustomEase2(id, data, config3) {
+      _coreInitted5 || _initCore5();
+      this.id = id;
+      _bonusValidated && this.setData(data, config3);
+    }
+    var _proto = CustomEase2.prototype;
+    _proto.setData = function setData(data, config3) {
+      config3 = config3 || {};
+      data = data || "0,0,1,1";
+      var values = data.match(_numExp2), closest = 1, points = [], lookup = [], precision = config3.precision || 1, fast = precision <= 1, l, a1, a2, i, inc, j, point, prevPoint, p;
+      this.data = data;
+      if (_needsParsingExp.test(data) || ~data.indexOf("M") && data.indexOf("C") < 0) {
+        values = stringToRawPath(data)[0];
+      }
+      l = values.length;
+      if (l === 4) {
+        values.unshift(0, 0);
+        values.push(1, 1);
+        l = 8;
+      } else if ((l - 2) % 6) {
+        throw "Invalid CustomEase";
+      }
+      if (+values[0] !== 0 || +values[l - 2] !== 1) {
+        _normalize(values, config3.height, config3.originY);
+      }
+      this.segment = values;
+      for (i = 2; i < l; i += 6) {
+        a1 = {
+          x: +values[i - 2],
+          y: +values[i - 1]
+        };
+        a2 = {
+          x: +values[i + 4],
+          y: +values[i + 5]
+        };
+        points.push(a1, a2);
+        _bezierToPoints(a1.x, a1.y, +values[i], +values[i + 1], +values[i + 2], +values[i + 3], a2.x, a2.y, 1 / (precision * 2e5), points, points.length - 1);
+      }
+      l = points.length;
+      for (i = 0; i < l; i++) {
+        point = points[i];
+        prevPoint = points[i - 1] || point;
+        if ((point.x > prevPoint.x || prevPoint.y !== point.y && prevPoint.x === point.x || point === prevPoint) && point.x <= 1) {
+          prevPoint.cx = point.x - prevPoint.x;
+          prevPoint.cy = point.y - prevPoint.y;
+          prevPoint.n = point;
+          prevPoint.nx = point.x;
+          if (fast && i > 1 && Math.abs(prevPoint.cy / prevPoint.cx - points[i - 2].cy / points[i - 2].cx) > 2) {
+            fast = 0;
+          }
+          if (prevPoint.cx < closest) {
+            if (!prevPoint.cx) {
+              prevPoint.cx = 1e-3;
+              if (i === l - 1) {
+                prevPoint.x -= 1e-3;
+                closest = Math.min(closest, 1e-3);
+                fast = 0;
+              }
+            } else {
+              closest = prevPoint.cx;
+            }
+          }
+        } else {
+          points.splice(i--, 1);
+          l--;
+        }
+      }
+      l = 1 / closest + 1 | 0;
+      inc = 1 / l;
+      j = 0;
+      point = points[0];
+      if (fast) {
+        for (i = 0; i < l; i++) {
+          p = i * inc;
+          if (point.nx < p) {
+            point = points[++j];
+          }
+          a1 = point.y + (p - point.x) / point.cx * point.cy;
+          lookup[i] = {
+            x: p,
+            cx: inc,
+            y: a1,
+            cy: 0,
+            nx: 9
+          };
+          if (i) {
+            lookup[i - 1].cy = a1 - lookup[i - 1].y;
+          }
+        }
+        j = points[points.length - 1];
+        lookup[l - 1].cy = j.y - a1;
+        lookup[l - 1].cx = j.x - lookup[lookup.length - 1].x;
+      } else {
+        for (i = 0; i < l; i++) {
+          if (point.nx < i * inc) {
+            point = points[++j];
+          }
+          lookup[i] = point;
+        }
+        if (j < points.length - 1) {
+          lookup[i - 1] = points[points.length - 2];
+        }
+      }
+      this.ease = function(p2) {
+        var point2 = lookup[p2 * l | 0] || lookup[l - 1];
+        if (point2.nx < p2) {
+          point2 = point2.n;
+        }
+        return point2.y + (p2 - point2.x) / point2.cx * point2.cy;
+      };
+      this.ease.custom = this;
+      this.id && gsap5 && gsap5.registerEase(this.id, this.ease);
+      return this;
+    };
+    _proto.getSVGData = function getSVGData(config3) {
+      return CustomEase2.getSVGData(this, config3);
+    };
+    CustomEase2.create = function create(id, data, config3) {
+      return new CustomEase2(id, data, config3).ease;
+    };
+    CustomEase2.register = function register3(core) {
+      gsap5 = core;
+      _initCore5();
+    };
+    CustomEase2.get = function get(id) {
+      return gsap5.parseEase(id);
+    };
+    CustomEase2.getSVGData = function getSVGData(ease, config3) {
+      config3 = config3 || {};
+      var width = config3.width || 100, height = config3.height || 100, x = config3.x || 0, y = (config3.y || 0) + height, e = gsap5.utils.toArray(config3.path)[0], a, slope, i, inc, tx, ty, precision, threshold, prevX, prevY;
+      if (config3.invert) {
+        height = -height;
+        y = 0;
+      }
+      if (typeof ease === "string") {
+        ease = gsap5.parseEase(ease);
+      }
+      if (ease.custom) {
+        ease = ease.custom;
+      }
+      if (ease instanceof CustomEase2) {
+        a = rawPathToString(transformRawPath([ease.segment], width, 0, 0, -height, x, y));
+      } else {
+        a = [x, y];
+        precision = Math.max(5, (config3.precision || 1) * 200);
+        inc = 1 / precision;
+        precision += 2;
+        threshold = 5 / precision;
+        prevX = _round7(x + inc * width);
+        prevY = _round7(y + ease(inc) * -height);
+        slope = (prevY - y) / (prevX - x);
+        for (i = 2; i < precision; i++) {
+          tx = _round7(x + i * inc * width);
+          ty = _round7(y + ease(i * inc) * -height);
+          if (Math.abs((ty - prevY) / (tx - prevX) - slope) > threshold || i === precision - 1) {
+            a.push(prevX, prevY);
+            slope = (ty - prevY) / (tx - prevX);
+          }
+          prevX = tx;
+          prevY = ty;
+        }
+        a = "M" + a.join(",");
+      }
+      e && e.setAttribute("d", a);
+      return a;
+    };
+    return CustomEase2;
+  }();
+  CustomEase.version = "3.13.0";
+  CustomEase.headless = true;
+  _getGSAP5() && gsap5.registerPlugin(CustomEase);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/TextPlugin.js
+  init_live_reload();
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/utils/strings.js
+  init_live_reload();
+  var _trimExp = /(?:^\s+|\s+$)/g;
+  var emojiExp = /([\uD800-\uDBFF][\uDC00-\uDFFF](?:[\u200D\uFE0F][\uD800-\uDBFF][\uDC00-\uDFFF]){2,}|\uD83D\uDC69(?:\u200D(?:(?:\uD83D\uDC69\u200D)?\uD83D\uDC67|(?:\uD83D\uDC69\u200D)?\uD83D\uDC66)|\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC69\u200D(?:\uD83D\uDC69\u200D)?\uD83D\uDC66\u200D\uD83D\uDC66|\uD83D\uDC69\u200D(?:\uD83D\uDC69\u200D)?\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C\uDFF3\uFE0F\u200D\uD83C\uDF08|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2642\u2640]\uFE0F|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDD27\uDCBC\uDD2C\uDE80\uDE92])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC6F\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3C-\uDD3E\uDDD6-\uDDDF])\u200D[\u2640\u2642]\uFE0F|\uD83C\uDDFD\uD83C\uDDF0|\uD83C\uDDF6\uD83C\uDDE6|\uD83C\uDDF4\uD83C\uDDF2|\uD83C\uDDE9(?:\uD83C[\uDDEA\uDDEC\uDDEF\uDDF0\uDDF2\uDDF4\uDDFF])|\uD83C\uDDF7(?:\uD83C[\uDDEA\uDDF4\uDDF8\uDDFA\uDDFC])|\uD83C\uDDE8(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDEE\uDDF0-\uDDF5\uDDF7\uDDFA-\uDDFF])|(?:\u26F9|\uD83C[\uDFCC\uDFCB]|\uD83D\uDD75)(?:\uFE0F\u200D[\u2640\u2642]|(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2640\u2642])\uFE0F|(?:\uD83D\uDC41\uFE0F\u200D\uD83D\uDDE8|\uD83D\uDC69(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2695\u2696\u2708]|\uD83D\uDC69\u200D[\u2695\u2696\u2708]|\uD83D\uDC68(?:(?:\uD83C[\uDFFB-\uDFFF])\u200D[\u2695\u2696\u2708]|\u200D[\u2695\u2696\u2708]))\uFE0F|\uD83C\uDDF2(?:\uD83C[\uDDE6\uDDE8-\uDDED\uDDF0-\uDDFF])|\uD83D\uDC69\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]|\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D(?:\uD83D[\uDC68\uDC69])|\uD83D[\uDC68\uDC69]))|\uD83C\uDDF1(?:\uD83C[\uDDE6-\uDDE8\uDDEE\uDDF0\uDDF7-\uDDFB\uDDFE])|\uD83C\uDDEF(?:\uD83C[\uDDEA\uDDF2\uDDF4\uDDF5])|\uD83C\uDDED(?:\uD83C[\uDDF0\uDDF2\uDDF3\uDDF7\uDDF9\uDDFA])|\uD83C\uDDEB(?:\uD83C[\uDDEE-\uDDF0\uDDF2\uDDF4\uDDF7])|[#\*0-9]\uFE0F\u20E3|\uD83C\uDDE7(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEF\uDDF1-\uDDF4\uDDF6-\uDDF9\uDDFB\uDDFC\uDDFE\uDDFF])|\uD83C\uDDE6(?:\uD83C[\uDDE8-\uDDEC\uDDEE\uDDF1\uDDF2\uDDF4\uDDF6-\uDDFA\uDDFC\uDDFD\uDDFF])|\uD83C\uDDFF(?:\uD83C[\uDDE6\uDDF2\uDDFC])|\uD83C\uDDF5(?:\uD83C[\uDDE6\uDDEA-\uDDED\uDDF0-\uDDF3\uDDF7-\uDDF9\uDDFC\uDDFE])|\uD83C\uDDFB(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDEE\uDDF3\uDDFA])|\uD83C\uDDF3(?:\uD83C[\uDDE6\uDDE8\uDDEA-\uDDEC\uDDEE\uDDF1\uDDF4\uDDF5\uDDF7\uDDFA\uDDFF])|\uD83C\uDFF4\uDB40\uDC67\uDB40\uDC62(?:\uDB40\uDC77\uDB40\uDC6C\uDB40\uDC73|\uDB40\uDC73\uDB40\uDC63\uDB40\uDC74|\uDB40\uDC65\uDB40\uDC6E\uDB40\uDC67)\uDB40\uDC7F|\uD83D\uDC68(?:\u200D(?:\u2764\uFE0F\u200D(?:\uD83D\uDC8B\u200D)?\uD83D\uDC68|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC66\u200D\uD83D\uDC66|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC67\u200D(?:\uD83D[\uDC66\uDC67])|\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92])|(?:\uD83C[\uDFFB-\uDFFF])\u200D(?:\uD83C[\uDF3E\uDF73\uDF93\uDFA4\uDFA8\uDFEB\uDFED]|\uD83D[\uDCBB\uDCBC\uDD27\uDD2C\uDE80\uDE92]))|\uD83C\uDDF8(?:\uD83C[\uDDE6-\uDDEA\uDDEC-\uDDF4\uDDF7-\uDDF9\uDDFB\uDDFD-\uDDFF])|\uD83C\uDDF0(?:\uD83C[\uDDEA\uDDEC-\uDDEE\uDDF2\uDDF3\uDDF5\uDDF7\uDDFC\uDDFE\uDDFF])|\uD83C\uDDFE(?:\uD83C[\uDDEA\uDDF9])|\uD83C\uDDEE(?:\uD83C[\uDDE8-\uDDEA\uDDF1-\uDDF4\uDDF6-\uDDF9])|\uD83C\uDDF9(?:\uD83C[\uDDE6\uDDE8\uDDE9\uDDEB-\uDDED\uDDEF-\uDDF4\uDDF7\uDDF9\uDDFB\uDDFC\uDDFF])|\uD83C\uDDEC(?:\uD83C[\uDDE6\uDDE7\uDDE9-\uDDEE\uDDF1-\uDDF3\uDDF5-\uDDFA\uDDFC\uDDFE])|\uD83C\uDDFA(?:\uD83C[\uDDE6\uDDEC\uDDF2\uDDF3\uDDF8\uDDFE\uDDFF])|\uD83C\uDDEA(?:\uD83C[\uDDE6\uDDE8\uDDEA\uDDEC\uDDED\uDDF7-\uDDFA])|\uD83C\uDDFC(?:\uD83C[\uDDEB\uDDF8])|(?:\u26F9|\uD83C[\uDFCB\uDFCC]|\uD83D\uDD75)(?:\uD83C[\uDFFB-\uDFFF])|(?:\uD83C[\uDFC3\uDFC4\uDFCA]|\uD83D[\uDC6E\uDC71\uDC73\uDC77\uDC81\uDC82\uDC86\uDC87\uDE45-\uDE47\uDE4B\uDE4D\uDE4E\uDEA3\uDEB4-\uDEB6]|\uD83E[\uDD26\uDD37-\uDD39\uDD3D\uDD3E\uDDD6-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u270A-\u270D]|\uD83C[\uDF85\uDFC2\uDFC7]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66\uDC67\uDC70\uDC72\uDC74-\uDC76\uDC78\uDC7C\uDC83\uDC85\uDCAA\uDD74\uDD7A\uDD90\uDD95\uDD96\uDE4C\uDE4F\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD30-\uDD36\uDDD1-\uDDD5])(?:\uD83C[\uDFFB-\uDFFF])|\uD83D\uDC68(?:\u200D(?:(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC67|(?:(?:\uD83D[\uDC68\uDC69])\u200D)?\uD83D\uDC66)|\uD83C[\uDFFB-\uDFFF])|(?:[\u261D\u26F9\u270A-\u270D]|\uD83C[\uDF85\uDFC2-\uDFC4\uDFC7\uDFCA-\uDFCC]|\uD83D[\uDC42\uDC43\uDC46-\uDC50\uDC66-\uDC69\uDC6E\uDC70-\uDC78\uDC7C\uDC81-\uDC83\uDC85-\uDC87\uDCAA\uDD74\uDD75\uDD7A\uDD90\uDD95\uDD96\uDE45-\uDE47\uDE4B-\uDE4F\uDEA3\uDEB4-\uDEB6\uDEC0\uDECC]|\uD83E[\uDD18-\uDD1C\uDD1E\uDD1F\uDD26\uDD30-\uDD39\uDD3D\uDD3E\uDDD1-\uDDDD])(?:\uD83C[\uDFFB-\uDFFF])?|(?:[\u231A\u231B\u23E9-\u23EC\u23F0\u23F3\u25FD\u25FE\u2614\u2615\u2648-\u2653\u267F\u2693\u26A1\u26AA\u26AB\u26BD\u26BE\u26C4\u26C5\u26CE\u26D4\u26EA\u26F2\u26F3\u26F5\u26FA\u26FD\u2705\u270A\u270B\u2728\u274C\u274E\u2753-\u2755\u2757\u2795-\u2797\u27B0\u27BF\u2B1B\u2B1C\u2B50\u2B55]|\uD83C[\uDC04\uDCCF\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE1A\uDE2F\uDE32-\uDE36\uDE38-\uDE3A\uDE50\uDE51\uDF00-\uDF20\uDF2D-\uDF35\uDF37-\uDF7C\uDF7E-\uDF93\uDFA0-\uDFCA\uDFCF-\uDFD3\uDFE0-\uDFF0\uDFF4\uDFF8-\uDFFF]|\uD83D[\uDC00-\uDC3E\uDC40\uDC42-\uDCFC\uDCFF-\uDD3D\uDD4B-\uDD4E\uDD50-\uDD67\uDD7A\uDD95\uDD96\uDDA4\uDDFB-\uDE4F\uDE80-\uDEC5\uDECC\uDED0-\uDED2\uDEEB\uDEEC\uDEF4-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])|(?:[#\*0-9\xA9\xAE\u203C\u2049\u2122\u2139\u2194-\u2199\u21A9\u21AA\u231A\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u24C2\u25AA\u25AB\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614\u2615\u2618\u261D\u2620\u2622\u2623\u2626\u262A\u262E\u262F\u2638-\u263A\u2640\u2642\u2648-\u2653\u2660\u2663\u2665\u2666\u2668\u267B\u267F\u2692-\u2697\u2699\u269B\u269C\u26A0\u26A1\u26AA\u26AB\u26B0\u26B1\u26BD\u26BE\u26C4\u26C5\u26C8\u26CE\u26CF\u26D1\u26D3\u26D4\u26E9\u26EA\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F\u2712\u2714\u2716\u271D\u2721\u2728\u2733\u2734\u2744\u2747\u274C\u274E\u2753-\u2755\u2757\u2763\u2764\u2795-\u2797\u27A1\u27B0\u27BF\u2934\u2935\u2B05-\u2B07\u2B1B\u2B1C\u2B50\u2B55\u3030\u303D\u3297\u3299]|\uD83C[\uDC04\uDCCF\uDD70\uDD71\uDD7E\uDD7F\uDD8E\uDD91-\uDD9A\uDDE6-\uDDFF\uDE01\uDE02\uDE1A\uDE2F\uDE32-\uDE3A\uDE50\uDE51\uDF00-\uDF21\uDF24-\uDF93\uDF96\uDF97\uDF99-\uDF9B\uDF9E-\uDFF0\uDFF3-\uDFF5\uDFF7-\uDFFF]|\uD83D[\uDC00-\uDCFD\uDCFF-\uDD3D\uDD49-\uDD4E\uDD50-\uDD67\uDD6F\uDD70\uDD73-\uDD7A\uDD87\uDD8A-\uDD8D\uDD90\uDD95\uDD96\uDDA4\uDDA5\uDDA8\uDDB1\uDDB2\uDDBC\uDDC2-\uDDC4\uDDD1-\uDDD3\uDDDC-\uDDDE\uDDE1\uDDE3\uDDE8\uDDEF\uDDF3\uDDFA-\uDE4F\uDE80-\uDEC5\uDECB-\uDED2\uDEE0-\uDEE5\uDEE9\uDEEB\uDEEC\uDEF0\uDEF3-\uDEF8]|\uD83E[\uDD10-\uDD3A\uDD3C-\uDD3E\uDD40-\uDD45\uDD47-\uDD4C\uDD50-\uDD6B\uDD80-\uDD97\uDDC0\uDDD0-\uDDE6])\uFE0F)/;
+  function getText(e) {
+    var type = e.nodeType, result = "";
+    if (type === 1 || type === 9 || type === 11) {
+      if (typeof e.textContent === "string") {
+        return e.textContent;
+      } else {
+        for (e = e.firstChild; e; e = e.nextSibling) {
+          result += getText(e);
+        }
+      }
+    } else if (type === 3 || type === 4) {
+      return e.nodeValue;
+    }
+    return result;
+  }
+  function splitInnerHTML(element, delimiter, trim, preserveSpaces, unescapedCharCodes) {
+    var node = element.firstChild, result = [], s;
+    while (node) {
+      if (node.nodeType === 3) {
+        s = (node.nodeValue + "").replace(/^\n+/g, "");
+        if (!preserveSpaces) {
+          s = s.replace(/\s+/g, " ");
+        }
+        result.push.apply(result, emojiSafeSplit(s, delimiter, trim, preserveSpaces, unescapedCharCodes));
+      } else if ((node.nodeName + "").toLowerCase() === "br") {
+        result[result.length - 1] += "<br>";
+      } else {
+        result.push(node.outerHTML);
+      }
+      node = node.nextSibling;
+    }
+    if (!unescapedCharCodes) {
+      s = result.length;
+      while (s--) {
+        result[s] === "&" && result.splice(s, 1, "&amp;");
+      }
+    }
+    return result;
+  }
+  function emojiSafeSplit(text, delimiter, trim, preserveSpaces, unescapedCharCodes) {
+    text += "";
+    trim && (text = text.trim ? text.trim() : text.replace(_trimExp, ""));
+    if (delimiter && delimiter !== "") {
+      return text.replace(/>/g, "&gt;").replace(/</g, "&lt;").split(delimiter);
+    }
+    var result = [], l = text.length, i = 0, j, character;
+    for (; i < l; i++) {
+      character = text.charAt(i);
+      if (character.charCodeAt(0) >= 55296 && character.charCodeAt(0) <= 56319 || text.charCodeAt(i + 1) >= 65024 && text.charCodeAt(i + 1) <= 65039) {
+        j = ((text.substr(i, 12).split(emojiExp) || [])[1] || "").length || 2;
+        character = text.substr(i, j);
+        result.emoji = 1;
+        i += j - 1;
+      }
+      result.push(unescapedCharCodes ? character : character === ">" ? "&gt;" : character === "<" ? "&lt;" : preserveSpaces && character === " " && (text.charAt(i - 1) === " " || text.charAt(i + 1) === " ") ? "&nbsp;" : character);
+    }
+    return result;
+  }
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/TextPlugin.js
+  var gsap6;
+  var _tempDiv2;
+  var _getGSAP7 = function _getGSAP8() {
+    return gsap6 || typeof window !== "undefined" && (gsap6 = window.gsap) && gsap6.registerPlugin && gsap6;
+  };
+  var TextPlugin = {
+    version: "3.13.0",
+    name: "text",
+    init: function init4(target, value, tween) {
+      typeof value !== "object" && (value = {
+        value
+      });
+      var i = target.nodeName.toUpperCase(), data = this, _value = value, newClass = _value.newClass, oldClass = _value.oldClass, preserveSpaces = _value.preserveSpaces, rtl = _value.rtl, delimiter = data.delimiter = value.delimiter || "", fillChar = data.fillChar = value.fillChar || (value.padSpace ? "&nbsp;" : ""), _short, text, original, j, condensedText, condensedOriginal, aggregate, s;
+      data.svg = target.getBBox && (i === "TEXT" || i === "TSPAN");
+      if (!("innerHTML" in target) && !data.svg) {
+        return false;
+      }
+      data.target = target;
+      if (!("value" in value)) {
+        data.text = data.original = [""];
+        return;
+      }
+      original = splitInnerHTML(target, delimiter, false, preserveSpaces, data.svg);
+      _tempDiv2 || (_tempDiv2 = document.createElement("div"));
+      _tempDiv2.innerHTML = value.value;
+      text = splitInnerHTML(_tempDiv2, delimiter, false, preserveSpaces, data.svg);
+      data.from = tween._from;
+      if ((data.from || rtl) && !(rtl && data.from)) {
+        i = original;
+        original = text;
+        text = i;
+      }
+      data.hasClass = !!(newClass || oldClass);
+      data.newClass = rtl ? oldClass : newClass;
+      data.oldClass = rtl ? newClass : oldClass;
+      i = original.length - text.length;
+      _short = i < 0 ? original : text;
+      if (i < 0) {
+        i = -i;
+      }
+      while (--i > -1) {
+        _short.push(fillChar);
+      }
+      if (value.type === "diff") {
+        j = 0;
+        condensedText = [];
+        condensedOriginal = [];
+        aggregate = "";
+        for (i = 0; i < text.length; i++) {
+          s = text[i];
+          if (s === original[i]) {
+            aggregate += s;
+          } else {
+            condensedText[j] = aggregate + s;
+            condensedOriginal[j++] = aggregate + original[i];
+            aggregate = "";
+          }
+        }
+        text = condensedText;
+        original = condensedOriginal;
+        if (aggregate) {
+          text.push(aggregate);
+          original.push(aggregate);
+        }
+      }
+      value.speed && tween.duration(Math.min(0.05 / value.speed * _short.length, value.maxDuration || 9999));
+      data.rtl = rtl;
+      data.original = original;
+      data.text = text;
+      data._props.push("text");
+    },
+    render: function render3(ratio, data) {
+      if (ratio > 1) {
+        ratio = 1;
+      } else if (ratio < 0) {
+        ratio = 0;
+      }
+      if (data.from) {
+        ratio = 1 - ratio;
+      }
+      var text = data.text, hasClass = data.hasClass, newClass = data.newClass, oldClass = data.oldClass, delimiter = data.delimiter, target = data.target, fillChar = data.fillChar, original = data.original, rtl = data.rtl, l = text.length, i = (rtl ? 1 - ratio : ratio) * l + 0.5 | 0, applyNew, applyOld, str;
+      if (hasClass && ratio) {
+        applyNew = newClass && i;
+        applyOld = oldClass && i !== l;
+        str = (applyNew ? "<span class='" + newClass + "'>" : "") + text.slice(0, i).join(delimiter) + (applyNew ? "</span>" : "") + (applyOld ? "<span class='" + oldClass + "'>" : "") + delimiter + original.slice(i).join(delimiter) + (applyOld ? "</span>" : "");
+      } else {
+        str = text.slice(0, i).join(delimiter) + delimiter + original.slice(i).join(delimiter);
+      }
+      if (data.svg) {
+        target.textContent = str;
+      } else {
+        target.innerHTML = fillChar === "&nbsp;" && ~str.indexOf("  ") ? str.split("  ").join("&nbsp;&nbsp;") : str;
+      }
+    }
+  };
+  TextPlugin.splitInnerHTML = splitInnerHTML;
+  TextPlugin.emojiSafeSplit = emojiSafeSplit;
+  TextPlugin.getText = getText;
+  _getGSAP7() && gsap6.registerPlugin(TextPlugin);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/ScrambleTextPlugin.js
+  init_live_reload();
+  var CharSet = /* @__PURE__ */ function() {
+    function CharSet2(chars) {
+      this.chars = emojiSafeSplit(chars);
+      this.sets = [];
+      this.length = 50;
+      for (var i = 0; i < 20; i++) {
+        this.sets[i] = _scrambleText(80, this.chars);
+      }
+    }
+    var _proto = CharSet2.prototype;
+    _proto.grow = function grow(newLength) {
+      for (var i = 0; i < 20; i++) {
+        this.sets[i] += _scrambleText(newLength - this.length, this.chars);
+      }
+      this.length = newLength;
+    };
+    return CharSet2;
+  }();
+  var gsap7;
+  var _coreInitted6;
+  var _getGSAP9 = function _getGSAP10() {
+    return gsap7 || typeof window !== "undefined" && (gsap7 = window.gsap) && gsap7.registerPlugin && gsap7;
+  };
+  var _bonusValidated2 = 1;
+  var _spacesExp = /\s+/g;
+  var _scrambleText = function _scrambleText2(length, chars) {
+    var l = chars.length, s = "";
+    while (--length > -1) {
+      s += chars[~~(Math.random() * l)];
+    }
+    return s;
+  };
+  var _upper = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  var _lower = _upper.toLowerCase();
+  var _charsLookup = {
+    upperCase: new CharSet(_upper),
+    lowerCase: new CharSet(_lower),
+    upperAndLowerCase: new CharSet(_upper + _lower)
+  };
+  var _initCore7 = function _initCore8() {
+    _coreInitted6 = gsap7 = _getGSAP9();
+  };
+  var ScrambleTextPlugin = {
+    version: "3.13.0",
+    name: "scrambleText",
+    register: function register(core, Plugin, propTween) {
+      gsap7 = core;
+      _initCore7();
+    },
+    init: function init5(target, value, tween, index, targets) {
+      _coreInitted6 || _initCore7();
+      this.prop = "innerHTML" in target ? "innerHTML" : "textContent" in target ? "textContent" : 0;
+      if (!this.prop) {
+        return;
+      }
+      this.target = target;
+      if (typeof value !== "object") {
+        value = {
+          text: value
+        };
+      }
+      var text = value.text || value.value || "", trim = value.trim !== false, data = this, delim, maxLength, charset, splitByChars;
+      data.delimiter = delim = value.delimiter || "";
+      data.original = emojiSafeSplit(getText(target).replace(_spacesExp, " ").split("&nbsp;").join(""), delim, trim);
+      if (text === "{original}" || text === true || text == null) {
+        text = data.original.join(delim);
+      }
+      data.text = emojiSafeSplit((text || "").replace(_spacesExp, " "), delim, trim);
+      data.hasClass = !!(value.newClass || value.oldClass);
+      data.newClass = value.newClass;
+      data.oldClass = value.oldClass;
+      splitByChars = delim === "";
+      data.textHasEmoji = splitByChars && !!data.text.emoji;
+      data.charsHaveEmoji = !!value.chars && !!emojiSafeSplit(value.chars).emoji;
+      data.length = splitByChars ? data.original.length : data.original.join(delim).length;
+      data.lengthDif = (splitByChars ? data.text.length : data.text.join(delim).length) - data.length;
+      data.fillChar = value.fillChar || value.chars && ~value.chars.indexOf(" ") ? "&nbsp;" : "";
+      data.charSet = charset = _charsLookup[value.chars || "upperCase"] || new CharSet(value.chars);
+      data.speed = 0.05 / (value.speed || 1);
+      data.prevScrambleTime = 0;
+      data.setIndex = Math.random() * 20 | 0;
+      maxLength = data.length + Math.max(data.lengthDif, 0);
+      if (maxLength > charset.length) {
+        charset.grow(maxLength);
+      }
+      data.chars = charset.sets[data.setIndex];
+      data.revealDelay = value.revealDelay || 0;
+      data.tweenLength = value.tweenLength !== false;
+      data.tween = tween;
+      data.rightToLeft = !!value.rightToLeft;
+      data._props.push("scrambleText", "text");
+      return _bonusValidated2;
+    },
+    render: function render4(ratio, data) {
+      var target = data.target, prop = data.prop, text = data.text, delimiter = data.delimiter, tween = data.tween, prevScrambleTime = data.prevScrambleTime, revealDelay = data.revealDelay, setIndex = data.setIndex, chars = data.chars, charSet = data.charSet, length = data.length, textHasEmoji = data.textHasEmoji, charsHaveEmoji = data.charsHaveEmoji, lengthDif = data.lengthDif, tweenLength = data.tweenLength, oldClass = data.oldClass, newClass = data.newClass, rightToLeft = data.rightToLeft, fillChar = data.fillChar, speed = data.speed, original = data.original, hasClass = data.hasClass, l = text.length, time = tween._time, timeDif = time - prevScrambleTime, i, i2, startText, endText, applyNew, applyOld, str, startClass, endClass, position, r;
+      if (revealDelay) {
+        if (tween._from) {
+          time = tween._dur - time;
+        }
+        ratio = time === 0 ? 0 : time < revealDelay ? 1e-6 : time === tween._dur ? 1 : tween._ease((time - revealDelay) / (tween._dur - revealDelay));
+      }
+      if (ratio < 0) {
+        ratio = 0;
+      } else if (ratio > 1) {
+        ratio = 1;
+      }
+      if (rightToLeft) {
+        ratio = 1 - ratio;
+      }
+      i = ~~(ratio * l + 0.5);
+      if (ratio) {
+        if (timeDif > speed || timeDif < -speed) {
+          data.setIndex = setIndex = (setIndex + (Math.random() * 19 | 0)) % 20;
+          data.chars = charSet.sets[setIndex];
+          data.prevScrambleTime += timeDif;
+        }
+        endText = chars;
+      } else {
+        endText = original.join(delimiter);
+      }
+      r = tween._from ? ratio : 1 - ratio;
+      position = length + (tweenLength ? tween._from ? r * r * r : 1 - r * r * r : 1) * lengthDif;
+      if (rightToLeft) {
+        if (ratio === 1 && (tween._from || tween.data === "isFromStart")) {
+          startText = "";
+          endText = original.join(delimiter);
+        } else {
+          str = text.slice(i).join(delimiter);
+          if (charsHaveEmoji) {
+            startText = emojiSafeSplit(endText).slice(0, position - (textHasEmoji ? emojiSafeSplit(str) : str).length + 0.5 | 0).join("");
+          } else {
+            startText = endText.substr(0, position - (textHasEmoji ? emojiSafeSplit(str) : str).length + 0.5 | 0);
+          }
+          endText = str;
+        }
+      } else {
+        startText = text.slice(0, i).join(delimiter);
+        i2 = (textHasEmoji ? emojiSafeSplit(startText) : startText).length;
+        if (charsHaveEmoji) {
+          endText = emojiSafeSplit(endText).slice(i2, position + 0.5 | 0).join("");
+        } else {
+          endText = endText.substr(i2, position - i2 + 0.5 | 0);
+        }
+      }
+      if (hasClass) {
+        startClass = rightToLeft ? oldClass : newClass;
+        endClass = rightToLeft ? newClass : oldClass;
+        applyNew = startClass && i !== 0;
+        applyOld = endClass && i !== l;
+        str = (applyNew ? "<span class='" + startClass + "'>" : "") + startText + (applyNew ? "</span>" : "") + (applyOld ? "<span class='" + endClass + "'>" : "") + delimiter + endText + (applyOld ? "</span>" : "");
+      } else {
+        str = startText + delimiter + endText;
+      }
+      target[prop] = fillChar === "&nbsp;" && ~str.indexOf("  ") ? str.split("  ").join("&nbsp;&nbsp;") : str;
+    }
+  };
+  ScrambleTextPlugin.emojiSafeSplit = emojiSafeSplit;
+  ScrambleTextPlugin.getText = getText;
+  _getGSAP9() && gsap7.registerPlugin(ScrambleTextPlugin);
+
+  // node_modules/.pnpm/gsap@3.13.0/node_modules/gsap/MorphSVGPlugin.js
+  init_live_reload();
+  var gsap8;
+  var _toArray3;
+  var _lastLinkedAnchor;
+  var _doc5;
+  var _coreInitted7;
+  var PluginClass;
+  var _getGSAP11 = function _getGSAP12() {
+    return gsap8 || typeof window !== "undefined" && (gsap8 = window.gsap) && gsap8.registerPlugin && gsap8;
+  };
+  var _isFunction5 = function _isFunction6(value) {
+    return typeof value === "function";
+  };
+  var _atan22 = Math.atan2;
+  var _cos3 = Math.cos;
+  var _sin3 = Math.sin;
+  var _sqrt3 = Math.sqrt;
+  var _PI = Math.PI;
+  var _2PI2 = _PI * 2;
+  var _angleMin = _PI * 0.3;
+  var _angleMax = _PI * 0.7;
+  var _bigNum4 = 1e20;
+  var _numExp3 = /[-+=\.]*\d+[\.e\-\+]*\d*[e\-\+]*\d*/gi;
+  var _selectorExp2 = /(^[#\.][a-z]|[a-y][a-z])/i;
+  var _commands = /[achlmqstvz]/i;
+  var _log = function _log2(message) {
+    return console && console.warn(message);
+  };
+  var _bonusValidated3 = 1;
+  var _getAverageXY = function _getAverageXY2(segment) {
+    var l = segment.length, x = 0, y = 0, i;
+    for (i = 0; i < l; i++) {
+      x += segment[i++];
+      y += segment[i];
+    }
+    return [x / (l / 2), y / (l / 2)];
+  };
+  var _getSize3 = function _getSize4(segment) {
+    var l = segment.length, xMax = segment[0], xMin = xMax, yMax = segment[1], yMin = yMax, x, y, i;
+    for (i = 6; i < l; i += 6) {
+      x = segment[i];
+      y = segment[i + 1];
+      if (x > xMax) {
+        xMax = x;
+      } else if (x < xMin) {
+        xMin = x;
+      }
+      if (y > yMax) {
+        yMax = y;
+      } else if (y < yMin) {
+        yMin = y;
+      }
+    }
+    segment.centerX = (xMax + xMin) / 2;
+    segment.centerY = (yMax + yMin) / 2;
+    return segment.size = (xMax - xMin) * (yMax - yMin);
+  };
+  var _getTotalSize = function _getTotalSize2(rawPath, samplesPerBezier) {
+    if (samplesPerBezier === void 0) {
+      samplesPerBezier = 3;
+    }
+    var j = rawPath.length, xMax = rawPath[0][0], xMin = xMax, yMax = rawPath[0][1], yMin = yMax, inc = 1 / samplesPerBezier, l, x, y, i, segment, k, t, inv, x1, y1, x2, x3, x4, y2, y3, y4;
+    while (--j > -1) {
+      segment = rawPath[j];
+      l = segment.length;
+      for (i = 6; i < l; i += 6) {
+        x1 = segment[i];
+        y1 = segment[i + 1];
+        x2 = segment[i + 2] - x1;
+        y2 = segment[i + 3] - y1;
+        x3 = segment[i + 4] - x1;
+        y3 = segment[i + 5] - y1;
+        x4 = segment[i + 6] - x1;
+        y4 = segment[i + 7] - y1;
+        k = samplesPerBezier;
+        while (--k > -1) {
+          t = inc * k;
+          inv = 1 - t;
+          x = (t * t * x4 + 3 * inv * (t * x3 + inv * x2)) * t + x1;
+          y = (t * t * y4 + 3 * inv * (t * y3 + inv * y2)) * t + y1;
+          if (x > xMax) {
+            xMax = x;
+          } else if (x < xMin) {
+            xMin = x;
+          }
+          if (y > yMax) {
+            yMax = y;
+          } else if (y < yMin) {
+            yMin = y;
+          }
+        }
+      }
+    }
+    rawPath.centerX = (xMax + xMin) / 2;
+    rawPath.centerY = (yMax + yMin) / 2;
+    rawPath.left = xMin;
+    rawPath.width = xMax - xMin;
+    rawPath.top = yMin;
+    rawPath.height = yMax - yMin;
+    return rawPath.size = (xMax - xMin) * (yMax - yMin);
+  };
+  var _sortByComplexity = function _sortByComplexity2(a, b) {
+    return b.length - a.length;
+  };
+  var _sortBySize = function _sortBySize2(a, b) {
+    var sizeA = a.size || _getSize3(a), sizeB = b.size || _getSize3(b);
+    return Math.abs(sizeB - sizeA) < (sizeA + sizeB) / 20 ? b.centerX - a.centerX || b.centerY - a.centerY : sizeB - sizeA;
+  };
+  var _offsetSegment = function _offsetSegment2(segment, shapeIndex) {
+    var a = segment.slice(0), l = segment.length, wrap3 = l - 2, i, index;
+    shapeIndex = shapeIndex | 0;
+    for (i = 0; i < l; i++) {
+      index = (i + shapeIndex) % wrap3;
+      segment[i++] = a[index];
+      segment[i] = a[index + 1];
+    }
+  };
+  var _getTotalMovement = function _getTotalMovement2(sb, eb, shapeIndex, offsetX, offsetY) {
+    var l = sb.length, d = 0, wrap3 = l - 2, index, i, x, y;
+    shapeIndex *= 6;
+    for (i = 0; i < l; i += 6) {
+      index = (i + shapeIndex) % wrap3;
+      y = sb[index] - (eb[i] - offsetX);
+      x = sb[index + 1] - (eb[i + 1] - offsetY);
+      d += _sqrt3(x * x + y * y);
+    }
+    return d;
+  };
+  var _getClosestShapeIndex = function _getClosestShapeIndex2(sb, eb, checkReverse) {
+    var l = sb.length, sCenter = _getAverageXY(sb), eCenter = _getAverageXY(eb), offsetX = eCenter[0] - sCenter[0], offsetY = eCenter[1] - sCenter[1], min = _getTotalMovement(sb, eb, 0, offsetX, offsetY), minIndex = 0, copy, d, i;
+    for (i = 6; i < l; i += 6) {
+      d = _getTotalMovement(sb, eb, i / 6, offsetX, offsetY);
+      if (d < min) {
+        min = d;
+        minIndex = i;
+      }
+    }
+    if (checkReverse) {
+      copy = sb.slice(0);
+      reverseSegment(copy);
+      for (i = 6; i < l; i += 6) {
+        d = _getTotalMovement(copy, eb, i / 6, offsetX, offsetY);
+        if (d < min) {
+          min = d;
+          minIndex = -i;
+        }
+      }
+    }
+    return minIndex / 6;
+  };
+  var _getClosestAnchor = function _getClosestAnchor2(rawPath, x, y) {
+    var j = rawPath.length, closestDistance = _bigNum4, closestX = 0, closestY = 0, segment, dx, dy, d, i, l;
+    while (--j > -1) {
+      segment = rawPath[j];
+      l = segment.length;
+      for (i = 0; i < l; i += 6) {
+        dx = segment[i] - x;
+        dy = segment[i + 1] - y;
+        d = _sqrt3(dx * dx + dy * dy);
+        if (d < closestDistance) {
+          closestDistance = d;
+          closestX = segment[i];
+          closestY = segment[i + 1];
+        }
+      }
+    }
+    return [closestX, closestY];
+  };
+  var _getClosestSegment = function _getClosestSegment2(bezier, pool, startIndex, sortRatio, offsetX, offsetY) {
+    var l = pool.length, index = 0, minSize = Math.min(bezier.size || _getSize3(bezier), pool[startIndex].size || _getSize3(pool[startIndex])) * sortRatio, min = _bigNum4, cx = bezier.centerX + offsetX, cy = bezier.centerY + offsetY, size, i, dx, dy, d;
+    for (i = startIndex; i < l; i++) {
+      size = pool[i].size || _getSize3(pool[i]);
+      if (size < minSize) {
+        break;
+      }
+      dx = pool[i].centerX - cx;
+      dy = pool[i].centerY - cy;
+      d = _sqrt3(dx * dx + dy * dy);
+      if (d < min) {
+        index = i;
+        min = d;
+      }
+    }
+    d = pool[index];
+    pool.splice(index, 1);
+    return d;
+  };
+  var _subdivideSegmentQty = function _subdivideSegmentQty2(segment, quantity) {
+    var tally = 0, max = 0.999999, l = segment.length, newPointsPerSegment = quantity / ((l - 2) / 6), ax, ay, cp1x, cp1y, cp2x, cp2y, bx, by, x1, y1, x2, y2, i, t;
+    for (i = 2; i < l; i += 6) {
+      tally += newPointsPerSegment;
+      while (tally > max) {
+        ax = segment[i - 2];
+        ay = segment[i - 1];
+        cp1x = segment[i];
+        cp1y = segment[i + 1];
+        cp2x = segment[i + 2];
+        cp2y = segment[i + 3];
+        bx = segment[i + 4];
+        by = segment[i + 5];
+        t = 1 / ((Math.floor(tally) || 1) + 1);
+        x1 = ax + (cp1x - ax) * t;
+        x2 = cp1x + (cp2x - cp1x) * t;
+        x1 += (x2 - x1) * t;
+        x2 += (cp2x + (bx - cp2x) * t - x2) * t;
+        y1 = ay + (cp1y - ay) * t;
+        y2 = cp1y + (cp2y - cp1y) * t;
+        y1 += (y2 - y1) * t;
+        y2 += (cp2y + (by - cp2y) * t - y2) * t;
+        segment.splice(
+          i,
+          4,
+          ax + (cp1x - ax) * t,
+          //first control point
+          ay + (cp1y - ay) * t,
+          x1,
+          //second control point
+          y1,
+          x1 + (x2 - x1) * t,
+          //new fabricated anchor on line
+          y1 + (y2 - y1) * t,
+          x2,
+          //third control point
+          y2,
+          cp2x + (bx - cp2x) * t,
+          //fourth control point
+          cp2y + (by - cp2y) * t
+        );
+        i += 6;
+        l += 6;
+        tally--;
+      }
+    }
+    return segment;
+  };
+  var _equalizeSegmentQuantity = function _equalizeSegmentQuantity2(start, end, shapeIndex, map, fillSafe) {
+    var dif = end.length - start.length, longer = dif > 0 ? end : start, shorter = dif > 0 ? start : end, added = 0, sortMethod = map === "complexity" ? _sortByComplexity : _sortBySize, sortRatio = map === "position" ? 0 : typeof map === "number" ? map : 0.8, i = shorter.length, shapeIndices = typeof shapeIndex === "object" && shapeIndex.push ? shapeIndex.slice(0) : [shapeIndex], reverse = shapeIndices[0] === "reverse" || shapeIndices[0] < 0, log = shapeIndex === "log", eb, sb, b, x, y, offsetX, offsetY;
+    if (!shorter[0]) {
+      return;
+    }
+    if (longer.length > 1) {
+      start.sort(sortMethod);
+      end.sort(sortMethod);
+      offsetX = longer.size || _getTotalSize(longer);
+      offsetX = shorter.size || _getTotalSize(shorter);
+      offsetX = longer.centerX - shorter.centerX;
+      offsetY = longer.centerY - shorter.centerY;
+      if (sortMethod === _sortBySize) {
+        for (i = 0; i < shorter.length; i++) {
+          longer.splice(i, 0, _getClosestSegment(shorter[i], longer, i, sortRatio, offsetX, offsetY));
+        }
+      }
+    }
+    if (dif) {
+      if (dif < 0) {
+        dif = -dif;
+      }
+      if (longer[0].length > shorter[0].length) {
+        _subdivideSegmentQty(shorter[0], (longer[0].length - shorter[0].length) / 6 | 0);
+      }
+      i = shorter.length;
+      while (added < dif) {
+        x = longer[i].size || _getSize3(longer[i]);
+        b = _getClosestAnchor(shorter, longer[i].centerX, longer[i].centerY);
+        x = b[0];
+        y = b[1];
+        shorter[i++] = [x, y, x, y, x, y, x, y];
+        shorter.totalPoints += 8;
+        added++;
+      }
+    }
+    for (i = 0; i < start.length; i++) {
+      eb = end[i];
+      sb = start[i];
+      dif = eb.length - sb.length;
+      if (dif < 0) {
+        _subdivideSegmentQty(eb, -dif / 6 | 0);
+      } else if (dif > 0) {
+        _subdivideSegmentQty(sb, dif / 6 | 0);
+      }
+      if (reverse && fillSafe !== false && !sb.reversed) {
+        reverseSegment(sb);
+      }
+      shapeIndex = shapeIndices[i] || shapeIndices[i] === 0 ? shapeIndices[i] : "auto";
+      if (shapeIndex) {
+        if (sb.closed || Math.abs(sb[0] - sb[sb.length - 2]) < 0.5 && Math.abs(sb[1] - sb[sb.length - 1]) < 0.5) {
+          if (shapeIndex === "auto" || shapeIndex === "log") {
+            shapeIndices[i] = shapeIndex = _getClosestShapeIndex(sb, eb, !i || fillSafe === false);
+            if (shapeIndex < 0) {
+              reverse = true;
+              reverseSegment(sb);
+              shapeIndex = -shapeIndex;
+            }
+            _offsetSegment(sb, shapeIndex * 6);
+          } else if (shapeIndex !== "reverse") {
+            if (i && shapeIndex < 0) {
+              reverseSegment(sb);
+            }
+            _offsetSegment(sb, (shapeIndex < 0 ? -shapeIndex : shapeIndex) * 6);
+          }
+        } else if (!reverse && (shapeIndex === "auto" && Math.abs(eb[0] - sb[0]) + Math.abs(eb[1] - sb[1]) + Math.abs(eb[eb.length - 2] - sb[sb.length - 2]) + Math.abs(eb[eb.length - 1] - sb[sb.length - 1]) > Math.abs(eb[0] - sb[sb.length - 2]) + Math.abs(eb[1] - sb[sb.length - 1]) + Math.abs(eb[eb.length - 2] - sb[0]) + Math.abs(eb[eb.length - 1] - sb[1]) || shapeIndex % 2)) {
+          reverseSegment(sb);
+          shapeIndices[i] = -1;
+          reverse = true;
+        } else if (shapeIndex === "auto") {
+          shapeIndices[i] = 0;
+        } else if (shapeIndex === "reverse") {
+          shapeIndices[i] = -1;
+        }
+        if (sb.closed !== eb.closed) {
+          sb.closed = eb.closed = false;
+        }
+      }
+    }
+    log && _log("shapeIndex:[" + shapeIndices.join(",") + "]");
+    start.shapeIndex = shapeIndices;
+    return shapeIndices;
+  };
+  var _pathFilter = function _pathFilter2(a, shapeIndex, map, precompile, fillSafe) {
+    var start = stringToRawPath(a[0]), end = stringToRawPath(a[1]);
+    if (!_equalizeSegmentQuantity(start, end, shapeIndex || shapeIndex === 0 ? shapeIndex : "auto", map, fillSafe)) {
+      return;
+    }
+    a[0] = rawPathToString(start);
+    a[1] = rawPathToString(end);
+    if (precompile === "log" || precompile === true) {
+      _log('precompile:["' + a[0] + '","' + a[1] + '"]');
+    }
+  };
+  var _offsetPoints = function _offsetPoints2(text, offset) {
+    if (!offset) {
+      return text;
+    }
+    var a = text.match(_numExp3) || [], l = a.length, s = "", inc, i, j;
+    if (offset === "reverse") {
+      i = l - 1;
+      inc = -2;
+    } else {
+      i = ((parseInt(offset, 10) || 0) * 2 + 1 + l * 100) % l;
+      inc = 2;
+    }
+    for (j = 0; j < l; j += 2) {
+      s += a[i - 1] + "," + a[i] + " ";
+      i = (i + inc) % l;
+    }
+    return s;
+  };
+  var _equalizePointQuantity = function _equalizePointQuantity2(a, quantity) {
+    var tally = 0, x = parseFloat(a[0]), y = parseFloat(a[1]), s = x + "," + y + " ", max = 0.999999, newPointsPerSegment, i, l, j, factor, nextX, nextY;
+    l = a.length;
+    newPointsPerSegment = quantity * 0.5 / (l * 0.5 - 1);
+    for (i = 0; i < l - 2; i += 2) {
+      tally += newPointsPerSegment;
+      nextX = parseFloat(a[i + 2]);
+      nextY = parseFloat(a[i + 3]);
+      if (tally > max) {
+        factor = 1 / (Math.floor(tally) + 1);
+        j = 1;
+        while (tally > max) {
+          s += (x + (nextX - x) * factor * j).toFixed(2) + "," + (y + (nextY - y) * factor * j).toFixed(2) + " ";
+          tally--;
+          j++;
+        }
+      }
+      s += nextX + "," + nextY + " ";
+      x = nextX;
+      y = nextY;
+    }
+    return s;
+  };
+  var _pointsFilter = function _pointsFilter2(a) {
+    var startNums = a[0].match(_numExp3) || [], endNums = a[1].match(_numExp3) || [], dif = endNums.length - startNums.length;
+    if (dif > 0) {
+      a[0] = _equalizePointQuantity(startNums, dif);
+    } else {
+      a[1] = _equalizePointQuantity(endNums, -dif);
+    }
+  };
+  var _buildPointsFilter = function _buildPointsFilter2(shapeIndex) {
+    return !isNaN(shapeIndex) ? function(a) {
+      _pointsFilter(a);
+      a[1] = _offsetPoints(a[1], parseInt(shapeIndex, 10));
+    } : _pointsFilter;
+  };
+  var _parseShape = function _parseShape2(shape, forcePath, target) {
+    var isString = typeof shape === "string", e, type;
+    if (!isString || _selectorExp2.test(shape) || (shape.match(_numExp3) || []).length < 3) {
+      e = _toArray3(shape)[0];
+      if (e) {
+        type = (e.nodeName + "").toUpperCase();
+        if (forcePath && type !== "PATH") {
+          e = convertToPath(e, false);
+          type = "PATH";
+        }
+        shape = e.getAttribute(type === "PATH" ? "d" : "points") || "";
+        if (e === target) {
+          shape = e.getAttributeNS(null, "data-original") || shape;
+        }
+      } else {
+        _log("WARNING: invalid morph to: " + shape);
+        shape = false;
+      }
+    }
+    return shape;
+  };
+  var _populateSmoothData = function _populateSmoothData2(rawPath, tolerance) {
+    var j = rawPath.length, limit = 0.2 * (tolerance || 1), smooth, segment, x, y, x2, y2, i, l, a, a2, isSmooth, smoothData;
+    while (--j > -1) {
+      segment = rawPath[j];
+      isSmooth = segment.isSmooth = segment.isSmooth || [0, 0, 0, 0];
+      smoothData = segment.smoothData = segment.smoothData || [0, 0, 0, 0];
+      isSmooth.length = 4;
+      l = segment.length - 2;
+      for (i = 6; i < l; i += 6) {
+        x = segment[i] - segment[i - 2];
+        y = segment[i + 1] - segment[i - 1];
+        x2 = segment[i + 2] - segment[i];
+        y2 = segment[i + 3] - segment[i + 1];
+        a = _atan22(y, x);
+        a2 = _atan22(y2, x2);
+        smooth = Math.abs(a - a2) < limit;
+        if (smooth) {
+          smoothData[i - 2] = a;
+          smoothData[i + 2] = a2;
+          smoothData[i - 1] = _sqrt3(x * x + y * y);
+          smoothData[i + 3] = _sqrt3(x2 * x2 + y2 * y2);
+        }
+        isSmooth.push(smooth, smooth, 0, 0, smooth, smooth);
+      }
+      if (segment[l] === segment[0] && segment[l + 1] === segment[1]) {
+        x = segment[0] - segment[l - 2];
+        y = segment[1] - segment[l - 1];
+        x2 = segment[2] - segment[0];
+        y2 = segment[3] - segment[1];
+        a = _atan22(y, x);
+        a2 = _atan22(y2, x2);
+        if (Math.abs(a - a2) < limit) {
+          smoothData[l - 2] = a;
+          smoothData[2] = a2;
+          smoothData[l - 1] = _sqrt3(x * x + y * y);
+          smoothData[3] = _sqrt3(x2 * x2 + y2 * y2);
+          isSmooth[l - 2] = isSmooth[l - 1] = true;
+        }
+      }
+    }
+    return rawPath;
+  };
+  var _parseOriginFactors = function _parseOriginFactors2(v) {
+    var a = v.trim().split(" "), x = ~v.indexOf("left") ? 0 : ~v.indexOf("right") ? 100 : isNaN(parseFloat(a[0])) ? 50 : parseFloat(a[0]), y = ~v.indexOf("top") ? 0 : ~v.indexOf("bottom") ? 100 : isNaN(parseFloat(a[1])) ? 50 : parseFloat(a[1]);
+    return {
+      x: x / 100,
+      y: y / 100
+    };
+  };
+  var _shortAngle = function _shortAngle2(dif) {
+    return dif !== dif % _PI ? dif + (dif < 0 ? _2PI2 : -_2PI2) : dif;
+  };
+  var _morphMessage = "Use MorphSVGPlugin.convertToPath() to convert to a path before morphing.";
+  var _tweenRotation = function _tweenRotation2(start, end, i, linkedPT) {
+    var so = this._origin, eo = this._eOrigin, dx = start[i] - so.x, dy = start[i + 1] - so.y, d = _sqrt3(dx * dx + dy * dy), sa = _atan22(dy, dx), angleDif, _short;
+    dx = end[i] - eo.x;
+    dy = end[i + 1] - eo.y;
+    angleDif = _atan22(dy, dx) - sa;
+    _short = _shortAngle(angleDif);
+    if (!linkedPT && _lastLinkedAnchor && Math.abs(_short + _lastLinkedAnchor.ca) < _angleMin) {
+      linkedPT = _lastLinkedAnchor;
+    }
+    return this._anchorPT = _lastLinkedAnchor = {
+      _next: this._anchorPT,
+      t: start,
+      sa,
+      //starting angle
+      ca: linkedPT && _short * linkedPT.ca < 0 && Math.abs(_short) > _angleMax ? angleDif : _short,
+      //change in angle
+      sl: d,
+      //starting length
+      cl: _sqrt3(dx * dx + dy * dy) - d,
+      //change in length
+      i
+    };
+  };
+  var _initCore9 = function _initCore10(required) {
+    gsap8 = _getGSAP11();
+    PluginClass = PluginClass || gsap8 && gsap8.plugins.morphSVG;
+    if (gsap8 && PluginClass) {
+      _toArray3 = gsap8.utils.toArray;
+      _doc5 = document;
+      PluginClass.prototype._tweenRotation = _tweenRotation;
+      _coreInitted7 = 1;
+    } else if (required) {
+      _log("Please gsap.registerPlugin(MorphSVGPlugin)");
+    }
+  };
+  var MorphSVGPlugin = {
+    version: "3.13.0",
+    name: "morphSVG",
+    rawVars: 1,
+    // otherwise "render" would be interpreted as a function-based value.
+    register: function register2(core, Plugin) {
+      gsap8 = core;
+      PluginClass = Plugin;
+      _initCore9();
+    },
+    init: function init6(target, value, tween, index, targets) {
+      _coreInitted7 || _initCore9(1);
+      if (!value) {
+        _log("invalid shape");
+        return false;
+      }
+      _isFunction5(value) && (value = value.call(tween, index, target, targets));
+      var type, p, pt, shape, isPoly, shapeIndex, map, startSmooth, endSmooth, start, end, i, j, l, startSeg, endSeg, precompiled, sData, eData, originFactors, useRotation, offset;
+      if (typeof value === "string" || value.getBBox || value[0]) {
+        value = {
+          shape: value
+        };
+      } else if (typeof value === "object") {
+        type = {};
+        for (p in value) {
+          type[p] = _isFunction5(value[p]) && p !== "render" ? value[p].call(tween, index, target, targets) : value[p];
+        }
+        value = type;
+      }
+      var cs = target.nodeType ? window.getComputedStyle(target) : {}, fill = cs.fill + "", fillSafe = !(fill === "none" || (fill.match(_numExp3) || [])[3] === "0" || cs.fillRule === "evenodd"), origins = (value.origin || "50 50").split(",");
+      type = (target.nodeName + "").toUpperCase();
+      isPoly = type === "POLYLINE" || type === "POLYGON";
+      if (type !== "PATH" && !isPoly && !value.prop) {
+        _log("Cannot morph a <" + type + "> element. " + _morphMessage);
+        return false;
+      }
+      p = type === "PATH" ? "d" : "points";
+      if (!value.prop && !_isFunction5(target.setAttribute)) {
+        return false;
+      }
+      shape = _parseShape(value.shape || value.d || value.points || "", p === "d", target);
+      if (isPoly && _commands.test(shape)) {
+        _log("A <" + type + "> cannot accept path data. " + _morphMessage);
+        return false;
+      }
+      shapeIndex = value.shapeIndex || value.shapeIndex === 0 ? value.shapeIndex : "auto";
+      map = value.map || MorphSVGPlugin.defaultMap;
+      this._prop = value.prop;
+      this._render = value.render || MorphSVGPlugin.defaultRender;
+      this._apply = "updateTarget" in value ? value.updateTarget : MorphSVGPlugin.defaultUpdateTarget;
+      this._rnd = Math.pow(10, isNaN(value.precision) ? 2 : +value.precision);
+      this._tween = tween;
+      if (shape) {
+        this._target = target;
+        precompiled = typeof value.precompile === "object";
+        start = this._prop ? target[this._prop] : target.getAttribute(p);
+        if (!this._prop && !target.getAttributeNS(null, "data-original")) {
+          target.setAttributeNS(null, "data-original", start);
+        }
+        if (p === "d" || this._prop) {
+          start = stringToRawPath(precompiled ? value.precompile[0] : start);
+          end = stringToRawPath(precompiled ? value.precompile[1] : shape);
+          if (!precompiled && !_equalizeSegmentQuantity(start, end, shapeIndex, map, fillSafe)) {
+            return false;
+          }
+          if (value.precompile === "log" || value.precompile === true) {
+            _log('precompile:["' + rawPathToString(start) + '","' + rawPathToString(end) + '"]');
+          }
+          useRotation = (value.type || MorphSVGPlugin.defaultType) !== "linear";
+          if (useRotation) {
+            start = _populateSmoothData(start, value.smoothTolerance);
+            end = _populateSmoothData(end, value.smoothTolerance);
+            if (!start.size) {
+              _getTotalSize(start);
+            }
+            if (!end.size) {
+              _getTotalSize(end);
+            }
+            originFactors = _parseOriginFactors(origins[0]);
+            this._origin = start.origin = {
+              x: start.left + originFactors.x * start.width,
+              y: start.top + originFactors.y * start.height
+            };
+            if (origins[1]) {
+              originFactors = _parseOriginFactors(origins[1]);
+            }
+            this._eOrigin = {
+              x: end.left + originFactors.x * end.width,
+              y: end.top + originFactors.y * end.height
+            };
+          }
+          this._rawPath = target._gsRawPath = start;
+          j = start.length;
+          while (--j > -1) {
+            startSeg = start[j];
+            endSeg = end[j];
+            startSmooth = startSeg.isSmooth || [];
+            endSmooth = endSeg.isSmooth || [];
+            l = startSeg.length;
+            _lastLinkedAnchor = 0;
+            for (i = 0; i < l; i += 2) {
+              if (endSeg[i] !== startSeg[i] || endSeg[i + 1] !== startSeg[i + 1]) {
+                if (useRotation) {
+                  if (startSmooth[i] && endSmooth[i]) {
+                    sData = startSeg.smoothData;
+                    eData = endSeg.smoothData;
+                    offset = i + (i === l - 4 ? 7 - l : 5);
+                    this._controlPT = {
+                      _next: this._controlPT,
+                      i,
+                      j,
+                      l1s: sData[i + 1],
+                      l1c: eData[i + 1] - sData[i + 1],
+                      l2s: sData[offset],
+                      l2c: eData[offset] - sData[offset]
+                    };
+                    pt = this._tweenRotation(startSeg, endSeg, i + 2);
+                    this._tweenRotation(startSeg, endSeg, i, pt);
+                    this._tweenRotation(startSeg, endSeg, offset - 1, pt);
+                    i += 4;
+                  } else {
+                    this._tweenRotation(startSeg, endSeg, i);
+                  }
+                } else {
+                  pt = this.add(startSeg, i, startSeg[i], endSeg[i], 0, 0, 0, 0, 0, 1);
+                  pt = this.add(startSeg, i + 1, startSeg[i + 1], endSeg[i + 1], 0, 0, 0, 0, 0, 1) || pt;
+                }
+              }
+            }
+          }
+        } else {
+          pt = this.add(target, "setAttribute", target.getAttribute(p) + "", shape + "", index, targets, 0, _buildPointsFilter(shapeIndex), p);
+        }
+        if (useRotation) {
+          this.add(this._origin, "x", this._origin.x, this._eOrigin.x, 0, 0, 0, 0, 0, 1);
+          pt = this.add(this._origin, "y", this._origin.y, this._eOrigin.y, 0, 0, 0, 0, 0, 1);
+        }
+        if (pt) {
+          this._props.push("morphSVG");
+          pt.end = shape;
+          pt.endProp = p;
+        }
+      }
+      return _bonusValidated3;
+    },
+    render: function render5(ratio, data) {
+      var rawPath = data._rawPath, controlPT = data._controlPT, anchorPT = data._anchorPT, rnd = data._rnd, target = data._target, pt = data._pt, s, space, easeInOut, segment, l, angle, i, j, x, y, sin, cos, offset;
+      while (pt) {
+        pt.r(ratio, pt.d);
+        pt = pt._next;
+      }
+      if (ratio === 1 && data._apply) {
+        pt = data._pt;
+        while (pt) {
+          if (pt.end) {
+            if (data._prop) {
+              target[data._prop] = pt.end;
+            } else {
+              target.setAttribute(pt.endProp, pt.end);
+            }
+          }
+          pt = pt._next;
+        }
+      } else if (rawPath) {
+        while (anchorPT) {
+          angle = anchorPT.sa + ratio * anchorPT.ca;
+          l = anchorPT.sl + ratio * anchorPT.cl;
+          anchorPT.t[anchorPT.i] = data._origin.x + _cos3(angle) * l;
+          anchorPT.t[anchorPT.i + 1] = data._origin.y + _sin3(angle) * l;
+          anchorPT = anchorPT._next;
+        }
+        easeInOut = ratio < 0.5 ? 2 * ratio * ratio : (4 - 2 * ratio) * ratio - 1;
+        while (controlPT) {
+          i = controlPT.i;
+          segment = rawPath[controlPT.j];
+          offset = i + (i === segment.length - 4 ? 7 - segment.length : 5);
+          angle = _atan22(segment[offset] - segment[i + 1], segment[offset - 1] - segment[i]);
+          sin = _sin3(angle);
+          cos = _cos3(angle);
+          x = segment[i + 2];
+          y = segment[i + 3];
+          l = controlPT.l1s + easeInOut * controlPT.l1c;
+          segment[i] = x - cos * l;
+          segment[i + 1] = y - sin * l;
+          l = controlPT.l2s + easeInOut * controlPT.l2c;
+          segment[offset - 1] = x + cos * l;
+          segment[offset] = y + sin * l;
+          controlPT = controlPT._next;
+        }
+        target._gsRawPath = rawPath;
+        if (data._apply) {
+          s = "";
+          space = " ";
+          for (j = 0; j < rawPath.length; j++) {
+            segment = rawPath[j];
+            l = segment.length;
+            s += "M" + (segment[0] * rnd | 0) / rnd + space + (segment[1] * rnd | 0) / rnd + " C";
+            for (i = 2; i < l; i++) {
+              s += (segment[i] * rnd | 0) / rnd + space;
+            }
+          }
+          if (data._prop) {
+            target[data._prop] = s;
+          } else {
+            target.setAttribute("d", s);
+          }
+        }
+      }
+      data._render && rawPath && data._render.call(data._tween, rawPath, target);
+    },
+    kill: function kill(property) {
+      this._pt = this._rawPath = 0;
+    },
+    getRawPath,
+    stringToRawPath,
+    rawPathToString,
+    normalizeStrings: function normalizeStrings(shape1, shape2, _ref) {
+      var shapeIndex = _ref.shapeIndex, map = _ref.map;
+      var result = [shape1, shape2];
+      _pathFilter(result, shapeIndex, map);
+      return result;
+    },
+    pathFilter: _pathFilter,
+    pointsFilter: _pointsFilter,
+    getTotalSize: _getTotalSize,
+    equalizeSegmentQuantity: _equalizeSegmentQuantity,
+    convertToPath: function convertToPath2(targets, swap) {
+      return _toArray3(targets).map(function(target) {
+        return convertToPath(target, swap !== false);
+      });
+    },
+    defaultType: "linear",
+    defaultUpdateTarget: true,
+    defaultMap: "size"
+  };
+  _getGSAP11() && gsap8.registerPlugin(MorphSVGPlugin);
+
+  // src/week7.js
+  gsapWithCSS.registerPlugin(
+    Observer,
+    SplitText,
+    ScrollTrigger2,
+    CustomEase,
+    TextPlugin,
+    ScrambleTextPlugin,
+    MorphSVGPlugin
+  );
+  window.Webflow ||= [];
+  window.Webflow.push(() => {
+    console.log(gsapWithCSS.version);
+    "use strict";
+    let lenis;
+    if (Webflow.env("editor") === void 0) {
+      lenis = new Lenis({
+        lerp: 0.1,
+        wheelMultiplier: 1.2
+      });
+      lenis.on("scroll", ScrollTrigger2.update);
+      gsapWithCSS.ticker.add((time) => {
+        lenis.raf(time * 1e3);
+      });
+      gsapWithCSS.ticker.lagSmoothing(0);
+    }
+    const slideData = [
+      {
+        accent: "exchange",
+        metrics: [
+          { value: "700+", text: "Youtube influencers" },
+          { value: "1.2K", text: "Twitter influencers" },
+          { value: "7B+", text: "Impressions" }
+        ],
+        numeration: "01"
+      },
+      {
+        accent: "Project",
+        metrics: [
+          { value: "2B+", text: "users reached" },
+          { value: "3K", text: "Influencers" },
+          { value: "100K", text: "Paying customers" }
+        ],
+        numeration: "02"
+      },
+      {
+        accent: "Token",
+        metrics: [
+          { value: "5B+", text: "Under management" },
+          { value: "300M", text: "Market cap" },
+          { value: "5", text: "Successful exits" }
+        ],
+        numeration: "03"
+      }
+    ];
+    const dots = document.querySelectorAll(".hero_pagination-dot");
+    const accentEl = document.querySelector(".hero_title-accent");
+    const valueEls = document.querySelectorAll(".hero_metric-value");
+    const textEls = document.querySelectorAll(".hero_metric-text");
+    const numerationEl = document.querySelector(".hero_numeration");
+    const indicatorEl = document.querySelector(".hero_pagination-indicator");
+    let currentSlide = 0;
+    let isAnimating = false;
+    let autoPlayInterval;
+    let resumeAutoPlayTimeout;
+    async function animateToSlide(slideIndex) {
+      if (isAnimating || slideIndex === currentSlide)
+        return;
+      isAnimating = true;
+      const data = slideData[slideIndex];
+      dots[currentSlide]?.classList.remove("is-active");
+      dots[slideIndex]?.classList.add("is-active");
+      animateIndicator(slideIndex);
+      const tl = gsapWithCSS.timeline();
+      if (accentEl) {
+        tl.to(accentEl, {
+          duration: 0.6,
+          scrambleText: {
+            text: data.accent,
+            chars: "lowerCase",
+            speed: 0.3,
+            revealDelay: 0
+          },
+          ease: "none"
+        });
+      }
+      if (numerationEl) {
+        tl.to(
+          numerationEl,
+          {
+            duration: 0.5,
+            scrambleText: {
+              text: data.numeration,
+              chars: "numbers",
+              speed: 0.3,
+              revealDelay: 0
+            },
+            ease: "none"
+          },
+          "<"
+        );
+      }
+      tl.add(() => {
+        data.metrics.forEach((metric, index) => {
+          if (valueEls[index]) {
+            gsapWithCSS.to(valueEls[index], {
+              duration: 0.5,
+              scrambleText: {
+                text: metric.value,
+                chars: "numbers",
+                speed: 0.3,
+                revealDelay: 0
+              },
+              ease: "none"
+            });
+          }
+          if (textEls[index]) {
+            gsapWithCSS.to(textEls[index], {
+              duration: 0.7,
+              scrambleText: {
+                text: metric.text,
+                chars: "lowerCase",
+                speed: 0.3,
+                revealDelay: 0
+              },
+              ease: "none"
+            });
+          }
+        });
+      }, "<0.2");
+      tl.then(() => {
+        currentSlide = slideIndex;
+        isAnimating = false;
+      });
+    }
+    function animateIndicator(slideIndex) {
+      if (!indicatorEl)
+        return;
+      const positions2 = ["0rem", "2.5rem", "5rem"];
+      gsapWithCSS.to(indicatorEl, {
+        duration: 0.4,
+        left: positions2[slideIndex],
+        right: "auto",
+        x: "0%",
+        ease: "power2.out"
+      });
+    }
+    function startAutoPlay() {
+      stopAutoPlay();
+      autoPlayInterval = setInterval(() => {
+        const nextSlide = (currentSlide + 1) % slideData.length;
+        animateToSlide(nextSlide);
+      }, 4e3);
+    }
+    function stopAutoPlay() {
+      if (autoPlayInterval) {
+        clearInterval(autoPlayInterval);
+        autoPlayInterval = null;
+      }
+    }
+    function pauseAutoPlayWithResume() {
+      stopAutoPlay();
+      if (resumeAutoPlayTimeout) {
+        clearTimeout(resumeAutoPlayTimeout);
+      }
+      resumeAutoPlayTimeout = setTimeout(() => {
+        startAutoPlay();
+      }, 5e3);
+    }
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        pauseAutoPlayWithResume();
+        animateToSlide(index);
+      });
+    });
+    if (dots[0]) {
+      dots[0].classList.add("is-active");
+    }
+    setTimeout(startAutoPlay, 0);
+    document.fonts.ready.then(function() {
+      const preloader = document.querySelector(".preloader_component") || "";
+      if (preloader) {
+        let preloaderAnimation = gsapWithCSS.timeline();
+        CustomEase.create("preloaderEase", ".5, 0, .25, 1");
+        preloaderAnimation.set(".preloader_component .grid-item", {
+          backdropFilter: "blur(1.75rem)"
+        }).to(
+          ".preloader_component .grid-item",
+          {
+            backgroundColor: "rgba(236, 245, 255, 0.04)",
+            duration: 0.4,
+            ease: "power3.out",
+            stagger: { from: "random", amount: 1 }
+          },
+          "1.0"
+        ).to(
+          ".preloader_component .grid-item",
+          {
+            backdropFilter: "blur(0rem)",
+            autoAlpha: 0,
+            duration: 0.4,
+            ease: "power3.out",
+            stagger: { from: "random", amount: 1 }
+          },
+          "<0.5"
+        ).set(preloader, {
+          autoAlpha: 0
+        });
+        document.querySelectorAll("a").forEach(function(anchor) {
+          anchor.addEventListener("click", function(e) {
+            if (this.hostname === window.location.host && this.getAttribute("href").indexOf("#") === -1 && this.getAttribute("target") !== "_blank") {
+              e.preventDefault();
+              const destination = this.getAttribute("href");
+            }
+          });
+        });
+      }
+      window.onpageshow = function(event) {
+        if (event.persisted) {
+          window.location.reload();
+        }
+      };
+    });
+    const slideElements = document.querySelectorAll(".services_horizontal-sticky");
+    const totalSlides = slideElements.length;
+    function getScrollAmount() {
+      const slideWidth = slideElements[0].offsetWidth;
+      const remToPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const gapBetween = remToPx * 8;
+      const endPadding = remToPx * 4;
+      const totalWidth = slideWidth * totalSlides + gapBetween * (totalSlides - 1) + endPadding;
+      return -(totalWidth - window.innerWidth);
+    }
+    const horizontalScroll = gsapWithCSS.to(".services_horizontal-wrapper", {
+      x: getScrollAmount,
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".services_horizontal-wrapper",
+        start: "top top",
+        end: () => `+=${totalSlides * 400}vh`,
+        pin: true,
+        scrub: 1,
+        invalidateOnRefresh: true
+        // markers: true,
+      }
+    });
+    gsapWithCSS.fromTo(
+      ".bg-grid-wrap",
+      { y: 0 },
+      {
+        y: () => {
+          const trigger = ScrollTrigger2.getById(horizontalScroll.scrollTrigger.vars.id) || horizontalScroll.scrollTrigger;
+          return trigger.end - trigger.start;
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".services_horizontal-wrapper",
+          start: "top top",
+          end: () => `+=${totalSlides * 400}vh`,
+          scrub: 0,
+          invalidateOnRefresh: true
+        }
+      }
+    );
+    const growthCases = document.querySelectorAll(".growth_case-horizontal, .growth_case-vertical");
+    growthCases.forEach((container) => {
+      const icon = container.querySelector(".icon-1x1-medium");
+      let iconInitialX;
+      let iconInitialY;
+      if (!icon)
+        return;
+      const arrowRight = container.querySelector(".arrow-right");
+      const arrowLeft = container.querySelector(".arrow-left");
+      if (!arrowRight || !arrowLeft)
+        return;
+      gsapWithCSS.set(icon, {
+        scale: 1
+      });
+      const morphTl = gsapWithCSS.timeline({ paused: true });
+      morphTl.to(arrowRight, {
+        duration: 0.2,
+        morphSVG: arrowLeft,
+        ease: "power2.Out"
+      });
+      container.addEventListener("mouseenter", () => {
+        const iconRect = icon.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        iconInitialX = iconRect.left - containerRect.left;
+        iconInitialY = iconRect.top - containerRect.top;
+        gsapWithCSS.to(icon, {
+          scale: 2.5,
+          // Increased scale
+          duration: 0.3,
+          ease: "power2.out"
+        });
+        morphTl.play();
+      });
+      container.addEventListener("mousemove", (e) => {
+        const containerRect = container.getBoundingClientRect();
+        const mouseX = e.clientX - containerRect.left;
+        const mouseY = e.clientY - containerRect.top;
+        const distanceX = mouseX - iconInitialX;
+        const distanceY = mouseY - iconInitialY;
+        const magneticPull = 0.15;
+        const moveX = distanceX * magneticPull;
+        const moveY = distanceY * magneticPull;
+        const maxMoveBottom = 35;
+        const maxMoveRight = 35;
+        const limitedX = Math.min(moveX, maxMoveRight);
+        const limitedY = Math.min(moveY, maxMoveBottom);
+        gsapWithCSS.to(icon, {
+          x: limitedX,
+          y: limitedY,
+          duration: 0.3,
+          ease: "power2.out"
+        });
+      });
+      container.addEventListener("mouseleave", () => {
+        gsapWithCSS.to(icon, {
+          x: 0,
+          y: 0,
+          scale: 1,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+        morphTl.reverse();
+      });
+    });
+    const buttons = document.querySelectorAll(".button");
+    const cornerAnimationValue = 0.125;
+    buttons.forEach((btnHover) => {
+      const btnText = btnHover.querySelector(".button-text");
+      const btnCorners = btnHover.querySelector(".button-corners-wrap");
+      const originalBgColor = getComputedStyle(btnCorners).backgroundColor;
+      const btnWidth = btnHover.offsetWidth / parseFloat(getComputedStyle(document.documentElement).fontSize) + 0.125;
+      gsapWithCSS.set(btnHover, {
+        width: btnWidth + "rem"
+      });
+      btnHover.addEventListener("mouseenter", () => {
+        const currentText = btnText.textContent;
+        gsapWithCSS.to(btnText, {
+          duration: 0.5,
+          scrambleText: {
+            text: currentText,
+            chars: "lowerCase",
+            speed: 0.8
+          },
+          ease: "none"
+        });
+        gsapWithCSS.to(btnCorners, {
+          top: cornerAnimationValue + "rem",
+          bottom: cornerAnimationValue + "rem",
+          left: cornerAnimationValue + "rem",
+          right: cornerAnimationValue + "rem",
+          backgroundColor: "transparent",
+          duration: 0.2,
+          ease: "power2.out"
+        });
+      });
+      btnHover.addEventListener("mouseleave", () => {
+        gsapWithCSS.to(btnCorners, {
+          top: 0,
+          bottom: 0,
+          left: 0,
+          right: 0,
+          backgroundColor: originalBgColor,
+          duration: 0.2,
+          ease: "power2.out"
+        });
+      });
+    });
+    const menuButton = document.querySelector(".button.is-nav");
+    const menuText = menuButton.querySelector(".button-text");
+    const navMenu = document.querySelector(".nav_menu");
+    const navIndicator = document.querySelector(".nav_indicator");
+    const navLinks = document.querySelectorAll(".nav_link");
+    function pxToRem(px) {
+      return px / parseFloat(getComputedStyle(document.documentElement).fontSize) + "rem";
+    }
+    const positions = ["0rem", "2.75rem", "5.5rem", "8.25rem"];
+    gsapWithCSS.set(navIndicator, {
+      autoAlpha: 0
+    });
+    function setupIndicatorInteractions() {
+      const currentLink = document.querySelector(".nav_link.w--current");
+      const currentIndex = currentLink ? Array.from(navLinks).indexOf(currentLink) : 0;
+      const currentLinkWidth = currentLink?.offsetWidth || navLinks[0]?.offsetWidth || 100;
+      const currentPosition = positions[currentIndex];
+      let lastHoveredLink = null;
+      navLinks.forEach((link, index) => {
+        link.removeEventListener("mouseenter", link._indicatorEnter);
+        link.removeEventListener("mouseleave", link._indicatorLeave);
+        link._indicatorEnter = () => {
+          const linkWidth = link.offsetWidth;
+          const targetPosition = positions[index];
+          lastHoveredLink = link;
+          gsapWithCSS.to(navIndicator, {
+            top: targetPosition,
+            width: pxToRem(linkWidth),
+            duration: 0.3,
+            ease: "power2.out"
+          });
+        };
+        link._indicatorLeave = () => {
+          setTimeout(() => {
+            if (lastHoveredLink === link) {
+              gsapWithCSS.to(navIndicator, {
+                top: currentPosition,
+                width: pxToRem(currentLinkWidth),
+                duration: 0.3,
+                ease: "power2.out"
+              });
+              lastHoveredLink = null;
+            }
+          }, 50);
+        };
+        link.addEventListener("mouseenter", link._indicatorEnter);
+        link.addEventListener("mouseleave", link._indicatorLeave);
+      });
+      return {
+        currentPosition,
+        currentLinkWidth: pxToRem(currentLinkWidth)
+      };
+    }
+    menuButton.addEventListener("click", () => {
+      const isMenuVisible = getComputedStyle(navMenu).display === "flex";
+      if (!isMenuVisible) {
+        navMenu.style.display = "flex";
+        gsapWithCSS.set(menuButton, {
+          width: "auto"
+        });
+        gsapWithCSS.to(menuText, {
+          duration: 0.5,
+          scrambleText: {
+            text: "Close",
+            chars: "lowerCase",
+            speed: 0.8
+          },
+          ease: "none"
+        });
+        const menuOpen = gsapWithCSS.timeline();
+        menuOpen.fromTo(
+          navMenu,
+          { scale: 0, transformOrigin: "top right" },
+          {
+            scale: 1,
+            duration: 0.5,
+            ease: "elastic.out(1,1)"
+          }
+        ).fromTo(
+          ".nav_link",
+          { autoAlpha: 0 },
+          {
+            autoAlpha: 1,
+            duration: 0.1,
+            stagger: 0.05,
+            ease: "power2.out",
+            onComplete: () => {
+              const { currentPosition, currentLinkWidth } = setupIndicatorInteractions();
+              gsapWithCSS.set(navIndicator, {
+                top: currentPosition,
+                width: currentLinkWidth
+              });
+              gsapWithCSS.to(navIndicator, {
+                autoAlpha: 1,
+                duration: 0.1,
+                ease: "power2.out"
+              });
+            }
+          },
+          "<0.15"
+        );
+      } else {
+        gsapWithCSS.to(menuText, {
+          duration: 0.5,
+          scrambleText: {
+            text: "Menu",
+            chars: "lowerCase",
+            speed: 0.8
+          },
+          ease: "none"
+        });
+        const menuClose = gsapWithCSS.timeline();
+        menuClose.to(navIndicator, {
+          autoAlpha: 0,
+          duration: 0.1,
+          ease: "power2.out"
+        }).to(
+          navMenu,
+          {
+            scale: 0,
+            transformOrigin: "top right",
+            duration: 0.2,
+            ease: "power2.in",
+            onComplete: () => {
+              navMenu.style.display = "none";
+              navMenu.style.opacity = 1;
+            }
+          },
+          "<0.05"
+        ).to(
+          ".nav_link",
+          {
+            autoAlpha: 0,
+            duration: 0.05,
+            stagger: { each: 0.025, from: "end" },
+            ease: "power2.out"
+          },
+          "<"
+        );
+      }
+    });
+    const squares = document.querySelectorAll(".logos_item");
+    function animateThreeSquares() {
+      const shuffled = Array.from(squares).sort(() => 0.5 - Math.random());
+      const selectedSquares = shuffled.slice(0, 3);
+      const masterTl = gsapWithCSS.timeline();
+      selectedSquares.forEach((square, index) => {
+        const cells = square.querySelectorAll(".logos_item-cell");
+        const logos = square.querySelectorAll(".logos_image");
+        const squareTl = gsapWithCSS.timeline();
+        squareTl.to(cells, {
+          autoAlpha: 1,
+          duration: 0,
+          stagger: {
+            amount: 0.4,
+            from: "random"
+          }
+        }).call(() => {
+          logos.forEach((logo) => {
+            logo.classList.toggle("hide");
+          });
+        }).to(cells, {
+          autoAlpha: 0,
+          duration: 0,
+          stagger: {
+            amount: 0.4,
+            from: "random"
+          }
+        });
+        masterTl.add(squareTl, index * 0.1);
+      });
+      masterTl.call(() => {
+        setTimeout(animateThreeSquares, 1500);
+      });
+    }
+    setTimeout(animateThreeSquares, 2500);
+    const caseTriggers = document.querySelectorAll(".growth_case-vertical, .growth_case-horizontal");
+    caseTriggers.forEach((caseTrigger) => {
+      const cells = caseTrigger.querySelectorAll(".growth_cell");
+      const accent = caseTrigger.querySelector(".font-family-accent");
+      gsapWithCSS.set(cells, {
+        autoAlpha: 1
+      });
+      gsapWithCSS.to(cells, {
+        duration: 0,
+        autoAlpha: 0,
+        delay: 0.8,
+        stagger: {
+          amount: 0.4,
+          from: "random"
+        },
+        scrollTrigger: {
+          trigger: caseTrigger,
+          start: "top 100%"
+        }
+      });
+      gsapWithCSS.to(accent, {
+        duration: 0.8,
+        delay: 0.5,
+        scrambleText: {
+          text: "{original}",
+          chars: "lowerCase",
+          speed: 0.8
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: accent,
+          start: "top 100%"
+          // markers: true,
+        }
+      });
+    });
+    gsapWithCSS.registerEffect({
+      name: "counter",
+      extendTimeline: true,
+      defaults: {
+        end: 0,
+        duration: 0.5,
+        ease: "power1",
+        increment: 1
+      },
+      effect: (targets, config3) => {
+        let tl = gsapWithCSS.timeline();
+        let num = targets[0].innerText.replace(/\,/g, "");
+        targets[0].innerText = num;
+        tl.from(
+          targets,
+          {
+            duration: config3.duration,
+            innerText: config3.end,
+            //snap:{innerText:config.increment},
+            modifiers: {
+              innerText: function(innerText) {
+                return gsapWithCSS.utils.snap(config3.increment, innerText).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+              }
+            },
+            ease: config3.ease
+          },
+          0
+        );
+        return tl;
+      }
+    });
+    let counterTl = gsapWithCSS.timeline({
+      scrollTrigger: {
+        trigger: "#count-up",
+        start: "top 80%"
+      }
+    });
+    counterTl.counter("#count-up", {
+      ease: "power2.out",
+      duration: 1.5
+    });
+    const animationConfig = {
+      speed: { min: 0.3, max: 0.4 },
+      // Animation duration in seconds
+      rarity: { min: 36, max: 48 },
+      // Delay between animations in seconds
+      initialDelay: { min: 1, max: 48 }
+      // Initial start delay in seconds
+    };
+    const horizontalLines = gsapWithCSS.utils.toArray(".grid-item-line.is-horizontal");
+    horizontalLines.forEach((line, index) => {
+      gsapWithCSS.set(line, { position: "relative", overflow: "hidden" });
+      const glowDiv = document.createElement("div");
+      glowDiv.style.cssText = `
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+      transparent 0%, 
+      rgba(144, 255, 0, 0.75) 50%, 
+      transparent 100%);
+    pointer-events: none;
+  `;
+      line.appendChild(glowDiv);
+      function animateLine() {
+        const goRight = Math.random() > 0.5;
+        gsapWithCSS.fromTo(
+          glowDiv,
+          {
+            left: goRight ? "-100%" : "100%"
+          },
+          {
+            left: goRight ? "100%" : "-100%",
+            duration: gsapWithCSS.utils.random(animationConfig.speed.min, animationConfig.speed.max),
+            ease: "none",
+            onComplete: () => {
+              gsapWithCSS.delayedCall(
+                gsapWithCSS.utils.random(animationConfig.rarity.min, animationConfig.rarity.max),
+                animateLine
+              );
+            }
+          }
+        );
+      }
+      gsapWithCSS.delayedCall(
+        gsapWithCSS.utils.random(animationConfig.initialDelay.min, animationConfig.initialDelay.max),
+        animateLine
+      );
+    });
+    const verticalLines = gsapWithCSS.utils.toArray(".grid-item-line.is-vertical");
+    verticalLines.forEach((line, index) => {
+      gsapWithCSS.set(line, { position: "relative", overflow: "hidden" });
+      const glowDiv = document.createElement("div");
+      glowDiv.style.cssText = `
+    position: absolute;
+    left: 0;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, 
+      transparent 0%, 
+      rgba(144, 255, 0, 0.75) 50%, 
+      transparent 100%);
+    pointer-events: none;
+  `;
+      line.appendChild(glowDiv);
+      function animateLine() {
+        const goDown = Math.random() > 0.5;
+        gsapWithCSS.fromTo(
+          glowDiv,
+          {
+            top: goDown ? "-100%" : "100%"
+          },
+          {
+            top: goDown ? "100%" : "-100%",
+            duration: gsapWithCSS.utils.random(animationConfig.speed.min, animationConfig.speed.max),
+            ease: "none",
+            onComplete: () => {
+              gsapWithCSS.delayedCall(
+                gsapWithCSS.utils.random(animationConfig.rarity.min, animationConfig.rarity.max),
+                animateLine
+              );
+            }
+          }
+        );
+      }
+      gsapWithCSS.delayedCall(
+        gsapWithCSS.utils.random(animationConfig.initialDelay.min, animationConfig.initialDelay.max),
+        animateLine
+      );
+    });
+  });
+})();
 /*! Bundled license information:
 
 gsap/gsap-core.js:
@@ -112,3 +10654,4 @@ gsap/MorphSVGPlugin.js:
    * @author: Jack Doyle, jack@greensock.com
   *)
 */
+//# sourceMappingURL=week7.js.map
