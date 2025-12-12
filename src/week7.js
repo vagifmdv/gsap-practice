@@ -307,6 +307,7 @@ window.Webflow.push(() => {
 
   const slideElements = document.querySelectorAll('.services_horizontal-sticky');
   const totalSlides = slideElements.length;
+  const servicesComponent = document.querySelector('.services_component');
 
   function getScrollAmount() {
     // Get the width of one slide
@@ -323,6 +324,47 @@ window.Webflow.push(() => {
     // Return how much to move left
     return -(totalWidth - window.innerWidth);
   }
+
+  function calculateGridPadding() {
+    const remToPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const cellSize = 16 * remToPx; // 16rem in pixels
+    const viewportHeight = window.innerHeight;
+
+    // Calculate remainder when dividing viewport height by cell size
+    const remainder = viewportHeight % cellSize;
+
+    // Determine if closer to lower or higher divisible number
+    const halfCell = cellSize / 2;
+    let adjustment;
+
+    if (remainder <= halfCell) {
+      // Closer to lower number - use negative margin
+      adjustment = -remainder;
+    } else {
+      // Closer to higher number - use positive padding
+      adjustment = cellSize - remainder;
+    }
+
+    // Apply adjustment to services component
+    if (servicesComponent) {
+      if (adjustment < 0) {
+        servicesComponent.style.marginBottom = `${adjustment}px`;
+        servicesComponent.style.paddingBottom = '0px';
+      } else {
+        servicesComponent.style.paddingBottom = `${adjustment}px`;
+        servicesComponent.style.marginBottom = '0px';
+      }
+    }
+  }
+
+  // Calculate initial padding
+  calculateGridPadding();
+
+  // Recalculate on window resize
+  window.addEventListener('resize', () => {
+    calculateGridPadding();
+    ScrollTrigger.refresh();
+  });
 
   // Main horizontal scroll animation
   const horizontalScroll = gsap.to('.services_horizontal-wrapper', {
@@ -790,8 +832,6 @@ window.Webflow.push(() => {
   caseTriggers.forEach((caseTrigger) => {
     const cells = caseTrigger.querySelectorAll('.growth_cell');
 
-    const accent = caseTrigger.querySelector('.font-family-accent');
-
     gsap.set(cells, {
       autoAlpha: 1,
     });
@@ -807,22 +847,6 @@ window.Webflow.push(() => {
       scrollTrigger: {
         trigger: caseTrigger,
         start: 'top 100%',
-      },
-    });
-
-    gsap.to(accent, {
-      duration: 0.8,
-      delay: 0.5,
-      scrambleText: {
-        text: '{original}',
-        chars: 'lowerCase',
-        speed: 0.8,
-      },
-      ease: 'none',
-      scrollTrigger: {
-        trigger: accent,
-        start: 'top 100%',
-        // markers: true,
       },
     });
   });
@@ -990,4 +1014,75 @@ window.Webflow.push(() => {
   });
 
   // ————— RANDOM LINE ANIMATIONS ————— //
+
+  // ————— GROWTH STICKY ANIMATION ————— //
+
+  const growthComponent = document.querySelector('.growth_component');
+  const growthSticky = document.querySelector('.growth-sticky');
+
+  if (growthComponent && growthSticky) {
+    // Entry animation (first half of scroll)
+    gsap.fromTo(
+      growthSticky,
+      {
+        y: '-20vh',
+      },
+      {
+        y: '0vh',
+        ease: 'power1.out',
+        scrollTrigger: {
+          trigger: growthComponent,
+          start: 'top bottom',
+          end: 'center center',
+          scrub: 1,
+          // markers: true,
+        },
+      }
+    );
+
+    // Exit animation (second half of scroll)
+    gsap.fromTo(
+      growthSticky,
+      {
+        y: '0vh',
+      },
+      {
+        y: '20vh',
+        ease: 'power1.in',
+        scrollTrigger: {
+          trigger: growthComponent,
+          start: 'center center',
+          end: 'bottom top',
+          scrub: 1,
+          // markers: true,
+        },
+      }
+    );
+  }
+
+  // ————— GROWTH STICKY ANIMATION ————— //
+
+  // ————— SCRAMBLE SCROLL-INTO-VIEW TEXT ANIMATION ————— //
+
+  const scrambleElements = document.querySelectorAll('[data-animation="scramble"]');
+
+  scrambleElements.forEach((element) => {
+    gsap.to(element, {
+      duration: 0.8,
+      delay: 0.2,
+      scrambleText: {
+        text: '{original}',
+        chars: 'lowerCase',
+        speed: 0.8,
+      },
+      ease: 'none',
+      scrollTrigger: {
+        trigger: element,
+        start: 'top 100%',
+        // markers: true,
+      },
+    });
+  });
+
+  // ————— SCRAMBLE SCROLL-INTO-VIEW TEXT ANIMATION ————— //
 });

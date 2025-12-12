@@ -10050,6 +10050,7 @@
     });
     const slideElements = document.querySelectorAll(".services_horizontal-sticky");
     const totalSlides = slideElements.length;
+    const servicesComponent = document.querySelector(".services_component");
     function getScrollAmount() {
       const slideWidth = slideElements[0].offsetWidth;
       const remToPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
@@ -10058,6 +10059,33 @@
       const totalWidth = slideWidth * totalSlides + gapBetween * (totalSlides - 1) + endPadding;
       return -(totalWidth - window.innerWidth);
     }
+    function calculateGridPadding() {
+      const remToPx = parseFloat(getComputedStyle(document.documentElement).fontSize);
+      const cellSize = 16 * remToPx;
+      const viewportHeight = window.innerHeight;
+      const remainder = viewportHeight % cellSize;
+      const halfCell = cellSize / 2;
+      let adjustment;
+      if (remainder <= halfCell) {
+        adjustment = -remainder;
+      } else {
+        adjustment = cellSize - remainder;
+      }
+      if (servicesComponent) {
+        if (adjustment < 0) {
+          servicesComponent.style.marginBottom = `${adjustment}px`;
+          servicesComponent.style.paddingBottom = "0px";
+        } else {
+          servicesComponent.style.paddingBottom = `${adjustment}px`;
+          servicesComponent.style.marginBottom = "0px";
+        }
+      }
+    }
+    calculateGridPadding();
+    window.addEventListener("resize", () => {
+      calculateGridPadding();
+      ScrollTrigger2.refresh();
+    });
     const horizontalScroll = gsapWithCSS.to(".services_horizontal-wrapper", {
       x: getScrollAmount,
       ease: "none",
@@ -10375,7 +10403,6 @@
     const caseTriggers = document.querySelectorAll(".growth_case-vertical, .growth_case-horizontal");
     caseTriggers.forEach((caseTrigger) => {
       const cells = caseTrigger.querySelectorAll(".growth_cell");
-      const accent = caseTrigger.querySelector(".font-family-accent");
       gsapWithCSS.set(cells, {
         autoAlpha: 1
       });
@@ -10390,21 +10417,6 @@
         scrollTrigger: {
           trigger: caseTrigger,
           start: "top 100%"
-        }
-      });
-      gsapWithCSS.to(accent, {
-        duration: 0.8,
-        delay: 0.5,
-        scrambleText: {
-          text: "{original}",
-          chars: "lowerCase",
-          speed: 0.8
-        },
-        ease: "none",
-        scrollTrigger: {
-          trigger: accent,
-          start: "top 100%"
-          // markers: true,
         }
       });
     });
@@ -10540,6 +10552,62 @@
         gsapWithCSS.utils.random(animationConfig.initialDelay.min, animationConfig.initialDelay.max),
         animateLine
       );
+    });
+    const growthComponent = document.querySelector(".growth_component");
+    const growthSticky = document.querySelector(".growth-sticky");
+    if (growthComponent && growthSticky) {
+      gsapWithCSS.fromTo(
+        growthSticky,
+        {
+          y: "-20vh"
+        },
+        {
+          y: "0vh",
+          ease: "power1.out",
+          scrollTrigger: {
+            trigger: growthComponent,
+            start: "top bottom",
+            end: "center center",
+            scrub: 1
+            // markers: true,
+          }
+        }
+      );
+      gsapWithCSS.fromTo(
+        growthSticky,
+        {
+          y: "0vh"
+        },
+        {
+          y: "20vh",
+          ease: "power1.in",
+          scrollTrigger: {
+            trigger: growthComponent,
+            start: "center center",
+            end: "bottom top",
+            scrub: 1
+            // markers: true,
+          }
+        }
+      );
+    }
+    const scrambleElements = document.querySelectorAll('[data-animation="scramble"]');
+    scrambleElements.forEach((element) => {
+      gsapWithCSS.to(element, {
+        duration: 0.8,
+        delay: 0.2,
+        scrambleText: {
+          text: "{original}",
+          chars: "lowerCase",
+          speed: 0.8
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: element,
+          start: "top 100%"
+          // markers: true,
+        }
+      });
     });
   });
 })();
